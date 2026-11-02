@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { TestBed } from '@angular/core/testing';
-import { provideRouter, Router } from '@angular/router';
+import { provideRouter } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { routes } from '../../app.routes';
 import {
@@ -37,12 +37,16 @@ describe('Introducción del curso SSP', () => {
     expect(page?.querySelectorAll('.suit-pill')).toHaveLength(4);
   });
 
-  it('redirige /curso/leccion-1 a /curso/introduccion por compatibilidad', async () => {
-    const router = TestBed.inject(Router);
+  it('ofrece enlace directo hacia /curso/leccion-1 desde el cierre de la introducción', async () => {
     const harness = await RouterTestingHarness.create();
-    await harness.navigateByUrl('/curso/leccion-1', Introduction);
+    await harness.navigateByUrl('/curso/introduccion', Introduction);
+    const page = harness.routeNativeElement;
 
-    expect(router.url).toBe('/curso/introduccion');
+    const lesson1Link = Array.from(page?.querySelectorAll<HTMLAnchorElement>('a') ?? []).find(
+      (link) => link.textContent?.includes('Ir a la Lección 1'),
+    );
+    expect(lesson1Link).toBeTruthy();
+    expect(lesson1Link?.getAttribute('href')).toBe('/curso/leccion-1');
   });
 
   it('permite repartir las 52 cartas y hacer clic en un punto para ver qué carta es', async () => {
@@ -87,6 +91,6 @@ describe('Introducción del curso SSP', () => {
 
     expect(doc.cookie).toContain(`${COMPLETED_LESSONS_COOKIE}=introduccion`);
     expect(page?.textContent).toContain('Introducción completada');
-    expect(page?.textContent).toContain('La Lección 1 estará disponible próximamente.');
+    expect(page?.textContent).toContain('Continúa con la Lección 1 para montar tu baraja física.');
   });
 });

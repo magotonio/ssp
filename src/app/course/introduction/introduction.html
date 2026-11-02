@@ -148,6 +148,16 @@
         <span>{{ isCompleted() ? 'Introducción completada' : 'Completar Introducción' }}</span>
       </button>
 
+      <a
+        routerLink="/curso/leccion-1"
+        class="button w-full sm:w-auto"
+        [class.button-accent]="isCompleted()"
+        [class.button-secondary]="!isCompleted()"
+      >
+        <span>Ir a la Lección 1</span>
+        <app-icon name="arrow" />
+      </a>
+
       <a routerLink="/" class="button button-secondary w-full sm:w-auto">
         <app-icon name="arrowLeft" />
         <span>Volver a la portada</span>
@@ -156,7 +166,7 @@
 
     @if (isCompleted()) {
       <p class="text-[13px] font-medium text-[#397153]" role="status">
-        Tu avance se ha guardado en este navegador. La Lección 1 estará disponible próximamente.
+        Tu avance se ha guardado en este navegador. Continúa con la Lección 1 para montar tu baraja física.
       </p>
     }
   </section>

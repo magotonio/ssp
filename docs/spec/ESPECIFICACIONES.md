@@ -62,9 +62,9 @@ Validaciones: `npm run build` y `npm test -- --watch=false`. La compilación se 
 
 ### Progreso del curso mediante cookies
 
-- La aplicación estructura el aprendizaje como un curso progresivo compuesto por una **Introducción** inicial seguida de lecciones numeradas.
-- El avance del usuario se guarda en cookies locales del navegador (`ssp_current_lesson` para el módulo en el que se quedó y `ssp_completed_lessons` para los módulos completados, manteniendo compatibilidad con el valor previo `leccion-1` hacia `introduccion`).
-- La ruta `/curso` redirige automáticamente a la pantalla guardada en la cookie o, en ausencia de progreso previo, a `/curso/introduccion`. La ruta antigua `/curso/leccion-1` redirige por compatibilidad a `/curso/introduccion`.
+- La aplicación estructura el aprendizaje como un curso progresivo compuesto por una **Introducción** inicial (`introduccion`) seguida de lecciones numeradas (`leccion-1`, etc.).
+- El avance del usuario se guarda en cookies locales del navegador (`ssp_current_lesson` para el módulo en el que se quedó y `ssp_completed_lessons` para los módulos completados).
+- La ruta `/curso` redirige automáticamente a la pantalla guardada en la cookie o, en ausencia de progreso previo, a `/curso/introduccion`.
 - Si el navegador bloquea las cookies, la aplicación mantiene el estado en memoria durante la sesión y muestra un aviso informativo sin interrumpir el uso.
 
 ### Introducción (`/curso/introduccion`)
@@ -76,7 +76,17 @@ Validaciones: `npm run build` y `npm test -- --watch=false`. La compilación se 
   - El reparto comienza situando el **As de Picas** arriba (las 12 del reloj) y distribuye los cuatro palos según el procedimiento pedagógico de [leccion0.md](../leccion0.md), señalando dónde recae la posición 1 y el cierre en la posición 52 de acuerdo con [ordenacion-ssp.md](../ordenacion-ssp.md).
   - Controles de reproducción/pausa, avance y retroceso carta a carta, salto rápido por palo, vaciado/completado directo y ajuste de velocidad.
   - Al pulsar, tocar en móvil o navegar con teclado sobre cualquiera de los 52 puntos, un visor central (con botones de punto anterior y siguiente para facilitar el uso táctil en pantallas pequeñas) muestra qué carta ocupa ese punto y su posición en la ordenación SSP.
-- Cierre teórico preparando el paso a la **Lección 1** (ordenación en las manos) y botón para marcar la **Introducción** como completada.
+- Cierre teórico preparando el paso a la **Lección 1** (ordenación en las manos), botón para marcar la **Introducción** como completada y enlace directo a `/curso/leccion-1`.
+
+### Lección 1 (`/curso/leccion-1`)
+
+- Cabecera de curso con enlace a la portada (`/`), acceso rápido a **Introducción** (`/curso/introduccion`), referencia a **Lección 1** e indicador de progreso por pasos / lección completada.
+- Guía práctica e interactiva en 4 pasos pensada para seguirse con una **baraja física de 52 cartas en las manos**, conforme a [leccion1.md](../leccion1.md) y [ordenacion-ssp.md](../ordenacion-ssp.md):
+  1. **Preparación previa por palos:** instrucciones y esquema visual de los 4 paquetes cara arriba (de Rey en el fondo a As visible arriba) apilados de abajo arriba según [leccion1.md](../leccion1.md), con comprobación física rápida.
+  2. **División en 3 montones:** guía por referencias visuales (sin necesidad de contar cartas) para formar sobre la mesa los tres montones cara arriba y verificar sus tres cartas superiores visibles conforme a [leccion1.md](../leccion1.md).
+  3. **Recogida alternada («uno, dos, tres…»):** entrenador interactivo en vivo que muestra el estado de los 3 montones en la mesa, la carta visible en la mano receptora y la tira de cartas entrelazadas, con controles de ritmo automático ajustable, avance/retroceso carta a carta, avance por tríos («1-2-3»), reinicio y saltos de comprobación hasta voltear el mazo dorso arriba.
+  4. **Verificación física y propiedad cíclica:** explicación del carácter cíclico (cortes completos ilimitados sin alterar la secuencia) y comprobador interactivo donde el usuario selecciona cualquier carta vista al cortar su baraja física para verificar las 6 cartas siguientes según [ordenacion-ssp.md](../ordenacion-ssp.md).
+- Cierre con adelanto de la siguiente lección (deducción de la carta siguiente al cortar por cualquier posición), botón para marcar la **Lección 1** como completada y navegación a **Introducción** e **Inicio**.
 
 ### Ejecución desde la raíz
 

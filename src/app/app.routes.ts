@@ -22,8 +22,9 @@ export const routes: Routes = [
   },
   {
     path: 'curso/leccion-1',
-    pathMatch: 'full',
-    redirectTo: 'curso/introduccion',
+    title: 'Lección 1 · Montaje de la baraja | StackSSP',
+    loadComponent: () =>
+      import('./course/lesson1/lesson1').then((module) => module.Lesson1),
   },
   {
     path: '**',

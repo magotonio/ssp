@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { computed, inject, Injectable, signal } from '@angular/core';
 
-export type LessonId = 'introduccion';
+export type LessonId = 'introduccion' | 'leccion-1';
 
 export interface CourseLessonMeta {
   readonly id: LessonId;
@@ -17,6 +17,12 @@ export const COURSE_LESSONS: readonly CourseLessonMeta[] = [
     title: 'Construcción visual de la SSP',
     route: '/curso/introduccion',
   },
+  {
+    id: 'leccion-1',
+    label: 'Lección 1',
+    title: 'Montaje de la baraja en las manos',
+    route: '/curso/leccion-1',
+  },
 ] as const;
 
 export const CURRENT_LESSON_COOKIE = 'ssp_current_lesson';
@@ -30,9 +36,6 @@ function isValidLessonId(value: string): value is LessonId {
 
 function normalizeLessonId(value: string): LessonId | null {
   const trimmed = value.trim();
-  if (trimmed === 'leccion-1') {
-    return 'introduccion';
-  }
   return isValidLessonId(trimmed) ? trimmed : null;
 }
 
