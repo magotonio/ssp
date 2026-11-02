@@ -51,6 +51,21 @@
   margin-top: 28px;
 }
 
+.resume-hint {
+  margin-top: 14px;
+  font-size: 13px;
+  color: #475569;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 7px 14px;
+}
+
+.resume-completed {
+  color: #397153;
+  font-weight: 600;
+}
+
 .benefits-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

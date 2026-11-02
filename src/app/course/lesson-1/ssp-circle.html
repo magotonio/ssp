@@ -1,0 +1,327 @@
+<div class="flex flex-col gap-4">
+  <!-- Leyenda de 4 colores y acceso rápido por palo -->
+  <div class="suit-legend grid grid-cols-2 sm:grid-cols-4 gap-2" role="group" aria-label="Leyenda de colores por palo y avance rápido">
+    @for (suit of suits; track suit.code) {
+      <button
+        type="button"
+        class="suit-pill"
+        [class.suit-pill-active]="activeStage() === suit.code"
+        [style.--suit-dot]="suit.dotColor"
+        [style.--suit-bg]="suit.surfaceBg"
+        [style.--suit-border]="suit.surfaceBorder"
+        [style.--suit-text]="suit.textColor"
+        (click)="jumpToSuitStage(suit.code)"
+        [attr.aria-label]="'Mostrar reparto hasta ' + suit.pluralName + ' (' + suit.colorName + ')'"
+      >
+        <span class="suit-dot" aria-hidden="true"></span>
+        <span class="inline-flex items-center" [style.color]="suit.dotColor"><app-suit-icon [suit]="suit.code" /></span>
+        <span class="truncate">{{ suit.pluralName }}</span>
+        <span class="ml-auto text-[11px] font-medium text-slate-500">{{ suitPlacedCount(suit.code) }}/13</span>
+      </button>
+    }
+  </div>
+
+  <!-- Escenario circular de 52 puntos -->
+  <div class="circle-stage">
+    <svg
+      class="w-full h-full block touch-manipulation"
+      viewBox="0 0 440 460"
+      role="group"
+      aria-label="Círculo interactivo de 52 huecos de la baraja SSP. Pulsa o usa las flechas del teclado sobre un punto para ver qué carta contiene."
+    >
+      <!-- Marca superior de las 12 en punto (inicio del reparto con AP) -->
+      <line x1="220" y1="38" x2="220" y2="50" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" />
+      <g class="cursor-pointer" (click)="selectSlot(0)">
+        <rect x="148" y="12" width="144" height="23" rx="6" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1" />
+        <text x="220" y="27" text-anchor="middle" class="landmark-text">12 h · Hueco inicial (AP)</text>
+      </g>
+
+      <!-- Guía circular -->
+      <circle cx="220" cy="224" r="166" fill="none" stroke="#e2e8f0" stroke-width="1.5" />
+
+      <!-- Arco indicador del salto actual (+3 huecos o cambio de palo) -->
+      @if (jumpArcPath(); as arcPath) {
+        <path
+          [attr.d]="arcPath"
+          fill="none"
+          stroke="#f97316"
+          stroke-width="1.8"
+          stroke-dasharray="4 4"
+          stroke-linecap="round"
+        />
+      }
+
+      <!-- Marcadores de inicio (1ª · 9P) y cierre (52ª · KD) de la ordenación SSP -->
+      @if (isStartCardPlaced()) {
+        <line
+          [attr.x1]="startSlotCoords.x"
+          [attr.y1]="startSlotCoords.y + 11"
+          x2="206"
+          y2="420"
+          stroke="#f97316"
+          stroke-width="1.5"
+        />
+        <g class="cursor-pointer" (click)="inspectSspBoundary('start')">
+          <rect x="140" y="420" width="128" height="25" rx="6" fill="#fff7ed" stroke="#f97316" stroke-width="1.3" />
+          <text x="204" y="436" text-anchor="middle" class="landmark-text landmark-accent">← 1ª SSP · 9 de Picas</text>
+        </g>
+      }
+
+      @if (isEndCardPlaced()) {
+        <line
+          [attr.x1]="endSlotCoords.x + 4"
+          [attr.y1]="endSlotCoords.y + 10"
+          x2="328"
+          y2="420"
+          stroke="#2563eb"
+          stroke-width="1.3"
+          stroke-dasharray="3 2"
+        />
+        <g class="cursor-pointer" (click)="inspectSspBoundary('end')">
+          <rect x="278" y="420" width="106" height="25" rx="6" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.1" />
+          <text x="331" y="436" text-anchor="middle" class="landmark-text landmark-blue">52ª · KD (final)</text>
+        </g>
+      }
+
+      <!-- Los 52 puntos interactivos -->
+      @for (slot of slots(); track slot.slotIndex) {
+        <g
+          #slotNode
+          class="slot-group"
+          role="button"
+          [attr.tabindex]="focusedSlot() === slot.slotIndex ? 0 : -1"
+          [attr.aria-label]="slot.ariaLabel"
+          [attr.aria-pressed]="slot.isSelected"
+          (click)="selectSlot(slot.slotIndex)"
+          (keydown)="onSlotKeydown($event, slot.slotIndex)"
+        >
+          <line
+            [attr.x1]="slot.hitX1"
+            [attr.y1]="slot.hitY1"
+            [attr.x2]="slot.hitX2"
+            [attr.y2]="slot.hitY2"
+            stroke="transparent"
+            stroke-width="15"
+            stroke-linecap="round"
+          />
+
+          @if (slot.isStartSspCard) {
+            <circle
+              [attr.cx]="slot.x"
+              [attr.cy]="slot.y"
+              r="9.8"
+              fill="none"
+              stroke="#f97316"
+              stroke-width="2"
+            />
+          }
+
+          @if (slot.isSkippedInLatestStep) {
+            <circle
+              [attr.cx]="slot.x"
+              [attr.cy]="slot.y"
+              r="7.4"
+              fill="none"
+              stroke="#fb923c"
+              stroke-width="1.4"
+              stroke-dasharray="2 2"
+            />
+          }
+
+          @if (slot.isSelected || slot.isLatestPlaced) {
+            <circle
+              [attr.cx]="slot.x"
+              [attr.cy]="slot.y"
+              r="10.5"
+              [attr.fill]="slot.suitMeta ? slot.suitMeta.dotColor : '#64748b'"
+              fill-opacity="0.18"
+              [attr.stroke]="slot.suitMeta ? slot.suitMeta.dotColor : '#475569'"
+              stroke-width="1.8"
+            />
+          }
+
+          <circle
+            class="slot-dot"
+            [attr.cx]="slot.x"
+            [attr.cy]="slot.y"
+            [attr.r]="slot.placedStep ? (slot.isSelected ? 7.2 : 6) : (slot.isSelected ? 5.6 : 4.2)"
+            [attr.fill]="slot.suitMeta ? slot.suitMeta.dotColor : '#f1f5f9'"
+            [attr.stroke]="slot.placedStep ? '#ffffff' : (slot.isSelected ? '#475569' : '#cbd5e1')"
+            stroke-width="1.5"
+          />
+        </g>
+      }
+    </svg>
+
+    <!-- Visor central (lupa de carta) situado en el interior libre del círculo -->
+    <div class="center-inspector" aria-live="polite">
+      @if (inspectedStep(); as step) {
+        @if (inspectedSuit(); as suit) {
+          <div class="flex items-center justify-between w-full gap-1.5">
+            <button
+              type="button"
+              class="neighbor-btn"
+              (click)="inspectNeighborSlot(-1)"
+              aria-label="Inspeccionar hueco anterior (sentido antihorario)"
+              title="Hueco anterior"
+            >
+              <app-icon name="chevronLeft" />
+            </button>
+
+            <div
+              class="mini-playing-card"
+              [style.background]="suit.surfaceBg"
+              [style.border-color]="suit.surfaceBorder"
+              [style.color]="suit.dotColor"
+            >
+              <span>{{ step.card.rank }}</span>
+              <app-suit-icon [suit]="step.card.suit" />
+            </div>
+
+            <button
+              type="button"
+              class="neighbor-btn"
+              (click)="inspectNeighborSlot(1)"
+              aria-label="Inspeccionar hueco siguiente (sentido horario)"
+              title="Siguiente en sentido horario"
+            >
+              <app-icon name="chevronRight" />
+            </button>
+          </div>
+
+          <strong class="inspector-card-name text-xs sm:text-[13.5px] font-bold text-slate-900 leading-tight">{{ step.card.fullName }}</strong>
+          <span
+            class="inspector-ssp-pos"
+            [class.inspector-ssp-highlight]="step.card.position === 1 || step.card.position === 52"
+          >
+            Posición {{ step.card.position }} en SSP
+            @if (step.card.position === 1) { · Inicio }
+            @if (step.card.position === 52) { · Final }
+          </span>
+          <span class="hidden sm:inline text-[11px] text-slate-500 leading-snug">{{ step.ruleDescription }}</span>
+        }
+      } @else if (activeSlotIndex() !== null) {
+        <div class="flex items-center justify-between w-full gap-1.5">
+          <button
+            type="button"
+            class="neighbor-btn"
+            (click)="inspectNeighborSlot(-1)"
+            aria-label="Inspeccionar hueco anterior"
+          >
+            <app-icon name="chevronLeft" />
+          </button>
+          <span class="px-2.5 py-1 rounded-md bg-slate-100 text-slate-600 text-[11px] font-semibold">Vacío</span>
+          <button
+            type="button"
+            class="neighbor-btn"
+            (click)="inspectNeighborSlot(1)"
+            aria-label="Inspeccionar hueco siguiente"
+          >
+            <app-icon name="chevronRight" />
+          </button>
+        </div>
+        <strong class="inspector-card-name text-xs sm:text-[13.5px] font-bold text-slate-900 leading-tight">Hueco {{ (activeSlotIndex() ?? 0) + 1 }} libre</strong>
+        <span class="hidden sm:inline text-[11px] text-slate-500 leading-snug">Aún no se ha repartido carta en este punto ({{ currentStep() }}/52).</span>
+      } @else {
+        <span class="px-2.5 py-1 rounded-md bg-slate-100 text-slate-600 text-[11px] font-semibold">0 / 52 cartas</span>
+        <strong class="inspector-card-name text-xs sm:text-[13.5px] font-bold text-slate-900 leading-tight">Reloj de 52 puntos</strong>
+        <span class="hidden sm:inline text-[11px] text-slate-500 leading-snug">Inicia la animación o toca un punto para explorarlo.</span>
+      }
+    </div>
+  </div>
+
+  <!-- Barra de progreso y narración en vivo del paso actual -->
+  <div class="bg-slate-50 border border-slate-200 rounded-[10px] px-4 py-3.5 flex flex-col gap-2" role="status" aria-live="polite">
+    <div class="flex items-center justify-between gap-2.5 text-[13px] text-slate-900">
+      <strong>{{ stageMessage().title }}</strong>
+      <span class="text-xs font-semibold text-slate-600 whitespace-nowrap">{{ currentStep() }} / {{ deckSize }} cartas</span>
+    </div>
+    <div class="progress-bar h-1.5 w-full bg-slate-200 rounded-full overflow-hidden" aria-hidden="true">
+      <span [style.width.%]="(currentStep() / deckSize) * 100"></span>
+    </div>
+    <p class="text-[13px] leading-relaxed text-slate-600">{{ stageMessage().detail }}</p>
+  </div>
+
+  <!-- Controles de reproducción pensados para táctil y escritorio -->
+  <div class="flex flex-col gap-3">
+    <div class="primary-controls grid gap-2 sm:gap-2.5">
+      <button
+        type="button"
+        class="button button-secondary px-2 sm:px-3 text-xs sm:text-[13px] gap-1.5 touch-manipulation disabled:opacity-50 disabled:cursor-not-allowed"
+        (click)="stepBackward()"
+        [disabled]="currentStep() === 0"
+        aria-label="Retroceder una carta"
+      >
+        <app-icon name="stepBack" />
+        <span>-1 carta</span>
+      </button>
+
+      <button
+        type="button"
+        class="button button-accent px-2 sm:px-3 text-xs sm:text-[13px] gap-1.5 touch-manipulation"
+        (click)="togglePlayback()"
+      >
+        @if (isPlaying()) {
+          <app-icon name="pause" />
+          <span>Pausar</span>
+        } @else if (currentStep() === deckSize) {
+          <app-icon name="reset" />
+          <span>Repetir</span>
+        } @else if (currentStep() > 0) {
+          <app-icon name="play" />
+          <span>Continuar</span>
+        } @else {
+          <app-icon name="play" />
+          <span>Reproducir</span>
+        }
+      </button>
+
+      <button
+        type="button"
+        class="button button-secondary px-2 sm:px-3 text-xs sm:text-[13px] gap-1.5 touch-manipulation disabled:opacity-50 disabled:cursor-not-allowed"
+        (click)="stepForward()"
+        [disabled]="currentStep() === deckSize"
+        aria-label="Avanzar una carta"
+      >
+        <span>+1 carta</span>
+        <app-icon name="stepForward" />
+      </button>
+    </div>
+
+    <div class="flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-between gap-2.5">
+      <div class="grid grid-cols-2 sm:flex sm:flex-wrap gap-2">
+        <button
+          type="button"
+          class="chip-btn"
+          (click)="resetCircle()"
+          [disabled]="currentStep() === 0"
+        >
+          Vaciar
+        </button>
+        <button
+          type="button"
+          class="chip-btn"
+          (click)="fillAllCards()"
+          [disabled]="currentStep() === deckSize && activeSlotIndex() === startCardSlot"
+        >
+          Ver las 52 cartas
+        </button>
+      </div>
+
+      <div class="inline-flex items-center justify-between sm:justify-start gap-1 bg-slate-100 p-1 rounded-lg" role="group" aria-label="Velocidad de la animación">
+        <span class="text-[11px] text-slate-500 px-1.5 font-medium">Velocidad:</span>
+        @for (opt of speedOptions; track opt.id) {
+          <button
+            type="button"
+            class="speed-btn"
+            [class.speed-btn-active]="speed() === opt.id"
+            (click)="setSpeed(opt.id)"
+            [attr.aria-pressed]="speed() === opt.id"
+          >
+            {{ opt.label }}
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+</div>

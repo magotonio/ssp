@@ -1,0 +1,163 @@
+<a href="#contenido-leccion" class="skip-link">Saltar al contenido</a>
+
+<header class="sticky top-0 z-30 bg-white border-b border-slate-200">
+  <div class="max-w-[1080px] mx-auto h-14 sm:h-16 px-4 sm:px-6 flex items-center justify-between gap-4">
+    <div class="flex items-center gap-3">
+      <a routerLink="/" class="inline-flex items-center gap-2.5 text-lg font-bold tracking-tight text-slate-900" aria-label="Volver a la portada de StackSSP">
+        <span class="brand-mark brand-mark-sm" aria-hidden="true"><app-icon name="cards" /></span>
+        <span>Stack<span class="brand-light">SSP</span></span>
+      </a>
+      <span class="text-slate-300 font-medium" aria-hidden="true">/</span>
+      <span class="text-[13px] font-semibold text-slate-600">Lección 1</span>
+    </div>
+
+    <div class="flex items-center gap-3">
+      @if (isCompleted()) {
+        <span class="status-pill status-completed">
+          <app-icon name="check" />
+          <span class="hidden sm:inline">Lección completada</span>
+        </span>
+      } @else {
+        <span class="status-pill status-active hidden sm:inline-flex">En progreso</span>
+      }
+      <a routerLink="/" class="back-link">
+        <app-icon name="arrowLeft" />
+        <span>Inicio</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main id="contenido-leccion" class="max-w-[1080px] mx-auto px-3.5 sm:px-6 pt-5 sm:pt-8 pb-11 sm:pb-16 flex flex-col gap-4.5 sm:gap-6" tabindex="-1">
+  @if (!progress.cookiesAvailable()) {
+    <div class="flex items-start gap-2.5 px-4 py-3 rounded-[10px] bg-orange-50 border border-orange-200 text-orange-800" role="status">
+      <app-icon name="info" />
+      <p class="text-[13px] text-orange-800">Las cookies están desactivadas en tu navegador. Podrás usar la lección con normalidad, aunque el progreso no se recordará al cerrar la pestaña.</p>
+    </div>
+  }
+
+  <!-- Introducción teórica -->
+  <section class="card p-5 sm:p-8 flex flex-col gap-3.5" aria-labelledby="lesson-title">
+    <p class="eyebrow">LECCIÓN 01 · FUNDAMENTOS</p>
+    <h1 id="lesson-title" class="lesson-h1">Introducción a la ordenación SSP</h1>
+    <div class="flex flex-col gap-3 max-w-[820px]">
+      <p class="text-[15px] leading-relaxed">
+        La ordenación <strong>SSP (Si Stebbins Poderosa)</strong> es una baraja ordenada matemática y cíclica pensada para la cartomagia. A partir de un principio aritmético oculto, organiza las 52 cartas sin repeticiones formando un ciclo continuo: al terminar la última carta se enlaza de nuevo con la primera.
+      </p>
+      <p class="text-[15px] leading-relaxed">
+        Frente a ordenaciones clásicas donde el patrón salta a la vista, la SSP <strong>rompe la alternancia de colores y de valores pares e impares</strong>, ofreciendo el aspecto natural de una baraja mezclada y permitiéndote localizar cualquier carta al instante a partir del <strong>9 de Picas</strong>.
+      </p>
+    </div>
+  </section>
+
+  <!-- Construcción visual interactiva (52 puntos de 4 colores) -->
+  <section class="card p-5 sm:px-8 sm:py-7 flex flex-col gap-6" aria-labelledby="circle-section-title">
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2.5 sm:gap-4">
+      <div>
+        <h2 id="circle-section-title" class="text-[19px] mb-1.5">Método de construcción gráfico: los 52 huecos</h2>
+        <p class="text-sm max-w-[680px]">
+          Cada punto del reloj representa una carta con un color distinto por palo. Reproduce el reparto y <strong>toca o haz clic en cualquier punto</strong> para descubrir qué carta ocupa ese lugar.
+        </p>
+      </div>
+      <span class="self-start shrink-0 px-2.5 py-1.5 rounded-md bg-[#f0eef9] text-[#5b4b8a] text-[11.5px] font-semibold">Interactivo · 4 colores</span>
+    </div>
+
+    <div class="interactive-grid">
+      <div>
+        <app-ssp-circle #circle />
+      </div>
+
+      <div class="flex flex-col gap-3.5">
+        <h3 class="text-[15px] text-slate-900">Cómo se distribuye la baraja</h3>
+        <ol class="list-none m-0 p-0 flex flex-col gap-2.5">
+          @for (rule of constructionRules; track rule.suit) {
+            <li>
+              <button
+                type="button"
+                class="rule-card"
+                [class.rule-card-active]="circle.activeStage() === rule.suit"
+                [style.--rule-color]="rule.suitMeta.dotColor"
+                [style.--rule-bg]="rule.suitMeta.surfaceBg"
+                (click)="showSuitOnCircle(rule.suit)"
+              >
+                <span
+                  class="rule-suit-badge"
+                  [style.background]="rule.suitMeta.surfaceBg"
+                  [style.border-color]="rule.suitMeta.surfaceBorder"
+                  [style.color]="rule.suitMeta.dotColor"
+                >
+                  <app-suit-icon [suit]="rule.suit" />
+                </span>
+                <span class="flex flex-col gap-1">
+                  <strong class="text-[13.5px] text-slate-900">{{ rule.heading }}</strong>
+                  <span class="text-[13px] leading-snug text-slate-600">{{ rule.description }}</span>
+                </span>
+              </button>
+            </li>
+          }
+        </ol>
+
+        <div class="result-callout" [class.result-callout-active]="circle.activeStage() === 'complete'">
+          <strong class="text-[13.5px] text-slate-900">Lectura final de la ordenación SSP</strong>
+          <p class="text-[13px] leading-relaxed">
+            Las 52 cartas encajan exactamente sin solaparse. Si tomamos el <strong>9 de Picas</strong> como primera carta y leemos el círculo en el sentido de las agujas del reloj (<code class="code-pill">9P → 5C → AT → 10P…</code>), el <strong>Rey de Diamantes</strong> cierra la secuencia en la posición 52.
+          </p>
+          <div class="flex flex-col sm:flex-row sm:flex-wrap gap-2 mt-0.5">
+            <button type="button" class="chip-action chip-action-accent w-full sm:w-auto" (click)="focusBoundaryCard('start')">
+              Señalar 1ª · 9 de Picas
+            </button>
+            <button type="button" class="chip-action w-full sm:w-auto" (click)="focusBoundaryCard('end')">
+              Señalar 52ª · Rey de Diamantes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Propiedades clave -->
+  <section class="grid grid-cols-1 lg:grid-cols-3 gap-5" aria-label="Propiedades de la ordenación SSP">
+    @for (prop of properties; track prop.title) {
+      <article class="card flex flex-col gap-3 p-6">
+        <span class="stat-icon" [class]="prop.tone"><app-icon [name]="prop.icon" /></span>
+        <h2 class="text-[16.5px] mt-0.5">{{ prop.title }}</h2>
+        <p>{{ prop.description }}</p>
+      </article>
+    }
+  </section>
+
+  <!-- Cierre y preparación para la Lección 2 -->
+  <section class="card p-5 sm:p-8 flex flex-col gap-5" aria-labelledby="closing-title">
+    <div class="flex flex-col gap-2.5 max-w-[780px]">
+      <p class="eyebrow">SIGUIENTE PASO · PREPARACIÓN PARA LA LECCIÓN 2</p>
+      <h2 id="closing-title" class="text-xl">De la teoría sobre el reloj a las manos</h2>
+      <p>
+        Este esquema circular de 52 huecos es una explicación visual para entender de dónde nace la estructura de la SSP; llevarlo a la práctica sobre un tapete requeriría una mesa enorme. En la <strong>Lección 2</strong> aprenderás una técnica sencilla y directa para <strong>ordenar la baraja directamente en las manos</strong>.
+      </p>
+    </div>
+
+    <div class="flex flex-col sm:flex-row flex-wrap gap-3">
+      <button
+        type="button"
+        class="button w-full sm:w-auto"
+        [class.button-accent]="!isCompleted()"
+        [class.button-completed]="isCompleted()"
+        (click)="completeLesson()"
+      >
+        <app-icon name="check" />
+        <span>{{ isCompleted() ? 'Lección 1 completada' : 'Completar Lección 1' }}</span>
+      </button>
+
+      <a routerLink="/" class="button button-secondary w-full sm:w-auto">
+        <app-icon name="arrowLeft" />
+        <span>Volver a la portada</span>
+      </a>
+    </div>
+
+    @if (isCompleted()) {
+      <p class="text-[13px] font-medium text-[#397153]" role="status">
+        Tu avance se ha guardado en este navegador. La Lección 2 estará disponible próximamente.
+      </p>
+    }
+  </section>
+</main>

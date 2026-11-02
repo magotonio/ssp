@@ -51,13 +51,32 @@ Validaciones: `npm run build` y `npm test -- --watch=false`. La compilación se 
 - `ssp-lesson-4`, `ssp-lesson-5` y `ssp-mockup` no forman parte de la aplicación: no se importan ni se incluyen en la compilación, las pruebas o la detección de clases de Tailwind.
 - Home tipo landing disponible en `/`, sin barra lateral, con título visible y de navegador **StackSSP** y subtítulo «Entrenamiento para la ordenación SSP.».
 - Estructura de la home en cuatro secciones:
-  - **Cabecera principal (Hero):** marca **StackSSP**, subtítulo, texto de apoyo orientado a magos y botón de acción «Iniciar el Curso».
+  - **Cabecera principal (Hero):** marca **StackSSP**, subtítulo, texto de apoyo orientado a magos y acción principal «Iniciar el Curso» (o «Continuar curso» junto con indicador de progreso si existe avance guardado en cookies).
   - **Beneficios:** tres bloques («Cálculo sencillo, no memoria bruta», «Localización al instante» y «Magia de alto impacto»).
   - **Práctica:** bloque «Entrenamiento paso a paso».
-  - **Llamado a la acción final:** mensaje con referencia al inicio en el 9 de Picas y botón «Empezar el Curso».
-- Los botones de acción de la home permanecen sin navegación activa hasta definir las pantallas correspondientes. No se incluyen ilustraciones de cartas, menciones de autoría, perfiles ni métricas ficticias.
+  - **Llamado a la acción final:** mensaje con referencia al inicio en el 9 de Picas y acción «Empezar el Curso» (o «Continuar curso» si hay progreso guardado).
+- En el cuerpo de la home no se incluyen ilustraciones de cartas, perfiles ni métricas ficticias.
+- **Pie de página común:** presente en todas las vistas de la aplicación, con la marca **StackSSP**, la versión actual de la aplicación leída desde `package.json`, el año actual junto con la mención de autoría y derechos de **Tonio Velayos**, y enlaces rápidos de navegación a **Inicio** (`/`) y al **Curso** (apuntando a la lección guardada en progreso o a `/curso/leccion-1`).
 - Diseño plano basado en [design.md](design.md): fondo claro, tarjetas blancas con bordes sutiles, azul pizarra, naranja de acción con texto oscuro de alto contraste y tonos secundarios suaves. Adaptable a móvil y escritorio, con foco visible y etiquetado accesible.
-- Componentes standalone y ruta home con carga diferida. Sin backend, persistencia, imágenes ni fuentes externas.
+- Componentes standalone y rutas con carga diferida. Sin backend, imágenes ni fuentes externas.
+
+### Progreso del curso mediante cookies
+
+- La aplicación estructura el aprendizaje como un curso progresivo por lecciones.
+- El avance del usuario se guarda en cookies locales del navegador (`ssp_current_lesson` para la lección en la que se quedó y `ssp_completed_lessons` para las lecciones completadas).
+- La ruta `/curso` redirige automáticamente a la lección guardada en la cookie o, en ausencia de progreso previo, a `/curso/leccion-1`.
+- Si el navegador bloquea las cookies, la aplicación mantiene el estado en memoria durante la sesión y muestra un aviso informativo sin interrumpir el uso.
+
+### Lección 1 (`/curso/leccion-1`)
+
+- Cabecera limpia de curso con enlace a la portada (`/`), referencia de la lección actual e indicador de estado («En progreso» / «Lección completada»).
+- Introducción en texto al concepto y las propiedades de la ordenación SSP conforme a [leccion1.md](../leccion1.md) y [ordenacion-ssp.md](../ordenacion-ssp.md).
+- Simulador interactivo de construcción visual mediante **52 puntos dispuestos en círculo**:
+  - Cada carta se representa como un punto coloreado según su palo mediante una paleta diferenciada de **4 colores** (negro para Picas, rojo para Corazones, verde para Tréboles y azul para Diamantes) acompañada de iconografía vectorial plana.
+  - El reparto comienza situando el **As de Picas** arriba (las 12 del reloj) y distribuye los cuatro palos según el procedimiento pedagógico de [leccion1.md](../leccion1.md), señalando dónde recae la posición 1 y el cierre en la posición 52 de acuerdo con [ordenacion-ssp.md](../ordenacion-ssp.md).
+  - Controles de reproducción/pausa, avance y retroceso carta a carta, salto rápido por palo, vaciado/completado directo y ajuste de velocidad.
+  - Al pulsar, tocar en móvil o navegar con teclado sobre cualquiera de los 52 puntos, un visor central (con botones de punto anterior y siguiente para facilitar el uso táctil en pantallas pequeñas) muestra qué carta ocupa ese punto y su posición en la ordenación SSP.
+- Cierre teórico preparando el paso a la Lección 2 (ordenación en las manos) y botón para marcar la Lección 1 como completada.
 
 ### Ejecución desde la raíz
 

@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { CourseProgressService } from '../course/course-progress.service';
 import { Icon, IconName } from '../icon';
 
 interface Benefit {
@@ -10,12 +12,23 @@ interface Benefit {
 
 @Component({
   selector: 'app-home',
-  imports: [Icon],
+  imports: [RouterLink, Icon],
   templateUrl: './home.html',
   styleUrl: './home.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Home {
+  protected readonly progress = inject(CourseProgressService);
+
+  protected readonly hasSavedCourse = this.progress.hasSavedProgress;
+  protected readonly courseRoute = this.progress.targetCourseRoute;
+  protected readonly savedLesson = this.progress.savedLesson;
+
+  protected readonly savedLessonCompleted = computed<boolean>(() => {
+    const lesson = this.savedLesson();
+    return lesson ? this.progress.isLessonCompleted(lesson.id) : false;
+  });
+
   protected readonly benefits: readonly Benefit[] = [
     {
       title: 'Cálculo sencillo, no memoria bruta',
@@ -39,4 +52,8 @@ export class Home {
       tone: 'lavender',
     },
   ];
+
+  constructor() {
+    this.progress.syncFromCookies();
+  }
 }
