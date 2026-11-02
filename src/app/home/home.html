@@ -1,0 +1,40 @@
+<main id="contenido" class="landing">
+  <section class="card hero" aria-labelledby="home-title">
+    <div class="hero-brand">
+      <span class="brand-mark" aria-hidden="true"><app-icon name="cards" /></span>
+      <h1 id="home-title">Stack<span class="brand-light">SSP</span></h1>
+    </div>
+    <p class="hero-subtitle">Entrenamiento para la ordenación SSP.</p>
+    <p class="hero-description">
+      Aprende la ordenación SSP de manera fácil y a tu propio ritmo. Diseñada para magos, la SSP va un paso más allá de la Si Stebbins estándar: te permite localizar cualquier carta rápidamente y tener el control absoluto de la baraja sin tener que memorizar las 52 posiciones. Prepárate para realizar juegos de magia verdaderamente potentes.
+    </p>
+    <div class="hero-actions">
+      <button type="button" class="button button-accent">Iniciar el Curso</button>
+    </div>
+  </section>
+
+  <section class="benefits-grid" aria-label="Por qué aprender la SSP">
+    @for (benefit of benefits; track benefit.title) {
+      <article class="card benefit-card">
+        <span class="stat-icon" [class]="benefit.tone"><app-icon [name]="benefit.icon" /></span>
+        <h2>{{ benefit.title }}</h2>
+        <p>{{ benefit.description }}</p>
+      </article>
+    }
+  </section>
+
+  <section class="card practice-section" aria-labelledby="practice-title">
+    <span class="stat-icon sage"><app-icon name="book" /></span>
+    <div class="practice-copy">
+      <h2 id="practice-title">Entrenamiento paso a paso</h2>
+      <p>
+        La plataforma está diseñada para que no te abrumes. Practica por bloques: primero los saltos de valor, luego el ciclo de palos, y finalmente une ambos conceptos. Con simuladores interactivos, irás ganando velocidad y confianza sin darte cuenta.
+      </p>
+    </div>
+  </section>
+
+  <section class="cta-banner" aria-label="Llamado a la acción final">
+    <p class="cta-message">Coge tu baraja, pon el 9 de Picas arriba y descubre de lo que eres capaz.</p>
+    <button type="button" class="button button-accent">Empezar el Curso</button>
+  </section>
+</main>

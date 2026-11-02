@@ -1,0 +1,3 @@
+La aplicación de la Lección 4 es un entrenamiento de SSP para practicar cómo reconocer la carta siguiente. En cada ronda muestra una carta y el usuario selecciona el valor y el palo que considera correctos. Las cartas se presentan en orden aleatorio; la aplicación verifica cada respuesta, cuenta los errores y avanza cuando se acierta, hasta completar las 52 cartas.
+
+El entrenamiento muestra el tiempo transcurrido y, al finalizar, guarda el tiempo y los errores de la última sesión en el navegador para mostrarlos la próxima vez. También permite cancelar la sesión con una confirmación.

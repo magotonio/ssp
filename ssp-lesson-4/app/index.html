@@ -1,0 +1,89 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Si Stebbins Poderosa - Lección 4</title>
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <!-- Place favicon.ico in the root directory -->
+  <!-- build:css styles/vendor.css -->
+  <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css" type="text/css" />
+  <!-- endbuild -->
+  <!-- build:css styles/main.css -->
+  <link rel="stylesheet" href="styles/main.css">
+  <!-- endbuild -->
+  <!-- build:js scripts/modernizr.js -->
+  <script src="scripts/modernizr.js"></script>
+  <!-- endbuild -->
+</head>
+
+<body>
+  <!--[if IE]>
+      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+  <div class="container">
+    <h1>Lección 4</h1>
+    <div class="card" style="width: 18rem;" id="iniciar">
+      <div class="card-body">
+        <h5 class="card-title">Saber la carta siguiente</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Resumen de último entrenamiento</h6>
+        <p class="card-text"><b>Tiempo total:</b> <span id="ultimo-tiempo"></span>
+        <p class="card-text"><b>Número de fallos:</b> <span id="ultimos-errores"></span></p>
+        <button type="button" class="btn btn-primary" id="btn-iniciar">Iniciar entrenamiento</button>
+      </div>
+    </div>
+    <div class="card" style="width: 18rem;" id="entrenamiento">
+      <div class="card-body">
+        <h5 class="card-title" id="count-card">1 / 52</h5>
+        <p class="card-text m-0"><b>Tiempo:</b> <span id="span-tiempo">0m 00.00s</span></p>
+        <p class="card-text"><b>Errores:</b> <span id="numero-errores">0</span></p>
+        <h4><span class="badge badge-secondary">La siguiente de:</span></h4>
+        <div class="display-1 text-center"><strong><span id="carta-indice">Q</span> <span id="carta-palo"
+              class="text-danger">&hearts;</span></strong></div>
+        <h4 id="noerror"><div class="badge badge-secondary"><span id="siguiente-indice">Es la carta </span><span id="siguiente-palo"></span></h4><div></h4>
+        <h4 id="error"><div class="badge badge-danger">¡Incorrecto! Prueba otra vez</div></h4>
+        <div id="indices0" class="m-1 text-center">
+          <button id="indiceA" type="button" class="btn btn-secondary">A</button>
+          <button id="indice2" type="button" class="btn btn-secondary">2</button>
+          <button id="indice3" type="button" class="btn btn-secondary">3</button>
+          <button id="indice4" type="button" class="btn btn-secondary">4</button>
+          <button id="indice5" type="button" class="btn btn-secondary">5</button>
+        </div>
+        <div id="indices1" class="m-1 text-center">
+          <button id="indice6" type="button" class="btn btn-secondary">6</button>
+          <button id="indice7" type="button" class="btn btn-secondary">7</button>
+          <button id="indice8" type="button" class="btn btn-secondary">8</button>
+          <button id="indice9" type="button" class="btn btn-secondary">9</button>
+          <button id="indice10" type="button" class="btn btn-secondary">10</button>
+        </div>
+        <div id="indices2" class="m-1 text-center">
+          <button id="indiceJ" type="button" class="btn btn-secondary">J</button>
+          <button id="indiceQ" type="button" class="btn btn-secondary">Q</button>
+          <button id="indiceK" type="button" class="btn btn-secondary">K</button>
+        </div>
+        <div id="palos" class="m-1 text-center">
+          <button id="palo0" type="button" class="btn btn-light">&spades;</button>
+          <button id="palo1" type="button" class="btn btn-light text-danger">&hearts;</button>
+          <button id="palo2" type="button" class="btn btn-light">&clubs;</button>
+          <button id="palo3" type="button" class="btn btn-light text-danger">&diams;</button>
+        </div>
+        <div class="m-1 text-center">
+          <button type="button" class="btn btn-danger" id="btn-stop">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- build:js scripts/vendor.js -->
+  <script type="text/javascript" src="/node_modules/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/node_modules/lodash/lodash.js"></script>
+  <!-- endbuild -->
+  <!-- build:js scripts/main.js -->
+  <script src="scripts/main.js"></script>
+  <!-- endbuild -->
+</body>
+
+</html>

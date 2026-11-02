@@ -1,0 +1,173 @@
+<a href="#contenido" class="skip-link">Saltar al contenido</a>
+<div class="app-shell">
+  <aside class="sidebar" [class.mobile-open]="menuOpen()" aria-label="Navegación principal">
+    <a class="brand" href="#inicio" (click)="navigate('inicio')">
+      <img src="brand.svg" alt="" width="40" height="40">
+      <span>ssp<span class="brand-light">academy</span><small>APRENDE A RECORDAR</small></span>
+    </a>
+    <div class="workspace-label">TU ESPACIO DE APRENDIZAJE</div>
+    <nav id="main-navigation">
+      @for (item of navigation; track item.id) {
+        <a [href]="'#' + item.id" (click)="navigate(item.id)" [class.active]="activeSection() === item.id" [attr.aria-current]="activeSection() === item.id ? 'location' : null">
+          <app-icon [name]="item.icon" /><span>{{ item.label }}</span>
+          @if (item.id === 'lecciones') { <span class="nav-count">8</span> }
+        </a>
+      }
+    </nav>
+    <div class="sidebar-tip">
+      <span class="tip-icon"><app-icon name="star" /></span>
+      <h3>Un poco, cada día.</h3>
+      <p>Los grandes recuerdos empiezan con pequeños hábitos.</p>
+      <a href="#planificar" (click)="navigate('planificar')">Crea tu rutina <app-icon name="arrow" /></a>
+    </div>
+    <div class="sidebar-bottom">
+      <a href="#planificar" (click)="navigate('planificar')"><app-icon name="settings" /> Configurar mi estudio</a>
+      <div class="profile"><span class="avatar">AL</span><div><strong>Alex López</strong><small>Estudiante · Nivel explorador</small></div><span class="online-dot" aria-label="Perfil de demostración"></span></div>
+    </div>
+  </aside>
+
+  <div class="main-shell">
+    <header class="topbar">
+      <div class="flex items-center gap-3">
+        <button class="icon-button mobile-toggle" type="button" (click)="menuOpen.set(!menuOpen())" [attr.aria-expanded]="menuOpen()" aria-controls="main-navigation" aria-label="Alternar menú">
+          <app-icon [name]="menuOpen() ? 'close' : 'menu'" />
+        </button>
+        <span class="breadcrumb">Mi aprendizaje <app-icon name="chevron" /> <strong>Mi espacio</strong></span>
+      </div>
+      <div class="topbar-actions">
+        <span class="demo-label"><span></span> Vista de demostración</span>
+        <details class="notifications">
+          <summary class="icon-button" aria-label="Notificaciones"><app-icon name="bell" /><span class="notification-dot"></span></summary>
+          <div class="notification-panel"><strong>Todo listo para aprender</strong><p>Tu próxima sesión te espera. Este es un perfil de ejemplo; no se enviarán notificaciones reales.</p></div>
+        </details>
+        <span class="avatar small" aria-label="Perfil de ejemplo: Alex López">AL</span>
+      </div>
+    </header>
+
+    <main id="contenido" tabindex="-1">
+      <section id="inicio" class="page-heading">
+        <div><p class="eyebrow">{{ today }}</p><h1>Tu memoria tiene mucho potencial<span class="orange-text">.</span></h1><p>Qué bien verte, Alex. Hoy es un buen día para entrenarla.</p></div>
+        <a class="button button-primary" href="#planificar" (click)="navigate('planificar')"><app-icon name="plus" /> Nueva sesión</a>
+      </section>
+
+      <div class="overview-grid">
+        <article class="stat-card"><span class="stat-icon peach"><app-icon name="flame" /></span><div><span class="stat-label">Racha de estudio</span><div class="stat-value">7 <span>días</span></div></div><span class="stat-note">¡Sigue así!</span></article>
+        <article class="stat-card"><span class="stat-icon sage"><app-icon name="clock" /></span><div><span class="stat-label">Tiempo esta semana</span><div class="stat-value">{{ lessonCompleted() ? '2 h 42' : '2 h 30' }} <span>min</span></div></div><span class="stat-note positive">+18 %</span></article>
+        <article class="stat-card"><span class="stat-icon lavender"><app-icon name="book" /></span><div><span class="stat-label">Lecciones completadas</span><div class="stat-value">{{ lessonCompleted() ? 13 : 12 }} <span>/ 20</span></div></div><span class="mini-progress"><span [style.width.%]="lessonCompleted() ? 65 : 60"></span></span></article>
+      </div>
+
+      <div class="dashboard-grid">
+        <section id="lecciones" class="card lesson-card">
+          <div class="section-header"><div class="flex items-center gap-2"><app-icon name="book" /><h2>Continúa donde lo dejaste</h2></div><span class="badge sage">Módulo 02</span></div>
+          <div class="lesson-layout">
+            <div class="lesson-image">
+              <img src="memory-palace.svg" alt="Ilustración de un palacio con columnas, árboles y un recuerdo guardado en su interior" width="640" height="400">
+              <span class="image-label">EL PODER DE LA IMAGINACIÓN</span>
+              <button type="button" class="play-button" (click)="lessonOpen.set(!lessonOpen())" [attr.aria-expanded]="lessonOpen()" aria-controls="lesson-detail" aria-label="Abrir o cerrar la lección de demostración"><app-icon [name]="lessonOpen() ? 'close' : 'play'" /></button>
+              <span class="image-duration">Lección interactiva · 12 min</span>
+              <div class="image-progress"><span [style.width.%]="lessonCompleted() ? 100 : 45"></span></div>
+            </div>
+            <div class="lesson-copy">
+              <p class="eyebrow">LECCIÓN 04 · TÉCNICAS DE MEMORIA</p>
+              <h3>Construye tu palacio<br class="desktop-break"> de la memoria</h3>
+              <p>Convierte lugares que conoces en un espacio para recordar lo que importa.</p>
+              <ul class="lesson-points"><li><span class="check-circle"><app-icon name="check" /></span> Elige un lugar familiar</li><li><span class="check-circle"><app-icon name="check" /></span> Crea asociaciones visuales</li><li><span class="empty-circle"></span> Recorre tu primer palacio</li></ul>
+              <button class="text-button" type="button" (click)="lessonOpen.set(!lessonOpen())" [attr.aria-expanded]="lessonOpen()" aria-controls="lesson-detail">{{ lessonOpen() ? 'Cerrar lección' : 'Continuar lección' }} <app-icon name="arrow" /></button>
+            </div>
+          </div>
+          @if (lessonOpen()) {
+            <div id="lesson-detail" class="inline-panel">
+              <h3>Un recorrido que ya conoces</h3><p>Imagina la entrada de tu casa, el salón y la cocina. Coloca mentalmente un libro en la entrada, un reloj gigante en el sofá y una naranja en la cocina. Recorre esos lugares e intenta recordar los tres objetos sin leerlos.</p>
+              <button class="button button-primary" type="button" [disabled]="lessonCompleted()" (click)="lessonCompleted.set(true)"><app-icon name="check" />{{ lessonCompleted() ? 'Lección completada' : 'Marcar como completada' }}</button>
+              <p class="small-muted">Contenido de ejemplo; no es un reproductor de vídeo.</p>
+            </div>
+          }
+          <div class="card-footer"><span><span class="tiny-dot"></span> {{ lessonCompleted() ? 'Completada. ¡Buen trabajo!' : 'Tu próximo paso, un recuerdo más fuerte.' }}</span><span>{{ lessonCompleted() ? '100' : '45' }} % completado</span></div>
+        </section>
+
+        <section id="progreso" class="card progress-card">
+          <div class="section-header"><h2>Tu progreso diario</h2><span class="badge neutral">Hoy</span></div>
+          <div class="daily-goal">
+            <svg class="progress-ring" viewBox="0 0 100 100" role="img" [attr.aria-label]="dailyProgress() + ' % del objetivo diario'"><circle class="ring-track" cx="50" cy="50" r="40" /><circle class="ring-value" cx="50" cy="50" r="40" pathLength="100" [attr.stroke-dasharray]="dailyProgress() + ' 100'" /><text x="50" y="49" text-anchor="middle">{{ dailyProgress() }} %</text><text class="ring-caption" x="50" y="64" text-anchor="middle">del objetivo</text></svg>
+            <div><strong>{{ lessonCompleted() ? 4 : 3 }} de 4</strong><p>actividades completadas</p><span class="positive text-xs">{{ lessonCompleted() ? '¡Objetivo conseguido!' : '¡Ya casi lo tienes!' }}</span></div>
+          </div>
+          <div class="week-heading"><h3>Actividad semanal</h3><button class="text-button muted" type="button" (click)="previousWeek.set(!previousWeek())">{{ previousWeek() ? 'Semana anterior' : 'Esta semana' }} <app-icon name="chevron" /></button></div>
+          <div class="bar-chart" role="img" [attr.aria-label]="previousWeek() ? 'Semana anterior: 30, 45, 20, 55, 35, 65 y 45 minutos' : 'Esta semana: 40, 65, 48, 85, 60, 100 y ' + (lessonCompleted() ? 95 : 72) + ' minutos'">
+            @for (value of weeklyActivity(); track $index) {
+              <div class="bar-column"><div class="bar-track"><span [style.height.%]="value" [class.highlight]="$index === 6" [attr.title]="value + ' minutos'"></span></div><span>{{ ['L', 'M', 'X', 'J', 'V', 'S', 'D'][$index] }}</span></div>
+            }
+          </div>
+          <details class="progress-details"><summary>Ver resumen de actividad <app-icon name="arrow" /></summary><p>Datos ficticios para explorar el diseño. Tu objetivo de ejemplo es completar cuatro actividades al día. Completar la lección actual actualiza este panel.</p></details>
+        </section>
+
+        <section id="entrenamiento" class="card training-card">
+          <div class="section-header"><div class="flex items-center gap-2"><app-icon name="brain" /><h2>Un reto para tu memoria</h2></div><span class="badge peach">Entrenamiento</span></div>
+          <p>Pequeños desafíos. Grandes conexiones.</p>
+          <div class="exercise-heading"><h3>Recuerda la secuencia</h3><span><app-icon name="clock" /> A tu ritmo</span></div>
+          <p class="small-muted" aria-live="polite">
+            @switch (trainingPhase()) {
+              @case ('ready') { Pulsa «Practicar» y observa el orden de las cuatro fichas. }
+              @case ('memorize') { Memoriza de izquierda a derecha. Cuando estés listo, ponte a prueba. }
+              @case ('recall') { Elige los números en el orden que acabas de ver. }
+              @case ('result') { Has acertado {{ correctAnswers() }} de 4 posiciones. {{ correctAnswers() === 4 ? '¡Una memoria excelente!' : 'Cada intento cuenta. Vuelve a practicar.' }} }
+            }
+          </p>
+          <div class="memory-tiles">
+            @for (value of sequence(); track $index) {
+              <div class="memory-tile" [class]="'memory-tile tile-' + $index" [attr.aria-label]="trainingPhase() === 'recall' ? 'Número oculto' : 'Posición ' + ($index + 1) + ': ' + value">{{ trainingPhase() === 'recall' ? '?' : value }}<span>{{ ['ASOCIA', 'IMAGINA', 'CONECTA', 'RECUERDA'][$index] }}</span></div>
+            }
+          </div>
+          @if (trainingPhase() === 'recall') {
+            <div class="answer-options" aria-label="Selecciona la secuencia">
+              @for (value of [1, 2, 3, 4]; track value) { <button type="button" class="button button-secondary" [disabled]="answers().includes(value)" (click)="answer(value)">{{ value }}</button> }
+            </div>
+            <p class="small-muted" role="status">Tu respuesta: {{ answers().join(' → ') || 'Elige el primer número' }}</p>
+          }
+          <div class="training-actions"><button class="button button-secondary" type="button" (click)="testMemory()" [disabled]="trainingPhase() !== 'memorize'">Ponerme a prueba</button><button class="button button-accent" type="button" (click)="startTraining()">{{ trainingPhase() === 'ready' ? 'Practicar' : 'Volver a practicar' }} <app-icon name="arrow" /></button></div>
+        </section>
+
+        <section class="card study-card">
+          <div class="section-header"><div class="flex items-center gap-2"><app-icon name="folder" /><h2>Aprende con intención</h2></div><span class="badge lavender">Estudio activo</span></div>
+          <h3>Así se construye un recuerdo</h3><p>Entender el proceso es el primer paso para mejorarlo.</p>
+          <div class="memory-flow" aria-label="De la memoria sensorial a la memoria de trabajo y a largo plazo">
+            <div class="flow-node"><span class="flow-icon sage"><app-icon name="target" /></span><strong>Sensorial</strong><small>Percibe</small></div><app-icon name="arrow" />
+            <div class="flow-node"><span class="flow-icon peach"><app-icon name="brain" /></span><strong>De trabajo</strong><small>Conecta</small></div><app-icon name="arrow" />
+            <div class="flow-node"><span class="flow-icon lavender"><app-icon name="folder" /></span><strong>Largo plazo</strong><small>Consolida</small></div>
+          </div>
+          <div class="study-note"><app-icon name="info" /><p><strong>La clave está en recuperar.</strong><br>Intenta recordar antes de volver a leer. Ese pequeño esfuerzo fortalece tu memoria.</p></div>
+          <details class="concept-details"><summary>Explorar el método <app-icon name="arrow" /></summary><p>Cierra tus apuntes, escribe tres ideas principales y compáralas con el original. Repasa las que falten mañana y vuelve a comprobarlas unos días después.</p></details>
+        </section>
+
+        <section id="biblioteca" class="card library-card">
+          <div class="section-header"><div><p class="eyebrow">SIGUE EXPLORANDO</p><h2>Un poco de inspiración</h2></div><label class="search-field"><app-icon name="search" /><input type="search" aria-label="Buscar recursos" placeholder="Buscar recursos..." [value]="search()" (input)="search.set($event.target.value)"></label></div>
+          <div class="resource-grid">
+            @for (resource of filteredResources(); track resource.title) {
+              <button class="resource" type="button" (click)="selectedResource.set(resource)" [attr.aria-expanded]="selectedResource()?.title === resource.title" aria-controls="resource-detail">
+                <span [class]="'resource-art ' + resource.color"><span class="art-orbit"></span><app-icon [name]="resource.icon" /><span class="art-dot"></span></span>
+                <span class="resource-category">{{ resource.category }}</span><strong>{{ resource.title }}</strong><span class="resource-bottom">{{ resource.duration }} <app-icon name="arrow" /></span>
+              </button>
+            } @empty { <p class="empty-state" role="status">No hay recursos para «{{ search() }}». Prueba con «memoria», «guía» o «tarjetas».</p> }
+          </div>
+          @if (selectedResource(); as resource) {
+            <div id="resource-detail" class="inline-panel"><div class="section-header"><h3>{{ resource.title }}</h3><button class="icon-button" type="button" (click)="selectedResource.set(null)" aria-label="Cerrar recurso"><app-icon name="close" /></button></div><p>{{ resource.description }}</p></div>
+          }
+        </section>
+
+        <section id="planificar" class="card planner-card">
+          <div class="section-header"><div class="flex items-center gap-2"><app-icon name="plus" /><h2>Haz espacio para aprender</h2></div></div>
+          <p>Diseña tu próxima sesión de estudio.</p>
+          <form [formGroup]="sessionForm" (ngSubmit)="saveSession()" novalidate>
+            <label for="session-name">Nombre de la sesión</label><input id="session-name" formControlName="name" placeholder="Ej. Mi práctica de cada mañana" maxlength="60" [attr.aria-invalid]="submitted() && sessionForm.controls.name.invalid" [attr.aria-describedby]="submitted() && sessionForm.controls.name.invalid ? 'name-error' : null">
+            @if (submitted() && sessionForm.controls.name.invalid) { <p id="name-error" class="form-error" role="alert">Escribe un nombre de entre 1 y 60 caracteres, no solo espacios.</p> }
+            <div class="form-row"><div><label for="session-topic">Quiero trabajar</label><select id="session-topic" formControlName="topic"><option>Técnicas de memoria</option><option>Estudio activo</option><option>Asociación visual</option></select></div><div><label for="session-minutes">Duración</label><select id="session-minutes" formControlName="minutes"><option [ngValue]="5">5 minutos</option><option [ngValue]="15">15 minutos</option><option [ngValue]="30">30 minutos</option><option [ngValue]="60">60 minutos</option></select></div></div>
+            <label class="checkbox-label"><input type="checkbox" formControlName="reminders"><span>Incluir un recordatorio <small>(simulado)</small></span></label>
+            <button type="submit" class="button button-primary w-full">Guardar sesión <app-icon name="arrow" /></button>
+            @if (session(); as saved) { <div class="session-success" role="status"><app-icon name="check" /><p><strong>{{ saved.name }}</strong><br>{{ saved.topic }} · {{ saved.minutes }} min<br>{{ saved.reminders ? 'Recordatorio simulado activado.' : 'Sin recordatorio.' }}</p></div> }
+            <p class="form-hint">Prototipo local: los cambios se reinician al recargar.</p>
+          </form>
+        </section>
+      </div>
+      <footer class="page-footer"><span><img src="brand.svg" alt="" width="20" height="20"> Construye recuerdos. Descubre tu potencial.</span><span>SSP Academy <span class="footer-divider">/</span> Mockup · Datos de ejemplo</span></footer>
+    </main>
+  </div>
+</div>

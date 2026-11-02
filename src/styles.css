@@ -1,0 +1,31 @@
+@import "tailwindcss" source("./");
+
+@theme {
+  --font-sans: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --color-canvas: #f8f9fa;
+  --color-navy: #1e293b;
+  --color-accent: #f97316;
+}
+
+:root { color-scheme: light; font-family: var(--font-sans); color: #1a202c; background: var(--color-canvas); font-synthesis: none; }
+* { box-sizing: border-box; }
+body { margin: 0; font-size: 14px; }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 2px solid #087f94; outline-offset: 4px; }
+section, main { scroll-margin-top: 24px; }
+h1, h2, h3, p { margin: 0; }
+h2 { font-size: 16px; font-weight: 650; letter-spacing: -.3px; color: #1a202c; }
+h3 { font-size: 14px; font-weight: 650; color: #1a202c; }
+p { color: #475569; line-height: 1.7; }
+strong { font-weight: 600; }
+.brand-mark { display: grid; place-items: center; width: 44px; height: 44px; flex-shrink: 0; border-radius: 12px; background: var(--color-navy); color: white; }
+.brand-light { font-weight: 400; }
+.button { display: inline-flex; justify-content: center; align-items: center; gap: 9px; border: 1px solid transparent; border-radius: 8px; padding: 11px 20px; font-family: inherit; font-size: 13px; font-weight: 600; min-height: 44px; cursor: pointer; }
+.button-accent { background: var(--color-accent); color: #301a09; }
+.button-secondary { background: #f1f5f9; color: var(--color-navy); border-color: #cbd5e1; }
+.button:hover { filter: brightness(.94); }
+.stat-icon { width: 43px; height: 43px; border-radius: 11px; display: grid; place-items: center; flex-shrink: 0; }
+.peach { background: #fdf0e5; color: #9c4c1f; }
+.sage { background: #edf2eb; color: #4c6a50; }
+.lavender { background: #f0eef9; color: #6b5c9d; }
+.card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; min-width: 0; }
