@@ -175,7 +175,7 @@ const CARD_BY_CODE: ReadonlyMap<string, SspCard> = new Map(
 );
 
 /**
- * Construye los 52 pasos del reloj visual de la Lección 1:
+ * Construye los 52 pasos del reloj visual de la Introducción:
  * - El As de Picas (AP) se coloca arriba a las 12 en punto (hueco 0).
  * - Cada palo avanza contando de 3 en 3 huecos en sentido horario.
  * - El As del siguiente palo se coloca justo después del 5 del palo anterior.

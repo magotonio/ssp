@@ -15,10 +15,15 @@ export const routes: Routes = [
     redirectTo: () => inject(CourseProgressService).targetCourseRoute(),
   },
   {
-    path: 'curso/leccion-1',
-    title: 'Lección 1 · Introducción a la SSP | StackSSP',
+    path: 'curso/introduccion',
+    title: 'Introducción · Ordenación SSP | StackSSP',
     loadComponent: () =>
-      import('./course/lesson-1/lesson-1').then((module) => module.Lesson1),
+      import('./course/introduction/introduction').then((module) => module.Introduction),
+  },
+  {
+    path: 'curso/leccion-1',
+    pathMatch: 'full',
+    redirectTo: 'curso/introduccion',
   },
   {
     path: '**',

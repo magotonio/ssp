@@ -47,10 +47,10 @@ describe('Pie de página común (Footer)', () => {
     const links = Array.from(nav?.querySelectorAll<HTMLAnchorElement>('a') ?? []);
     expect(links.map((a) => a.textContent?.trim())).toEqual(['Inicio', 'Curso']);
     expect(links[0].getAttribute('href')).toBe('/');
-    expect(links[1].getAttribute('href')).toBe('/curso/leccion-1');
+    expect(links[1].getAttribute('href')).toBe('/curso/introduccion');
 
-    // Al navegar a la lección 1 sigue presente el mismo pie de página común
-    await router.navigateByUrl('/curso/leccion-1');
+    // Al navegar a la introducción sigue presente el mismo pie de página común
+    await router.navigateByUrl('/curso/introduccion');
     fixture.detectChanges();
 
     const footerInLesson = host.querySelector('footer');

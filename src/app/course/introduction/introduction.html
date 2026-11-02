@@ -1,4 +1,4 @@
-<a href="#contenido-leccion" class="skip-link">Saltar al contenido</a>
+<a href="#contenido-introduccion" class="skip-link">Saltar al contenido</a>
 
 <header class="sticky top-0 z-30 bg-white border-b border-slate-200">
   <div class="max-w-[1080px] mx-auto h-14 sm:h-16 px-4 sm:px-6 flex items-center justify-between gap-4">
@@ -8,14 +8,14 @@
         <span>Stack<span class="brand-light">SSP</span></span>
       </a>
       <span class="text-slate-300 font-medium" aria-hidden="true">/</span>
-      <span class="text-[13px] font-semibold text-slate-600">Lección 1</span>
+      <span class="text-[13px] font-semibold text-slate-600">Introducción</span>
     </div>
 
     <div class="flex items-center gap-3">
       @if (isCompleted()) {
         <span class="status-pill status-completed">
           <app-icon name="check" />
-          <span class="hidden sm:inline">Lección completada</span>
+          <span class="hidden sm:inline">Introducción completada</span>
         </span>
       } @else {
         <span class="status-pill status-active hidden sm:inline-flex">En progreso</span>
@@ -28,18 +28,18 @@
   </div>
 </header>
 
-<main id="contenido-leccion" class="max-w-[1080px] mx-auto px-3.5 sm:px-6 pt-5 sm:pt-8 pb-11 sm:pb-16 flex flex-col gap-4.5 sm:gap-6" tabindex="-1">
+<main id="contenido-introduccion" class="max-w-[1080px] mx-auto px-3.5 sm:px-6 pt-5 sm:pt-8 pb-11 sm:pb-16 flex flex-col gap-4.5 sm:gap-6" tabindex="-1">
   @if (!progress.cookiesAvailable()) {
     <div class="flex items-start gap-2.5 px-4 py-3 rounded-[10px] bg-orange-50 border border-orange-200 text-orange-800" role="status">
       <app-icon name="info" />
-      <p class="text-[13px] text-orange-800">Las cookies están desactivadas en tu navegador. Podrás usar la lección con normalidad, aunque el progreso no se recordará al cerrar la pestaña.</p>
+      <p class="text-[13px] text-orange-800">Las cookies están desactivadas en tu navegador. Podrás usar este módulo con normalidad, aunque el progreso no se recordará al cerrar la pestaña.</p>
     </div>
   }
 
   <!-- Introducción teórica -->
-  <section class="card p-5 sm:p-8 flex flex-col gap-3.5" aria-labelledby="lesson-title">
-    <p class="eyebrow">LECCIÓN 01 · FUNDAMENTOS</p>
-    <h1 id="lesson-title" class="lesson-h1">Introducción a la ordenación SSP</h1>
+  <section class="card p-5 sm:p-8 flex flex-col gap-3.5" aria-labelledby="intro-title">
+    <p class="eyebrow">INTRODUCCIÓN · FUNDAMENTOS</p>
+    <h1 id="intro-title" class="lesson-h1">Introducción a la ordenación SSP</h1>
     <div class="flex flex-col gap-3 max-w-[820px]">
       <p class="text-[15px] leading-relaxed">
         La ordenación <strong>SSP (Si Stebbins Poderosa)</strong> es una baraja ordenada matemática y cíclica pensada para la cartomagia. A partir de un principio aritmético oculto, organiza las 52 cartas sin repeticiones formando un ciclo continuo: al terminar la última carta se enlaza de nuevo con la primera.
@@ -126,13 +126,13 @@
     }
   </section>
 
-  <!-- Cierre y preparación para la Lección 2 -->
+  <!-- Cierre y preparación para la Lección 1 -->
   <section class="card p-5 sm:p-8 flex flex-col gap-5" aria-labelledby="closing-title">
     <div class="flex flex-col gap-2.5 max-w-[780px]">
-      <p class="eyebrow">SIGUIENTE PASO · PREPARACIÓN PARA LA LECCIÓN 2</p>
+      <p class="eyebrow">SIGUIENTE PASO · PREPARACIÓN PARA LA LECCIÓN 1</p>
       <h2 id="closing-title" class="text-xl">De la teoría sobre el reloj a las manos</h2>
       <p>
-        Este esquema circular de 52 huecos es una explicación visual para entender de dónde nace la estructura de la SSP; llevarlo a la práctica sobre un tapete requeriría una mesa enorme. En la <strong>Lección 2</strong> aprenderás una técnica sencilla y directa para <strong>ordenar la baraja directamente en las manos</strong>.
+        Este esquema circular de 52 huecos es una explicación visual para entender de dónde nace la estructura de la SSP; llevarlo a la práctica sobre un tapete requeriría una mesa enorme. En la <strong>Lección 1</strong> aprenderás una técnica sencilla y directa para <strong>ordenar la baraja directamente en las manos</strong>.
       </p>
     </div>
 
@@ -142,10 +142,10 @@
         class="button w-full sm:w-auto"
         [class.button-accent]="!isCompleted()"
         [class.button-completed]="isCompleted()"
-        (click)="completeLesson()"
+        (click)="completeIntroduction()"
       >
         <app-icon name="check" />
-        <span>{{ isCompleted() ? 'Lección 1 completada' : 'Completar Lección 1' }}</span>
+        <span>{{ isCompleted() ? 'Introducción completada' : 'Completar Introducción' }}</span>
       </button>
 
       <a routerLink="/" class="button button-secondary w-full sm:w-auto">
@@ -156,7 +156,7 @@
 
     @if (isCompleted()) {
       <p class="text-[13px] font-medium text-[#397153]" role="status">
-        Tu avance se ha guardado en este navegador. La Lección 2 estará disponible próximamente.
+        Tu avance se ha guardado en este navegador. La Lección 1 estará disponible próximamente.
       </p>
     }
   </section>

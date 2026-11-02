@@ -16,7 +16,7 @@
     </div>
     @if (savedLesson(); as lesson) {
       <p class="resume-hint" role="status">
-        Progreso guardado: <strong>Lección {{ lesson.number }} · {{ lesson.title }}</strong>
+        Progreso guardado: <strong>{{ lesson.label }} · {{ lesson.title }}</strong>
         @if (savedLessonCompleted()) {
           <span class="resume-completed">· Completada</span>
         }

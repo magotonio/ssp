@@ -1,21 +1,21 @@
 import { DOCUMENT } from '@angular/common';
 import { computed, inject, Injectable, signal } from '@angular/core';
 
-export type LessonId = 'leccion-1';
+export type LessonId = 'introduccion';
 
 export interface CourseLessonMeta {
   readonly id: LessonId;
-  readonly number: number;
+  readonly label: string;
   readonly title: string;
   readonly route: string;
 }
 
 export const COURSE_LESSONS: readonly CourseLessonMeta[] = [
   {
-    id: 'leccion-1',
-    number: 1,
-    title: 'Introducción y construcción visual',
-    route: '/curso/leccion-1',
+    id: 'introduccion',
+    label: 'Introducción',
+    title: 'Construcción visual de la SSP',
+    route: '/curso/introduccion',
   },
 ] as const;
 
@@ -26,6 +26,14 @@ const COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365;
 
 function isValidLessonId(value: string): value is LessonId {
   return COURSE_LESSONS.some((lesson) => lesson.id === value);
+}
+
+function normalizeLessonId(value: string): LessonId | null {
+  const trimmed = value.trim();
+  if (trimmed === 'leccion-1') {
+    return 'introduccion';
+  }
+  return isValidLessonId(trimmed) ? trimmed : null;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -62,7 +70,7 @@ export class CourseProgressService {
 
   syncFromCookies(): void {
     const rawCurrent = this.readCookie(CURRENT_LESSON_COOKIE);
-    const validCurrent = rawCurrent && isValidLessonId(rawCurrent) ? rawCurrent : null;
+    const validCurrent = rawCurrent ? normalizeLessonId(rawCurrent) : null;
     this.currentLessonState.set(validCurrent);
 
     const rawCompleted = this.readCookie(COMPLETED_LESSONS_COOKIE);
@@ -73,8 +81,8 @@ export class CourseProgressService {
 
     const parsed = rawCompleted
       .split(',')
-      .map((item) => item.trim())
-      .filter(isValidLessonId);
+      .map(normalizeLessonId)
+      .filter((item): item is LessonId => item !== null);
 
     this.completedLessonsState.set(Array.from(new Set(parsed)));
   }
@@ -131,4 +139,3 @@ export class CourseProgressService {
     }
   }
 }
-

@@ -66,7 +66,7 @@ describe('Home de la aplicación SSP', () => {
     expect(page?.querySelector('.playing-cards')).toBeNull();
   });
 
-  it('muestra «Iniciar el Curso» y «Empezar el Curso» hacia /curso/leccion-1 cuando no hay cookie', async () => {
+  it('muestra «Iniciar el Curso» y «Empezar el Curso» hacia /curso/introduccion cuando no hay cookie', async () => {
     const harness = await RouterTestingHarness.create();
     await harness.navigateByUrl('/', Home);
     const page = harness.routeNativeElement;
@@ -77,14 +77,14 @@ describe('Home de la aplicación SSP', () => {
       'Empezar el Curso',
     ]);
     links.forEach((link) => {
-      expect(link.getAttribute('href')).toBe('/curso/leccion-1');
+      expect(link.getAttribute('href')).toBe('/curso/introduccion');
     });
     expect(page?.querySelector('.resume-hint')).toBeNull();
   });
 
   it('cambia los botones a «Continuar curso» cuando existe progreso guardado en cookies', async () => {
     const doc = TestBed.inject(DOCUMENT);
-    doc.cookie = `${CURRENT_LESSON_COOKIE}=leccion-1; path=/`;
+    doc.cookie = `${CURRENT_LESSON_COOKIE}=introduccion; path=/`;
 
     const harness = await RouterTestingHarness.create();
     await harness.navigateByUrl('/', Home);
@@ -95,6 +95,6 @@ describe('Home de la aplicación SSP', () => {
       'Continuar curso',
       'Continuar curso',
     ]);
-    expect(page?.querySelector('.resume-hint')?.textContent).toContain('Lección 1');
+    expect(page?.querySelector('.resume-hint')?.textContent).toContain('Introducción');
   });
 });

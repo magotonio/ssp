@@ -21,18 +21,18 @@ interface SspPropertyItem {
 }
 
 @Component({
-  selector: 'app-lesson-1',
+  selector: 'app-introduction',
   imports: [RouterLink, Icon, SuitIcon, SspCircle],
-  templateUrl: './lesson-1.html',
-  styleUrl: './lesson-1.css',
+  templateUrl: './introduction.html',
+  styleUrl: './introduction.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Lesson1 {
+export class Introduction {
   protected readonly progress = inject(CourseProgressService);
   private readonly circleRef = viewChild(SspCircle);
 
   protected readonly isCompleted = computed<boolean>(() =>
-    this.progress.isLessonCompleted('leccion-1'),
+    this.progress.isLessonCompleted('introduccion'),
   );
 
   protected readonly constructionRules: readonly ConstructionRuleItem[] = [
@@ -91,7 +91,7 @@ export class Lesson1 {
   ];
 
   constructor() {
-    this.progress.recordLessonVisit('leccion-1');
+    this.progress.recordLessonVisit('introduccion');
   }
 
   protected showSuitOnCircle(suit: SuitCode): void {
@@ -102,8 +102,7 @@ export class Lesson1 {
     this.circleRef()?.inspectSspBoundary(boundary);
   }
 
-  protected completeLesson(): void {
-    this.progress.markLessonCompleted('leccion-1');
+  protected completeIntroduction(): void {
+    this.progress.markLessonCompleted('introduccion');
   }
 }
-

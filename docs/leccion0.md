@@ -1,4 +1,4 @@
-En la **Lección 1**, se presenta el concepto y el método de construcción visual de la ordenación de cartomagia **SSP (Si Stebbins Poderosa)**.
+En la **Lección 1introducción**, se presenta el concepto y el método de construcción visual de la ordenación de cartomagia **SSP (Si Stebbins Poderosa)**.
 
 ### **1. Método de construcción gráfico (Los 52 huecos)**
 * **Estructura circular:** Se imaginan 52 huecos o círculos en forma de reloj para ubicar toda la baraja.
