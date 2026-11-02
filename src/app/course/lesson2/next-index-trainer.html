@@ -1,0 +1,109 @@
+<div class="flex flex-col gap-4.5 p-4 sm:p-5 rounded-xl bg-slate-50 border border-slate-200">
+  <!-- Barra superior de contadores y botón de reseteo -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3.5 border-b border-slate-200">
+    <div class="flex flex-wrap items-center gap-2.5" aria-label="Marcador del entrenador">
+      <div class="score-pill score-pill-hits" data-testid="trainer-hits">
+        <span class="score-label">Aciertos</span>
+        <strong class="score-value">{{ hits() }}</strong>
+      </div>
+
+      <div class="score-pill score-pill-misses" data-testid="trainer-misses">
+        <span class="score-label">Fallos</span>
+        <strong class="score-value">{{ misses() }}</strong>
+      </div>
+
+      @if (accuracyPercent() !== null) {
+        <div class="score-pill score-pill-neutral">
+          <span class="score-label">Precisión</span>
+          <strong class="score-value">{{ accuracyPercent() }}%</strong>
+        </div>
+      }
+    </div>
+
+    <button
+      type="button"
+      class="reset-counter-btn self-start sm:self-auto"
+      data-testid="trainer-reset"
+      (click)="resetCounters()"
+    >
+      <app-icon name="reset" />
+      <span>Resetear contador</span>
+    </button>
+  </div>
+
+  <!-- Área central: índice aleatorio actual + teclado de los 13 índices -->
+  <div class="trainer-arena">
+    <!-- Carta / Índice preguntado -->
+    <div class="flex flex-col items-center justify-center gap-2.5 p-4 sm:p-5 rounded-[11px] bg-white border border-slate-200">
+      <span class="text-xs font-bold uppercase tracking-wide text-slate-500">
+        Índice actual al azar
+      </span>
+
+      <div
+        class="prompt-card"
+        data-testid="trainer-prompt-rank"
+        [attr.aria-label]="'Índice actual: ' + currentRank().valueName + ' (' + currentRank().rank + ')'"
+      >
+        <span class="prompt-corner prompt-corner-top" aria-hidden="true">{{ currentRank().rank }}</span>
+        <span class="prompt-rank-main">{{ currentRank().rank }}</span>
+        <span class="prompt-corner prompt-corner-bottom" aria-hidden="true">{{ currentRank().rank }}</span>
+      </div>
+
+      <span class="text-[13px] font-semibold text-slate-600">
+        {{ currentCardSubtitle() }}
+      </span>
+    </div>
+
+    <!-- Selección del siguiente índice -->
+    <div class="flex flex-col justify-between gap-4 p-4 sm:p-5 rounded-[11px] bg-white border border-slate-200">
+      <div class="flex flex-col gap-1">
+        <h3 class="text-[15.5px] text-slate-900">
+          ¿Cuál es el siguiente índice después de <strong class="text-slate-950">{{ currentRank().rank }}</strong>?
+        </h3>
+        <p class="text-[13px] text-slate-600">
+          Pulsa el índice que le sigue en la ordenación SSP:
+        </p>
+      </div>
+
+      <div
+        class="choices-grid"
+        role="group"
+        aria-label="Índices disponibles para responder"
+      >
+        @for (item of ranks; track item.value) {
+          <button
+            type="button"
+            class="index-choice-btn"
+            [class.index-choice-btn-wrong]="isFailedOption(item.value)"
+            [attr.data-rank]="item.rank"
+            [attr.aria-label]="'Elegir ' + item.valueName + (item.valueName !== item.rank ? ' (' + item.rank + ')' : '')"
+            (click)="selectAnswer(item.value)"
+          >
+            {{ item.rank }}
+          </button>
+        }
+      </div>
+
+      <!-- Mensaje accesible de resultado o instrucción -->
+      <div
+        class="feedback-box"
+        [class.feedback-box-hit]="feedback()?.kind === 'hit'"
+        [class.feedback-box-miss]="feedback()?.kind === 'miss'"
+        role="status"
+        aria-live="polite"
+      >
+        @if (feedback(); as fb) {
+          <div class="flex flex-col gap-0.5">
+            <strong class="text-[13.5px]">{{ fb.heading }}</strong>
+            <span class="text-[12.5px] opacity-90">{{ fb.detail }}</span>
+          </div>
+        } @else {
+          <p class="text-[13px] text-slate-600">
+            Aplica <strong>− 4</strong> si el índice está entre <strong>5 y K</strong>, o <strong>+ 9</strong> si es <strong>A, 2, 3 o 4</strong>.
+          </p>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+

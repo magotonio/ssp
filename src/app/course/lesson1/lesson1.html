@@ -563,6 +563,16 @@
         <span>{{ isLessonCompleted() ? 'Lección 1 completada' : 'Completar Lección 1' }}</span>
       </button>
 
+      <a
+        routerLink="/curso/leccion-2"
+        class="button w-full sm:w-auto"
+        [class.button-accent]="isLessonCompleted()"
+        [class.button-secondary]="!isLessonCompleted()"
+      >
+        <span>Ir a la Lección 2</span>
+        <app-icon name="arrow" />
+      </a>
+
       <a routerLink="/curso/introduccion" class="button button-secondary w-full sm:w-auto">
         <app-icon name="arrowLeft" />
         <span>Repasar Introducción</span>
@@ -575,7 +585,7 @@
 
     @if (isLessonCompleted()) {
       <p class="text-[13px] font-medium text-[#397153]" role="status">
-        ¡Enhorabuena! Tu progreso en la Lección 1 ha quedado guardado en este navegador. Conserva tu baraja física ordenada para la siguiente lección.
+        ¡Enhorabuena! Tu progreso en la Lección 1 ha quedado guardado en este navegador. Continúa con la Lección 2 para dominar el cálculo del siguiente índice.
       </p>
     }
   </section>

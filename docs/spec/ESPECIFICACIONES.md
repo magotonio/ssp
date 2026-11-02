@@ -86,7 +86,20 @@ Validaciones: `npm run build` y `npm test -- --watch=false`. La compilación se 
   2. **División en 3 montones:** guía por referencias visuales (sin necesidad de contar cartas) para formar sobre la mesa los tres montones cara arriba y verificar sus tres cartas superiores visibles conforme a [leccion1.md](../leccion1.md).
   3. **Recogida alternada («uno, dos, tres…»):** entrenador interactivo en vivo que muestra el estado de los 3 montones en la mesa, la carta visible en la mano receptora y la tira de cartas entrelazadas, con controles de ritmo automático ajustable, avance/retroceso carta a carta, avance por tríos («1-2-3»), reinicio y saltos de comprobación hasta voltear el mazo dorso arriba.
   4. **Verificación física y propiedad cíclica:** explicación del carácter cíclico (cortes completos ilimitados sin alterar la secuencia) y comprobador interactivo donde el usuario selecciona cualquier carta vista al cortar su baraja física para verificar las 6 cartas siguientes según [ordenacion-ssp.md](../ordenacion-ssp.md).
-- Cierre con adelanto de la siguiente lección (deducción de la carta siguiente al cortar por cualquier posición), botón para marcar la **Lección 1** como completada y navegación a **Introducción** e **Inicio**.
+- Cierre con adelanto de la siguiente lección (deducción de la carta siguiente al cortar por cualquier posición), botón para marcar la **Lección 1** como completada y navegación a **Lección 2**, **Introducción** e **Inicio**.
+
+### Lección 2 (`/curso/leccion-2`)
+
+- Cabecera de curso con enlace a la portada (`/`), acceso rápido a **Lección 1** (`/curso/leccion-1`), referencia a **Lección 2** e indicador de estado («En progreso» / «Lección 2 completada»).
+- Explicación pedagógica del cálculo del **siguiente índice** conforme a [leccion2.md](../leccion2.md) y [ordenacion-ssp.md](../ordenacion-ssp.md):
+  - Equivalencia numérica de los 13 índices (`A` a `K`).
+  - Desglose comparativo del caso general y de la gestión de valores bajos sin duplicar ni contradecir la definición normativa de [ordenacion-ssp.md](../ordenacion-ssp.md).
+  - Explorador interactivo del ciclo de 13 índices donde al pulsar cualquier índice se muestra la operación aplicada y el índice resultante.
+- **Entrenador del siguiente índice:**
+  - Muestra aleatoriamente uno de los 13 índices (`A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K`) para que el usuario pulse cuál es el índice siguiente.
+  - Si falla, incrementa el **contador de fallos**, señala el error con una pista de la regla y permite volver a intentarlo sobre el mismo índice; si acierta, incrementa el **contador de aciertos**, confirma el cálculo aplicado y pasa automáticamente a un nuevo índice aleatorio distinto.
+  - Botón **Resetear contador** para poner a cero los contadores de aciertos y fallos en cualquier momento.
+- Cierre con adelanto de la **Lección 3** (funcionamiento y secuencia de los palos), botón para marcar la **Lección 2** como completada y navegación a **Lección 1** e **Inicio**.
 
 ### Ejecución desde la raíz
 

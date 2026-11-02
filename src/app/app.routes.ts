@@ -27,6 +27,12 @@ export const routes: Routes = [
       import('./course/lesson1/lesson1').then((module) => module.Lesson1),
   },
   {
+    path: 'curso/leccion-2',
+    title: 'Lección 2 · Cálculo del siguiente índice | StackSSP',
+    loadComponent: () =>
+      import('./course/lesson2/lesson2').then((module) => module.Lesson2),
+  },
+  {
     path: '**',
     redirectTo: '',
   },

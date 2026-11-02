@@ -1,0 +1,308 @@
+<a href="#contenido-leccion-2" class="skip-link">Saltar al contenido</a>
+
+<header class="sticky top-0 z-30 bg-white border-b border-slate-200">
+  <div class="max-w-[1080px] mx-auto h-14 sm:h-16 px-4 sm:px-6 flex items-center justify-between gap-3">
+    <div class="flex items-center gap-2.5 min-w-0">
+      <a
+        routerLink="/"
+        class="inline-flex items-center gap-2.5 text-lg font-bold tracking-tight text-slate-900 shrink-0"
+        aria-label="Volver a la portada de StackSSP"
+      >
+        <span class="brand-mark brand-mark-sm" aria-hidden="true"><app-icon name="cards" /></span>
+        <span>Stack<span class="brand-light">SSP</span></span>
+      </a>
+      <span class="text-slate-300 font-medium" aria-hidden="true">/</span>
+      <span class="text-[13px] font-semibold text-slate-600 truncate">Lección 2</span>
+    </div>
+
+    <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+      @if (isLessonCompleted()) {
+        <span class="status-pill status-completed">
+          <app-icon name="check" />
+          <span class="hidden sm:inline">Lección 2 completada</span>
+        </span>
+      } @else {
+        <span class="status-pill status-active hidden sm:inline-flex">
+          En progreso
+        </span>
+      }
+      <a routerLink="/curso/leccion-1" class="back-link hidden md:inline-flex">
+        <app-icon name="arrowLeft" />
+        <span>Lección 1</span>
+      </a>
+      <a routerLink="/" class="back-link">
+        <span>Inicio</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main
+  id="contenido-leccion-2"
+  class="max-w-[1080px] mx-auto px-3.5 sm:px-6 pt-5 sm:pt-8 pb-11 sm:pb-16 flex flex-col gap-4.5 sm:gap-6"
+  tabindex="-1"
+>
+  @if (!progress.cookiesAvailable()) {
+    <div
+      class="flex items-start gap-2.5 px-4 py-3 rounded-[10px] bg-orange-50 border border-orange-200 text-orange-800"
+      role="status"
+    >
+      <app-icon name="info" />
+      <p class="text-[13px] text-orange-800">
+        Las cookies están desactivadas en tu navegador. Podrás estudiar y usar el entrenador con normalidad, aunque el progreso no se recordará al cerrar la pestaña.
+      </p>
+    </div>
+  }
+
+  <!-- 1. Introducción al concepto de índice -->
+  <section class="card p-5 sm:p-8 flex flex-col gap-5" aria-labelledby="lesson2-title">
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+      <div class="flex flex-col gap-3 max-w-[780px]">
+        <div class="flex flex-wrap items-center gap-2">
+          <p class="eyebrow">LECCIÓN 2 · CÁLCULO DE ÍNDICES</p>
+          <span class="px-2 py-0.5 rounded bg-[#fdf0e5] text-[#9c4c1f] text-[11px] font-bold">
+            Cálculo mental rápido
+          </span>
+        </div>
+        <h1 id="lesson2-title" class="lesson-h1">Cómo calcular el siguiente índice</h1>
+        <p class="text-[15px] leading-relaxed">
+          Al cortar la baraja por cualquier punto y ver la carta inferior, necesitas saber al instante qué carta está arriba. En esta lección nos centramos exclusivamente en los <strong>13 índices o valores</strong> (<code class="code-pill">A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K</code>), dejando los palos para la Lección 3.
+        </p>
+      </div>
+
+      <button
+        type="button"
+        class="chip-action chip-action-accent self-start shrink-0"
+        (click)="scrollToSection('entrenador-indices')"
+      >
+        Ir al entrenador ↓
+      </button>
+    </div>
+
+    <!-- Equivalencia numérica de los índices -->
+    <div class="flex flex-col gap-2.5">
+      <h2 class="text-[14.5px] text-slate-900">Valor numérico de cada índice (del 1 al 13)</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5" role="list" aria-label="Equivalencias numéricas de los índices">
+        @for (eq of figureEquivalences; track eq.rank) {
+          <div class="p-3 rounded-[10px] bg-slate-50 border border-slate-200 flex flex-col gap-0.5" role="listitem">
+            <div class="flex items-baseline justify-between gap-2">
+              <strong class="text-base font-extrabold text-slate-900">{{ eq.rank }}</strong>
+              <span class="px-1.5 py-0.5 rounded bg-white border border-slate-300 text-xs font-bold text-slate-800">
+                = {{ eq.numericText }}
+              </span>
+            </div>
+            <span class="text-xs font-semibold text-slate-700">{{ eq.name }}</span>
+            <span class="text-[11.5px] text-slate-500">{{ eq.note }}</span>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Las dos reglas: restar 4 y sumar 9 en valores bajos -->
+  <section class="grid grid-cols-1 lg:grid-cols-2 gap-4.5 sm:gap-6" aria-label="Regla de cálculo del siguiente índice">
+    <!-- Caso A: Restar 4 -->
+    <article class="card p-5 sm:p-7 flex flex-col justify-between gap-4">
+      <div class="flex flex-col gap-3">
+        <div class="flex items-center justify-between gap-2">
+          <span class="stat-icon sage"><app-icon name="stepForward" /></span>
+          <span class="px-2.5 py-1 rounded-md bg-[#edf2eb] text-[#397153] text-xs font-bold">
+            Índices del 5 al K (valor ≥ 5)
+          </span>
+        </div>
+
+        <h2 class="text-[19px]">Regla general: resta 4</h2>
+        <p class="text-sm leading-relaxed">
+          La regla base de la SSP consiste en <strong>restar 4 al valor actual</strong>. Siempre que estés en un <strong>5, 6, 7, 8, 9, 10, J, Q o K</strong>, la resta da un número positivo entre 1 y 9: ese es directamente el siguiente índice.
+        </p>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-1">
+          @for (ex of subtractFourExamples; track ex.fromRank) {
+            <div class="p-2.5 rounded-[9px] bg-slate-50 border border-slate-200 flex flex-col items-center gap-0.5 text-center">
+              <span class="text-[11.5px] font-semibold text-slate-500">{{ ex.operation }}</span>
+              <strong class="text-[13.5px] text-slate-900">{{ ex.fromRank }} → {{ ex.toRank }}</strong>
+            </div>
+          }
+        </div>
+      </div>
+
+      <p class="text-xs text-slate-600 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5">
+        Fíjate en las figuras: <strong>J (11) → 7</strong>, <strong>Q (12) → 8</strong> y <strong>K (13) → 9</strong>.
+      </p>
+    </article>
+
+    <!-- Caso B: Sumar 9 en valores bajos -->
+    <article class="card p-5 sm:p-7 flex flex-col justify-between gap-4">
+      <div class="flex flex-col gap-3">
+        <div class="flex items-center justify-between gap-2">
+          <span class="stat-icon peach"><app-icon name="cycle" /></span>
+          <span class="px-2.5 py-1 rounded-md bg-[#fdf0e5] text-[#9c4c1f] text-xs font-bold">
+            Índices bajos: A, 2, 3 y 4 (valor ≤ 4)
+          </span>
+        </div>
+
+        <h2 class="text-[19px]">Valores bajos: suma 9</h2>
+        <p class="text-sm leading-relaxed">
+          Cuando estás en <strong>A (1), 2, 3 o 4</strong>, al restar 4 obtendrías 0 o un número negativo. En estos <strong>cuatro únicos casos</strong>, en lugar de restar 4 debes <strong>sumar 9</strong> (equivalente a retroceder cuatro posiciones dando la vuelta por las cartas altas K, Q, J, 10):
+        </p>
+
+        <div class="grid grid-cols-2 gap-2 mt-1">
+          @for (ex of addNineExamples; track ex.fromRank) {
+            <div class="p-2.5 rounded-[9px] bg-[#fffaf5] border border-orange-200 flex flex-col items-center gap-0.5 text-center">
+              <span class="text-[11.5px] font-semibold text-[#9c4c1f]">{{ ex.operation }}</span>
+              <strong class="text-[14px] text-slate-900">{{ ex.fromRank }} → {{ ex.toRank }}</strong>
+            </div>
+          }
+        </div>
+      </div>
+
+      <p class="text-xs text-slate-600 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5">
+        Atajo mental para el <strong>4</strong> y el <strong>Rey (K)</strong>: si piensas en <code class="font-mono text-[11.5px]">4 − 4 = 0</code>, el <strong>Rey actúa como 0</strong> (o 13), y desde él <code class="font-mono text-[11.5px]">0 + 9 = 9</code> reinicia el ciclo.
+      </p>
+    </article>
+  </section>
+
+  <!-- 3. Secuencia resultante de los 13 índices y consulta rápida -->
+  <section class="card p-5 sm:px-8 sm:py-7 flex flex-col gap-5" aria-labelledby="cycle-title">
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2.5">
+      <div class="flex flex-col gap-1.5 max-w-[740px]">
+        <p class="eyebrow">RUEDA COMPLETA DE 13 VALORES</p>
+        <h2 id="cycle-title" class="text-[20px]">La secuencia de índices y cómo comprobar cualquier paso</h2>
+        <p class="text-sm leading-relaxed">
+          Partiendo del <strong>9</strong> y aplicando la regla una y otra vez se recorren los 13 índices sin repetir ninguno hasta cerrar en el <strong>Rey (K)</strong>. Pulsa cualquier índice para ver su transición:
+        </p>
+      </div>
+      <span class="self-start shrink-0 px-2.5 py-1.5 rounded-md bg-[#f0eef9] text-[#5b4b8a] text-xs font-semibold">
+        Ciclo de 13 pasos
+      </span>
+    </div>
+
+    <!-- Tira interactiva en orden del ciclo SSP -->
+    <div class="flex flex-wrap items-center gap-1.5 sm:gap-2" role="group" aria-label="Secuencia de 13 índices SSP">
+      @for (step of cycleSteps; track step.meta.value; let last = $last) {
+        <button
+          type="button"
+          class="cycle-node-btn"
+          [class.cycle-node-btn-low]="step.isLowValue"
+          [class.cycle-node-btn-active]="inspectedValue() === step.meta.value"
+          [attr.aria-pressed]="inspectedValue() === step.meta.value"
+          [attr.aria-label]="'Inspeccionar ' + step.meta.valueName + ' (' + step.meta.rank + ')'"
+          (click)="inspectValue(step.meta.value)"
+        >
+          {{ step.meta.rank }}
+        </button>
+        @if (!last) {
+          <span class="text-xs font-bold text-slate-400" aria-hidden="true">→</span>
+        }
+      }
+      <span class="text-xs font-semibold text-slate-500 ml-1">→ (vuelve al 9)</span>
+    </div>
+
+    <!-- Detalle en vivo del índice seleccionado -->
+    <div class="p-4 rounded-[10px] bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3" role="status" aria-live="polite">
+      <div class="flex flex-col gap-1">
+        <div class="flex flex-wrap items-center gap-2 text-sm text-slate-800">
+          <span>Si ves un</span>
+          <strong class="px-2 py-0.5 rounded bg-white border border-slate-300 text-slate-900">
+            {{ inspectedFromMeta().valueName }} ({{ inspectedFromMeta().rank }})
+          </strong>
+          <span>aplicas</span>
+          <strong
+            class="px-2 py-0.5 rounded text-xs font-bold"
+            [class.bg-[#edf2eb]]="inspectedFromMeta().value >= 5"
+            [class.text-[#397153]]="inspectedFromMeta().value >= 5"
+            [class.bg-[#fdf0e5]]="inspectedFromMeta().value <= 4"
+            [class.text-[#9c4c1f]]="inspectedFromMeta().value <= 4"
+          >
+            {{ inspectedTransition().operatorLabel }}
+          </strong>
+          <span>y obtienes</span>
+          <strong class="px-2.5 py-0.5 rounded bg-slate-900 text-white">
+            {{ inspectedToMeta().rank }} ({{ inspectedToMeta().valueName }})
+          </strong>
+        </div>
+        <p class="text-[13px] text-slate-600">
+          {{ inspectedTransition().ruleReason }}
+        </p>
+      </div>
+
+      <code class="self-start sm:self-center shrink-0 px-3 py-1.5 rounded-lg bg-white border border-slate-300 font-mono text-[13px] font-bold text-slate-900">
+        {{ inspectedTransition().formulaText }}
+      </code>
+    </div>
+
+    <p class="text-[13px] text-slate-600">
+      Con la repetición terminarás recordando las parejas de memoria (<code class="code-pill">6 → 2</code>, <code class="code-pill">2 → J</code>, <code class="code-pill">J → 7</code>…), pero siempre tendrás el cálculo mental como red de seguridad si en algún momento dudas.
+    </p>
+  </section>
+
+  <!-- 4. Entrenador interactivo del siguiente índice -->
+  <section
+    id="entrenador-indices"
+    class="card p-5 sm:px-8 sm:py-7 flex flex-col gap-5"
+    aria-labelledby="trainer-title"
+    tabindex="-1"
+  >
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2.5">
+      <div class="flex flex-col gap-1.5 max-w-[760px]">
+        <p class="eyebrow">PRÁCTICA INTERACTIVA · VELOCIDAD Y PRECISIÓN</p>
+        <h2 id="trainer-title" class="text-[20px]">Entrenador del siguiente índice</h2>
+        <p class="text-sm leading-relaxed">
+          Pon a prueba el cálculo: se mostrará un índice al azar y debes pulsar cuál le sigue. Practica hasta responder sin titubear y usa <strong>Resetear contador</strong> cuando quieras iniciar una nueva tanda limpia.
+        </p>
+      </div>
+      <span class="self-start shrink-0 px-2.5 py-1.5 rounded-md bg-[#fdf0e5] text-[#9c4c1f] text-xs font-semibold">
+        Entrenador aleatorio
+      </span>
+    </div>
+
+    <app-next-index-trainer />
+
+    <div class="px-4 py-3 rounded-[10px] bg-slate-50 border border-slate-200 flex items-start gap-2.5">
+      <span class="text-slate-600 mt-0.5"><app-icon name="cards" /></span>
+      <p class="text-[13px] text-slate-600">
+        <strong>Práctica complementaria con tus cartas:</strong> toma las 13 cartas de un solo palo de tu baraja física, mézclalas y ve sacándolas una a una diciendo en voz alta el índice que sigue antes de pasar a la siguiente.
+      </p>
+    </div>
+  </section>
+
+  <!-- 5. Cierre de la Lección 2 y adelanto de la Lección 3 -->
+  <section class="card p-5 sm:p-8 flex flex-col gap-5" aria-labelledby="closing-lesson2-title">
+    <div class="flex flex-col gap-2.5 max-w-[780px]">
+      <p class="eyebrow">CIERRE · ADELANTO DE LA LECCIÓN 3</p>
+      <h2 id="closing-lesson2-title" class="text-xl">Ya dominas el motor numérico; faltan los palos</h2>
+      <p>
+        Saber pasar de cualquier índice al siguiente es la mitad del secreto de la SSP. En la <strong>Lección 3</strong> aprenderás el funcionamiento y la secuencia cíclica de los <strong>palos</strong> para deducir la carta completa en cuestión de segundos.
+      </p>
+    </div>
+
+    <div class="flex flex-col sm:flex-row flex-wrap gap-3">
+      <button
+        type="button"
+        class="button w-full sm:w-auto"
+        [class.button-accent]="!isLessonCompleted()"
+        [class.button-completed]="isLessonCompleted()"
+        (click)="completeLesson()"
+      >
+        <app-icon name="check" />
+        <span>{{ isLessonCompleted() ? 'Lección 2 completada' : 'Completar Lección 2' }}</span>
+      </button>
+
+      <a routerLink="/curso/leccion-1" class="button button-secondary w-full sm:w-auto">
+        <app-icon name="arrowLeft" />
+        <span>Repasar Lección 1</span>
+      </a>
+
+      <a routerLink="/" class="button button-secondary w-full sm:w-auto">
+        <span>Volver a la portada</span>
+      </a>
+    </div>
+
+    @if (isLessonCompleted()) {
+      <p class="text-[13px] font-medium text-[#397153]" role="status">
+        ¡Excelente trabajo! Tu progreso en la Lección 2 ha quedado guardado en este navegador.
+      </p>
+    }
+  </section>
+</main>
+

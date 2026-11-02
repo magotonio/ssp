@@ -2,6 +2,12 @@ export type SuitCode = 'P' | 'C' | 'T' | 'D';
 
 export type CardValue = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13;
 
+export interface CardRankMeta {
+  readonly value: CardValue;
+  readonly rank: string;
+  readonly valueName: string;
+}
+
 export interface SuitMeta {
   readonly code: SuitCode;
   readonly order: 1 | 2 | 3 | 4;
@@ -129,6 +135,51 @@ const VALUE_NAME_BY_VALUE: Readonly<Record<CardValue, string>> = {
 
 export const DECK_SIZE = 52;
 
+export const CARD_RANKS: readonly CardRankMeta[] = (
+  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13] as const
+).map((value) => ({
+  value,
+  rank: RANK_BY_VALUE[value],
+  valueName: VALUE_NAME_BY_VALUE[value],
+}));
+
+export const CARD_RANK_BY_VALUE: Readonly<Record<CardValue, CardRankMeta>> = {
+  1: CARD_RANKS[0],
+  2: CARD_RANKS[1],
+  3: CARD_RANKS[2],
+  4: CARD_RANKS[3],
+  5: CARD_RANKS[4],
+  6: CARD_RANKS[5],
+  7: CARD_RANKS[6],
+  8: CARD_RANKS[7],
+  9: CARD_RANKS[8],
+  10: CARD_RANKS[9],
+  11: CARD_RANKS[10],
+  12: CARD_RANKS[11],
+  13: CARD_RANKS[12],
+};
+
+/**
+ * Calcula el siguiente índice según la regla normativa de ordenacion-ssp.md:
+ * - Si V_n >= 5: V_{n+1} = V_n - 4
+ * - Si V_n <= 4: V_{n+1} = V_n + 9
+ */
+export function getNextCardValue(value: CardValue): CardValue {
+  return (value >= 5 ? value - 4 : value + 9) as CardValue;
+}
+
+function buildSspValueCycle(): readonly CardValue[] {
+  const cycle: CardValue[] = [];
+  let current: CardValue = 9;
+  for (let i = 0; i < 13; i++) {
+    cycle.push(current);
+    current = getNextCardValue(current);
+  }
+  return cycle;
+}
+
+export const SSP_VALUE_CYCLE: readonly CardValue[] = buildSspValueCycle();
+
 /**
  * Genera las 52 cartas según la definición normativa de ordenacion-ssp.md:
  * - Carta inicial C_1 = 9P (valor 9, palo 1)
@@ -156,13 +207,13 @@ export function generateSspStack(): readonly SspCard[] {
       fullName: `${valueName} de ${suitMeta.pluralName}`,
     });
 
+    const nextValue = getNextCardValue(currentValue);
     if (currentValue >= 5) {
-      currentValue = (currentValue - 4) as CardValue;
       currentSuitOrder = (currentSuitOrder % 4) + 1;
     } else {
-      currentValue = (currentValue + 9) as CardValue;
       currentSuitOrder = ((currentSuitOrder + 1) % 4) + 1;
     }
+    currentValue = nextValue;
   }
 
   return cards;
