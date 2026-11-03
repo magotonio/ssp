@@ -186,6 +186,12 @@ npm run start
 
 La home se sirve en `http://localhost:4200/` de forma predeterminada. Validaciones: `npm run build` y `npm test -- --watch=false`. Salida de producción: `dist/ssp/browser`.
 
+### Despliegue en GitHub Pages
+
+- Workflow automatizado en `.github/workflows/deploy-pages.yml`.
+- Se ejecuta al integrar cambios en `main` (`push` a `main`, incluido el merge desde `develop`) o de forma manual mediante `workflow_dispatch`.
+- Instala Node.js 26 y las dependencias con `npm ci`, compila la aplicación con `npm run build` ajustando dinámicamente `--base-href` según la ruta de GitHub Pages, genera `404.html` a partir de `index.html` para soportar rutas SPA de Angular, sube `dist/ssp/browser` como artefacto y publica el sitio en el entorno `github-pages`.
+
 ### Funcionalidades futuras pendientes de definir
 
 - Objetivo de uso y público destinatario.
