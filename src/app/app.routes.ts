@@ -57,6 +57,12 @@ export const routes: Routes = [
       import('./course/lesson6/lesson6').then((module) => module.Lesson6),
   },
   {
+    path: 'curso/leccion-7',
+    title: 'Lección 7 · Integración y localización al tacto | StackSSP',
+    loadComponent: () =>
+      import('./course/lesson7/lesson7').then((module) => module.Lesson7),
+  },
+  {
     path: '**',
     redirectTo: '',
   },

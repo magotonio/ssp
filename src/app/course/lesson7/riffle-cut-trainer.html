@@ -1,0 +1,758 @@
+<div class="flex flex-col gap-4.5 p-4 sm:p-5 rounded-xl bg-slate-50 border border-slate-200">
+  <!-- Selector de las 4 fases de entrenamiento -->
+  <div
+    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2"
+    role="tablist"
+    aria-label="Fases del entrenamiento de corte y localización"
+    data-testid="cut-trainer-phases"
+  >
+    @for (phase of phases; track phase.id) {
+      <button
+        type="button"
+        role="tab"
+        class="flex flex-col gap-1.5 px-3 py-2.5 rounded-[10px] border-[1.5px] border-slate-300 bg-white cursor-pointer hover:border-[#f97316] hover:bg-orange-50 text-left"
+        [class.phase-tab-btn-active]="activePhaseId() === phase.id"
+        [class.phase-tab-btn-done]="isPhaseDone(phase.id) && activePhaseId() !== phase.id"
+        [attr.aria-selected]="activePhaseId() === phase.id"
+        [attr.data-testid]="'phase-tab-' + phase.id"
+        (click)="selectPhase(phase.id)"
+      >
+        <div class="flex items-center justify-between gap-2 w-full">
+          <span
+            class="phase-step-badge"
+            [class.phase-step-badge-active]="activePhaseId() === phase.id"
+            [class.phase-step-badge-done]="isPhaseDone(phase.id)"
+          >
+            @if (isPhaseDone(phase.id)) {
+              <app-icon name="check" />
+            } @else {
+              {{ phase.stepNumber }}
+            }
+          </span>
+          <span class="text-[11px] font-bold text-slate-500 truncate">{{ phase.badgeLabel }}</span>
+        </div>
+        <strong class="text-[13px] text-slate-900 leading-snug">{{ phase.shortLabel }}</strong>
+      </button>
+    }
+  </div>
+
+  <!-- Cabecera de la fase activa y marcadores -->
+  <div class="flex flex-col gap-3 pb-3.5 border-b border-slate-200">
+    <div class="flex flex-col gap-1">
+      <h3 class="text-[16px] text-slate-900">{{ activePhase().title }}</h3>
+      <p class="text-[13px] text-slate-600 leading-relaxed">{{ activePhase().description }}</p>
+    </div>
+
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+      <div
+        class="flex flex-wrap items-center gap-2 sm:gap-2.5"
+        aria-label="Marcadores de la fase actual"
+      >
+        @if (isCycle52Phase()) {
+          <div class="score-pill score-pill-progress" data-testid="cut-trainer-progress">
+            <span class="score-label">Ciclo</span>
+            <strong class="score-value tabular-nums">
+              {{ isCycleCompleted() ? deckSize : cycleStepNumber() }} / {{ deckSize }}
+            </strong>
+          </div>
+
+          <div class="score-pill score-pill-timer" data-testid="cut-trainer-timer">
+            <app-icon name="clock" />
+            <span class="score-label">Tiempo</span>
+            <strong class="score-value tabular-nums">{{ formattedTime() }}</strong>
+            @if (!isCycleCompleted()) {
+              <button
+                type="button"
+                class="timer-toggle-btn"
+                [attr.aria-label]="isTimerRunning() ? 'Pausar cronómetro' : 'Iniciar cronómetro'"
+                [attr.aria-pressed]="isTimerRunning()"
+                data-testid="cut-trainer-timer-toggle"
+                (click)="toggleTimer()"
+              >
+                <app-icon [name]="isTimerRunning() ? 'pause' : 'play'" />
+              </button>
+            }
+          </div>
+        } @else {
+          <div class="score-pill score-pill-progress" data-testid="cut-trainer-progress">
+            <span class="score-label">Calibración</span>
+            <strong class="score-value tabular-nums">
+              @if (isCurrentPhaseCompleted()) {
+                Superada ✓
+              } @else {
+                {{ phaseResolvedCount() }} / {{ activePhase().goalCount }}
+              }
+            </strong>
+          </div>
+        }
+
+        <div class="score-pill score-pill-hits" data-testid="cut-trainer-exact">
+          <span class="score-label">Exactos</span>
+          <strong class="score-value tabular-nums">{{ exactCuts() }}</strong>
+        </div>
+
+        <div class="score-pill score-pill-neutral" data-testid="cut-trainer-tolerance">
+          <span class="score-label">Margen ±{{ toleranceLimit }}</span>
+          <strong class="score-value tabular-nums">{{ toleranceCuts() }}</strong>
+        </div>
+
+        <div class="score-pill score-pill-misses" data-testid="cut-trainer-misses">
+          <span class="score-label">Fallos desvío</span>
+          <strong class="score-value tabular-nums">{{ deviationMisses() }}</strong>
+        </div>
+
+        @if (averageDeviationLabel(); as avgDev) {
+          <div class="score-pill score-pill-neutral">
+            <span class="score-label">Desvío medio</span>
+            <strong class="score-value tabular-nums">±{{ avgDev }}</strong>
+          </div>
+        }
+      </div>
+
+      <button
+        type="button"
+        class="inline-flex items-center gap-1.5 min-h-[40px] px-3.5 py-2 rounded-lg border border-slate-300 bg-white text-slate-800 text-[12.5px] font-semibold cursor-pointer hover:bg-slate-100 self-start lg:self-auto shrink-0"
+        data-testid="cut-trainer-reset"
+        (click)="resetCurrentPhase()"
+      >
+        <span class="inline-flex w-4 h-4"><app-icon name="reset" /></span>
+        <span>{{ isCycle52Phase() ? 'Resetear ciclo' : 'Reiniciar fase' }}</span>
+      </button>
+    </div>
+
+    <!-- Barra de progreso de la fase -->
+    <div class="flex flex-col gap-1">
+      <div
+        class="w-full h-2 rounded-full bg-slate-200 overflow-hidden"
+        role="progressbar"
+        [attr.aria-label]="'Progreso de ' + activePhase().shortLabel"
+        [attr.aria-valuenow]="phaseProgressPercent()"
+        aria-valuemin="0"
+        aria-valuemax="100"
+      >
+        <div
+          class="h-full bg-[#f97316] transition-[width] duration-200"
+          [style.width.%]="phaseProgressPercent()"
+        ></div>
+      </div>
+      <div class="flex items-center justify-between text-[11.5px] text-slate-500">
+        @if (isCycle52Phase()) {
+          <span>52 cartas mezcladas al azar sin repetición</span>
+          <span class="font-semibold tabular-nums">
+            {{ phaseResolvedCount() }} de {{ deckSize }} localizadas
+          </span>
+        } @else {
+          <span>
+            Objetivo: clavar la carta #{{ activePhase().fixedTargetPosition }} o calibrar
+            {{ activePhase().goalCount }} cortes calculando el desvío
+          </span>
+          <span class="font-semibold tabular-nums">{{ phaseProgressPercent() }}%</span>
+        }
+      </div>
+    </div>
+  </div>
+
+  @if (isCycle52Phase() && isCycleCompleted()) {
+    <!-- Resumen final al completar las 52 cartas de la Fase 4 -->
+    <div
+      class="p-5 sm:p-6 rounded-[11px] bg-white border border-slate-200 flex flex-col gap-4"
+      data-testid="cut-trainer-cycle-summary"
+      role="status"
+      aria-live="polite"
+    >
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <span class="stat-icon sage"><app-icon name="check" /></span>
+          <div class="flex flex-col gap-0.5">
+            <span class="text-xs font-bold uppercase tracking-wide text-[#397153]">
+              Fase 4 superada · Baraja completa
+            </span>
+            <h4 class="text-[18px] font-bold text-slate-900">
+              ¡Has localizado al corte las 52 cartas de la ordenación SSP!
+            </h4>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="button button-accent self-start sm:self-center shrink-0"
+          data-testid="cut-trainer-new-cycle"
+          (click)="resetCurrentPhase()"
+        >
+          <app-icon name="reset" />
+          <span>Nuevo ciclo de 52 cartas</span>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+        <div class="p-3 rounded-lg bg-slate-50 border border-slate-200 flex flex-col gap-0.5">
+          <span class="text-xs font-semibold text-slate-500">Tiempo total</span>
+          <strong class="text-lg font-extrabold text-slate-900 tabular-nums">
+            {{ formattedTime() }}
+          </strong>
+          <span class="text-[11px] text-slate-500">{{ averageSecondsPerCard() }} s / carta</span>
+        </div>
+        <div class="p-3 rounded-lg bg-[#f0fdf4] border border-[#bbf7d0] flex flex-col gap-0.5">
+          <span class="text-xs font-semibold text-[#166534]">Cortes exactos</span>
+          <strong class="text-lg font-extrabold text-[#15803d] tabular-nums">
+            {{ exactCuts() }} / {{ deckSize }}
+          </strong>
+        </div>
+        <div class="p-3 rounded-lg bg-[#fdf0e5] border border-[#fed7aa] flex flex-col gap-0.5">
+          <span class="text-xs font-semibold text-[#9c4c1f]">En margen ±{{ toleranceLimit }}</span>
+          <strong class="text-lg font-extrabold text-[#7c2d12] tabular-nums">
+            {{ toleranceCuts() }} / {{ deckSize }}
+          </strong>
+        </div>
+        <div class="p-3 rounded-lg bg-slate-50 border border-slate-200 flex flex-col gap-0.5">
+          <span class="text-xs font-semibold text-slate-500">Desvío medio</span>
+          <strong class="text-lg font-extrabold text-slate-900 tabular-nums">
+            ±{{ averageDeviationLabel() ?? '0,0' }} cartas
+          </strong>
+        </div>
+        <div class="p-3 rounded-lg bg-[#fff1f2] border border-[#fecdd3] flex flex-col gap-0.5">
+          <span class="text-xs font-semibold text-[#9f1239]">Fallos de desvío</span>
+          <strong class="text-lg font-extrabold text-[#be123c] tabular-nums">
+            {{ deviationMisses() }}
+          </strong>
+        </div>
+      </div>
+
+      @if (feedback(); as fb) {
+        <div class="px-3.5 py-2.5 rounded-[9px] border border-[#bbf7d0] bg-[#f0fdf4] text-[#14532d]">
+          <div class="flex flex-col gap-0.5">
+            <strong class="text-[13.5px]">{{ fb.heading }}</strong>
+            <span class="text-[12.5px] opacity-90">{{ fb.detail }}</span>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <!-- Comparativa de cartas: Objetivo buscado vs Carta revelada al cortar -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <!-- Tarjeta 1: Objetivo buscado -->
+      <div
+        class="p-3.5 sm:p-4 rounded-[11px] bg-white border border-slate-200 flex items-center gap-3.5"
+        data-testid="cut-trainer-target"
+      >
+        <div
+          class="mini-playing-card shrink-0"
+          [style.color]="targetCardInkHex()"
+          [attr.aria-label]="'Carta objetivo: ' + targetCard().fullName"
+        >
+          <span class="absolute top-1.5 left-2 text-[10px] font-extrabold leading-none" aria-hidden="true">
+            {{ targetCard().rank }}
+          </span>
+          <div class="flex flex-col items-center gap-0.5">
+            <span class="text-[24px] font-extrabold leading-none">{{ targetCard().rank }}</span>
+            <span class="mini-card-suit inline-flex"><app-suit-icon [suit]="targetCard().suit" /></span>
+          </div>
+          <span class="absolute bottom-1.5 right-2 rotate-180 text-[10px] font-extrabold leading-none" aria-hidden="true">
+            {{ targetCard().rank }}
+          </span>
+        </div>
+
+        <div class="flex flex-col gap-1 min-w-0">
+          <span class="text-[11px] font-bold uppercase tracking-wide text-slate-500">
+            @if (isCycle52Phase()) {
+              Carta {{ cycleStepNumber() }} de {{ deckSize }} · Localiza al corte
+            } @else {
+              Objetivo de corte · {{ activePhase().badgeLabel }}
+            }
+          </span>
+          <strong class="text-[15.5px] text-slate-900 leading-snug">
+            @if (!isCycle52Phase()) {
+              Cortar {{ activePhase().fixedTargetPosition }} cartas ({{ targetCard().fullName }})
+            } @else {
+              {{ targetCard().fullName }}
+            }
+          </strong>
+          <span class="text-[12.5px] text-slate-600 leading-snug">
+            @if (stage() === 'resolved') {
+              Posición real en SSP:
+              <strong class="text-slate-900">#{{ targetCard().position }}</strong>
+            } @else if (isCycle52Phase()) {
+              Deduce su reino + posición interna, riflea y suelta en ese lugar.
+            } @else {
+              Estima a ojo la posición #{{ activePhase().fixedTargetPosition }} sobre las 52 cartas y suelta.
+            }
+          </span>
+        </div>
+      </div>
+
+      <!-- Tarjeta 2: Carta vista al cortar -->
+      <div
+        class="p-3.5 sm:p-4 rounded-[11px] bg-white border border-slate-200 flex items-center gap-3.5"
+        data-testid="cut-trainer-cut-card"
+      >
+        @if (stage() !== 'ready' && lastEvaluation(); as evalResult) {
+          <div
+            class="mini-playing-card shrink-0"
+            [class.mini-playing-card-hit]="evalResult.isExact"
+            [style.color]="cardInkHex(evalResult.cutCard.suit)"
+            [attr.aria-label]="'Has cortado en: ' + evalResult.cutCard.fullName"
+          >
+            <span class="absolute top-1.5 left-2 text-[10px] font-extrabold leading-none" aria-hidden="true">
+              {{ evalResult.cutCard.rank }}
+            </span>
+            <div class="flex flex-col items-center gap-0.5">
+              <span class="text-[24px] font-extrabold leading-none">
+                {{ evalResult.cutCard.rank }}
+              </span>
+              <span class="mini-card-suit inline-flex">
+                <app-suit-icon [suit]="evalResult.cutCard.suit" />
+              </span>
+            </div>
+            <span class="absolute bottom-1.5 right-2 rotate-180 text-[10px] font-extrabold leading-none" aria-hidden="true">
+              {{ evalResult.cutCard.rank }}
+            </span>
+          </div>
+
+          <div class="flex flex-col gap-1 min-w-0">
+            <span class="text-[11px] font-bold uppercase tracking-wide text-slate-500">
+              Carta vista al cortar
+            </span>
+            <strong class="text-[15.5px] text-slate-900 leading-snug">
+              Has cortado en: {{ evalResult.cutCard.fullName }}
+            </strong>
+            <span class="text-[12.5px] text-slate-600 leading-snug">
+              @if (evalResult.isExact) {
+                <strong class="text-[#15803d]">
+                  ¡Coincide con la carta elegida! (#{{ evalResult.cutPosition }})
+                </strong>
+              } @else if (stage() === 'resolved') {
+                Estaba en la posición
+                <strong class="text-slate-900">#{{ evalResult.cutPosition }}</strong>
+                (a {{ evalResult.distance }}
+                {{ evalResult.distance === 1 ? 'carta' : 'cartas' }}
+                {{ evalResult.direction === 'above' ? 'por arriba' : 'por abajo' }}).
+              } @else {
+                No es la carta buscada. Calcula abajo cuántas cartas te has ido por arriba o por abajo.
+              }
+            </span>
+          </div>
+        } @else {
+          <div class="mini-playing-card mini-playing-card-placeholder shrink-0" aria-hidden="true">
+            <span class="text-xs font-bold text-slate-400">Corte</span>
+          </div>
+          <div class="flex flex-col gap-1 min-w-0">
+            <span class="text-[11px] font-bold uppercase tracking-wide text-slate-500">
+              Carta vista al cortar
+            </span>
+            <strong class="text-[14.5px] text-slate-700 leading-snug">
+              Esperando tu corte en la barra…
+            </strong>
+            <span class="text-[12.5px] text-slate-500 leading-snug">
+              Al soltar el marcador verás qué carta asoma por la cara del paquete cortado.
+            </span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Barra horizontal interactiva de 52 cartas (Arrastrar, riflear y soltar) -->
+    <div class="p-4 sm:p-5 rounded-[11px] bg-white border border-slate-200 flex flex-col gap-3">
+      <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+        <span class="px-2 py-0.5 rounded bg-slate-100 border border-slate-200 font-bold text-slate-700">
+          ← Arriba · Dorso (#1)
+        </span>
+
+        <span
+          class="font-semibold text-center"
+          [class.text-[#9c4c1f]]="isDragging() || (stage() === 'ready' && riffleSlot() > 0)"
+          [class.text-slate-600]="!isDragging() && !(stage() === 'ready' && riffleSlot() > 0)"
+          role="status"
+          aria-live="polite"
+        >
+          @if (stage() === 'ready') {
+            @if (isDragging() && riffleSlot() >= 1) {
+              Rifleando el mazo… suelta en este punto para cortar
+            } @else if (riffleSlot() >= 1) {
+              Posición preparada · Pulsa Intro o Espacio para cortar aquí
+            } @else {
+              Arrastra el marcador naranja, riflea las cartas y suelta para cortar
+            }
+          } @else if (stage() === 'awaiting-deviation' && lastEvaluation(); as evalWait) {
+            Corte detenido en {{ evalWait.cutCard.code }} · Indica abajo tu desvío
+          } @else if (stage() === 'resolved' && lastEvaluation(); as evalDone) {
+            @if (evalDone.isExact) {
+              ¡Diana exacta en la posición #{{ evalDone.cutPosition }}!
+            } @else {
+              Comparativa en barra: tu corte (#{{ evalDone.cutPosition }}) frente a la buscada (#{{ evalDone.targetCard.position }})
+            }
+          }
+        </span>
+
+        <span class="px-2 py-0.5 rounded bg-slate-100 border border-slate-200 font-bold text-slate-700">
+          Abajo · Fondo (#52) →
+        </span>
+      </div>
+
+      <!-- Pista táctil / ratón con cuna de salida y los 52 cantos de carta -->
+      <div
+        class="riffle-arena"
+        [class.riffle-arena-locked]="stage() !== 'ready'"
+        data-testid="riffle-arena"
+        (pointerdown)="onArenaPointerDown($event)"
+        (pointermove)="onArenaPointerMove($event)"
+        (pointerup)="onArenaPointerUp($event)"
+        (pointercancel)="onArenaPointerCancel($event)"
+      >
+        <!-- Cuna izquierda de salida del pulgar -->
+        <div
+          class="w-[52px] h-[54px] shrink-0 rounded-l-[9px] border-[1.5px] border-dashed border-slate-300 border-r-0 bg-white flex items-end justify-center pb-1.5"
+          aria-hidden="true"
+        >
+          <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Inicio</span>
+        </div>
+
+        <!-- Mazo horizontal de 52 cartas sin numerar -->
+        <div #barTrack class="riffle-bar-track" data-testid="riffle-bar-track">
+          @for (slot of deckSlots; track slot) {
+            <span
+              class="deck-slice"
+              [class.deck-slice-lifted]="isSlotLifted(slot)"
+              [class.deck-slice-riffling]="isSlotRiffling(slot)"
+              [class.deck-slice-cut-edge]="stage() !== 'ready' && activeDisplaySlot() === slot"
+              aria-hidden="true"
+            ></span>
+          }
+
+          <!-- Franja de distancia y marcador de la carta objetivo (solo visibles tras resolver) -->
+          @if (gapHighlightStyle(); as gapStyle) {
+            <div
+              class="riffle-gap-band"
+              [style.left]="gapStyle.left"
+              [style.width]="gapStyle.width"
+              aria-hidden="true"
+            ></div>
+          }
+
+          @if (stage() === 'resolved' && lastEvaluation(); as evalResolved) {
+            @if (!evalResolved.isExact) {
+              <div
+                class="riffle-target-pin"
+                [style.left]="targetMarkerLeftCss()"
+                data-testid="riffle-target-pin"
+              >
+                <span class="whitespace-nowrap px-1.5 py-0.5 rounded bg-[#15803d] text-white text-[11px] font-extrabold">
+                  #{{ evalResolved.targetCard.position }} · {{ evalResolved.targetCard.code }}
+                </span>
+                <span class="w-0.5 h-3 bg-[#15803d]" aria-hidden="true"></span>
+              </div>
+            }
+          }
+
+          <!-- Objeto / dibujo arrastrable de pulgar / uña de corte -->
+          <div
+            class="riffle-cutter-handle"
+            [class.riffle-cutter-dragging]="isDragging()"
+            [class.riffle-cutter-hit]="stage() === 'resolved' && lastEvaluation()?.isExact"
+            [class.riffle-cutter-locked]="stage() !== 'ready'"
+            [style.left]="handleLeftCss()"
+            [attr.tabindex]="stage() === 'ready' ? 0 : -1"
+            role="slider"
+            aria-label="Marcador de rifleado y corte. Arrastra por la barra y suelta, o usa las flechas izquierda y derecha y pulsa Intro para cortar."
+            aria-valuemin="0"
+            [attr.aria-valuemax]="deckSize"
+            [attr.aria-valuenow]="activeDisplaySlot() > 0 ? 1 : 0"
+            [attr.aria-valuetext]="
+              stage() === 'ready'
+                ? riffleSlot() > 0
+                  ? 'Rifleando sobre el mazo, pulsa Intro para soltar y cortar'
+                  : 'En posición inicial, arrastra o pulsa flecha derecha para riflear'
+                : 'Corte realizado'
+            "
+            data-testid="riffle-cutter-handle"
+            (keydown)="onHandleKeydown($event)"
+          >
+            <span
+              class="whitespace-nowrap px-1.5 py-0.5 rounded text-white text-[10.5px] font-bold leading-tight"
+              [class.bg-[#15803d]]="stage() === 'resolved' && lastEvaluation()?.isExact"
+              [class.bg-slate-800]="!(stage() === 'resolved' && lastEvaluation()?.isExact)"
+            >
+              @if (stage() === 'ready') {
+                {{ riffleSlot() > 0 ? 'Suelta' : 'Riflear' }}
+              } @else if (stage() === 'awaiting-deviation' && lastEvaluation(); as evalWait) {
+                {{ evalWait.cutCard.code }}
+              } @else if (lastEvaluation(); as evalDone) {
+                #{{ evalDone.cutPosition }}
+              }
+            </span>
+
+            <!-- Dibujo vectorial de uña / pulgar separador de corte -->
+            <span class="cutter-thumb-figure" aria-hidden="true">
+              <svg viewBox="0 0 36 40" fill="none">
+                <rect
+                  x="4"
+                  y="2"
+                  width="28"
+                  height="24"
+                  rx="8"
+                  fill="currentColor"
+                  stroke="#301a09"
+                  stroke-width="2"
+                />
+                <path
+                  d="M12 10h12M12 14.5h12M14 19h8"
+                  stroke="#301a09"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                />
+                <path
+                  d="M13 26L18 37L23 26Z"
+                  fill="#301a09"
+                />
+              </svg>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      @if (stage() === 'ready') {
+        <p class="text-[12px] text-slate-500 leading-relaxed">
+          <strong>Cómo cortar:</strong> sujeta el marcador naranja, deslízalo rifleando a lo largo del mazo y suéltalo donde creas que está la carta (también puedes usar las <strong>flechas ← / →</strong> y pulsar <strong>Intro</strong>).
+        </p>
+      }
+    </div>
+
+    <!-- Panel inferior según estado del intento -->
+    @if (stage() === 'awaiting-deviation' && lastEvaluation(); as evalPending) {
+      <form
+        class="p-4 sm:p-5 rounded-[11px] bg-white border border-slate-200 flex flex-col gap-4"
+        (submit)="onDeviationFormSubmit($event)"
+        data-testid="deviation-panel"
+        novalidate
+      >
+        <div class="flex flex-col gap-1">
+          <span class="text-xs font-bold uppercase tracking-wide text-[#9c4c1f]">
+            Cálculo del desvío de corte
+          </span>
+          <h4 class="text-[15.5px] font-bold text-slate-900">
+            Has cortado por {{ evalPending.cutCard.fullName }} ({{ evalPending.cutCard.code }}).
+            ¿Cuántas cartas te has pasado, por arriba o por abajo?
+          </h4>
+          <p class="text-[13px] text-slate-600">
+            Compara la posición de la carta que has visto al cortar con la carta buscada e indica hacia qué lado del mazo quedó tu corte y cuántas cartas de margen hay entre ambas:
+          </p>
+        </div>
+
+        <!-- Paso 1: Dirección (Por arriba vs Por abajo) -->
+        <div class="flex flex-col gap-1.5">
+          <span class="text-xs font-bold uppercase tracking-wide text-slate-500">
+            1. ¿Hacia dónde quedó tu corte respecto a la carta buscada?
+          </span>
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"
+            role="group"
+            aria-label="Sentido del desvío: por arriba o por abajo"
+          >
+            <button
+              type="button"
+              class="flex flex-col gap-1 px-3.5 py-2.5 rounded-[10px] border-[1.5px] border-slate-300 bg-slate-50 cursor-pointer hover:border-[#f97316] hover:bg-orange-50 text-left"
+              [class.direction-choice-btn-active]="selectedDirection() === 'above'"
+              [attr.aria-pressed]="selectedDirection() === 'above'"
+              data-testid="deviation-dir-above"
+              (click)="selectDirection('above')"
+            >
+              <div class="flex items-center justify-between gap-2 w-full">
+                <strong class="text-[14px] text-slate-900">← Por arriba</strong>
+                <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700">
+                  Hacia #1
+                </span>
+              </div>
+              <span class="text-[12px] text-slate-600">
+                Te quedaste corto (cortaste menos cartas, antes de llegar a la buscada)
+              </span>
+            </button>
+
+            <button
+              type="button"
+              class="flex flex-col gap-1 px-3.5 py-2.5 rounded-[10px] border-[1.5px] border-slate-300 bg-slate-50 cursor-pointer hover:border-[#f97316] hover:bg-orange-50 text-left"
+              [class.direction-choice-btn-active]="selectedDirection() === 'below'"
+              [attr.aria-pressed]="selectedDirection() === 'below'"
+              data-testid="deviation-dir-below"
+              (click)="selectDirection('below')"
+            >
+              <div class="flex items-center justify-between gap-2 w-full">
+                <strong class="text-[14px] text-slate-900">Por abajo →</strong>
+                <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700">
+                  Hacia #52
+                </span>
+              </div>
+              <span class="text-[12px] text-slate-600">
+                Te pasaste de largo (cortaste más cartas, después de la buscada)
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Paso 2: Cantidad de cartas de desvío -->
+        <div class="flex flex-col gap-2">
+          <label
+            for="deviation-distance-input"
+            class="text-xs font-bold uppercase tracking-wide text-slate-500"
+          >
+            2. ¿Cuántas cartas de diferencia hay? (1 a 51)
+          </label>
+
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+            <!-- Atajos rápidos 1..10 -->
+            <div
+              class="flex flex-wrap items-center gap-1.5"
+              role="group"
+              aria-label="Atajos rápidos de 1 a 10 cartas"
+            >
+              @for (n of quickDistances; track n) {
+                <button
+                  type="button"
+                  class="min-w-[36px] min-h-[36px] px-2.5 py-1 rounded-lg border-[1.5px] border-slate-300 bg-slate-50 text-slate-800 text-[13.5px] font-bold cursor-pointer hover:border-[#f97316] hover:bg-orange-50"
+                  [class.quick-distance-btn-active]="selectedDistance() === n"
+                  [attr.aria-pressed]="selectedDistance() === n"
+                  [attr.data-testid]="'deviation-quick-' + n"
+                  (click)="selectQuickDistance(n)"
+                >
+                  {{ n }}
+                </button>
+              }
+            </div>
+
+            <!-- Control numérico exacto + botón Comprobar -->
+            <div class="flex flex-wrap items-center gap-2">
+              <div class="inline-flex items-center gap-1">
+                <button
+                  type="button"
+                  class="w-[38px] h-[42px] rounded-lg border-[1.5px] border-slate-300 bg-slate-50 text-slate-800 text-[16px] font-extrabold cursor-pointer hover:bg-slate-100"
+                  aria-label="Restar una carta al desvío"
+                  (click)="adjustDistance(-1)"
+                >
+                  −
+                </button>
+                <input
+                  id="deviation-distance-input"
+                  type="number"
+                  [value]="selectedDistance() ?? ''"
+                  (input)="onDistanceInput($event)"
+                  min="1"
+                  max="51"
+                  inputmode="numeric"
+                  placeholder="N.º"
+                  class="w-[72px] h-[42px] px-2.5 py-1.5 rounded-lg border-[1.5px] border-slate-300 bg-white text-slate-900 text-center text-[15px] font-extrabold tabular-nums"
+                  data-testid="deviation-distance-input"
+                />
+                <button
+                  type="button"
+                  class="w-[38px] h-[42px] rounded-lg border-[1.5px] border-slate-300 bg-slate-50 text-slate-800 text-[16px] font-extrabold cursor-pointer hover:bg-slate-100"
+                  aria-label="Sumar una carta al desvío"
+                  (click)="adjustDistance(1)"
+                >
+                  +
+                </button>
+              </div>
+
+              <button
+                type="submit"
+                class="button button-accent disabled:opacity-55 disabled:cursor-not-allowed"
+                [disabled]="!isDeviationValid()"
+                data-testid="deviation-submit"
+              >
+                <app-icon name="check" />
+                <span>Comprobar desvío</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        @if (feedback(); as fbMiss) {
+          <div
+            class="px-3.5 py-2.5 rounded-[9px] border border-[#fecdd3] bg-[#fff1f2] text-[#881337]"
+            role="status"
+            aria-live="polite"
+          >
+            <div class="flex flex-col gap-0.5">
+              <strong class="text-[13.5px]">{{ fbMiss.heading }}</strong>
+              <span class="text-[12.5px] opacity-90">{{ fbMiss.detail }}</span>
+            </div>
+          </div>
+        }
+      </form>
+    }
+
+    @if (stage() === 'resolved') {
+      <div
+        class="p-4 sm:p-5 rounded-[11px] bg-white border border-slate-200 flex flex-col gap-3.5"
+        data-testid="resolved-panel"
+        role="status"
+        aria-live="polite"
+      >
+        @if (feedback(); as fbHit) {
+          <div class="px-3.5 py-2.5 rounded-[9px] border border-[#bbf7d0] bg-[#f0fdf4] text-[#14532d]">
+            <div class="flex flex-col gap-0.5">
+              <strong class="text-[13.5px]">{{ fbHit.heading }}</strong>
+              <span class="text-[12.5px] opacity-90">{{ fbHit.detail }}</span>
+            </div>
+          </div>
+        }
+
+        <div class="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2.5">
+          @if (!isCycle52Phase()) {
+            @if (isCurrentPhaseCompleted() && nextPhaseMeta(); as nextPhase) {
+              <button
+                type="button"
+                class="button button-accent"
+                data-testid="next-phase-btn"
+                (click)="goToNextPhase()"
+              >
+                <span>Pasar a {{ nextPhase.shortLabel }}</span>
+                <app-icon name="arrow" />
+              </button>
+
+              <button
+                type="button"
+                class="button button-secondary"
+                data-testid="repeat-cut-btn"
+                (click)="repeatCurrentTargetCut()"
+              >
+                <app-icon name="reset" />
+                <span>Practicar otro corte a {{ activePhase().fixedTargetPosition }}</span>
+              </button>
+            } @else {
+              <button
+                type="button"
+                class="button button-accent"
+                data-testid="repeat-cut-btn"
+                (click)="advanceAfterResolved()"
+              >
+                <span>
+                  Corregir y volver a cortar ({{ phaseResolvedCount() }} /
+                  {{ activePhase().goalCount }})
+                </span>
+                <app-icon name="arrow" />
+              </button>
+            }
+          } @else {
+            <button
+              type="button"
+              class="button button-accent"
+              data-testid="next-card-btn"
+              (click)="advanceAfterResolved()"
+            >
+              <span>Siguiente carta ({{ cycleStepNumber() + 1 }} / {{ deckSize }})</span>
+              <app-icon name="arrow" />
+            </button>
+
+            <button
+              type="button"
+              class="button button-secondary"
+              data-testid="repeat-cut-btn"
+              (click)="repeatCurrentTargetCut()"
+            >
+              <app-icon name="reset" />
+              <span>Repetir corte a esta carta</span>
+            </button>
+          }
+        </div>
+      </div>
+    }
+  }
+</div>

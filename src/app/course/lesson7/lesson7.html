@@ -1,0 +1,362 @@
+<a href="#contenido-leccion-7" class="skip-link">Saltar al contenido</a>
+
+<header class="sticky top-0 z-30 bg-white border-b border-slate-200">
+  <div class="max-w-[1080px] mx-auto h-14 sm:h-16 px-4 sm:px-6 flex items-center justify-between gap-3">
+    <div class="flex items-center gap-2.5 min-w-0">
+      <a
+        routerLink="/"
+        class="inline-flex items-center gap-2.5 text-lg font-bold tracking-tight text-slate-900 shrink-0"
+        aria-label="Volver a la portada de StackSSP"
+      >
+        <span class="brand-mark brand-mark-sm" aria-hidden="true"><app-icon name="cards" /></span>
+        <span>Stack<span class="brand-light">SSP</span></span>
+      </a>
+      <span class="text-slate-300 font-medium" aria-hidden="true">/</span>
+      <span class="text-[13px] font-semibold text-slate-600 truncate">Lección 7</span>
+    </div>
+
+    <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+      @if (isLessonCompleted()) {
+        <span class="status-pill status-completed">
+          <app-icon name="check" />
+          <span class="hidden sm:inline">Lección 7 completada</span>
+        </span>
+      } @else {
+        <span class="status-pill status-active hidden sm:inline-flex">
+          En progreso
+        </span>
+      }
+      <a routerLink="/curso/leccion-6" class="back-link hidden md:inline-flex">
+        <app-icon name="arrowLeft" />
+        <span>Lección 6</span>
+      </a>
+      <a routerLink="/" class="back-link">
+        <span>Inicio</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main
+  id="contenido-leccion-7"
+  class="max-w-[1080px] mx-auto px-3.5 sm:px-6 pt-5 sm:pt-8 pb-11 sm:pb-16 flex flex-col gap-4.5 sm:gap-6"
+  tabindex="-1"
+>
+  @if (!progress.cookiesAvailable()) {
+    <div
+      class="flex items-start gap-2.5 px-4 py-3 rounded-[10px] bg-orange-50 border border-orange-200 text-orange-800"
+      role="status"
+    >
+      <app-icon name="info" />
+      <p class="text-[13px] text-orange-800">
+        Las cookies están desactivadas en tu navegador. Podrás practicar todas las fases con normalidad, aunque el progreso no se recordará al cerrar la pestaña.
+      </p>
+    </div>
+  }
+
+  <!-- 1. Integración de Reinos y Posiciones Internas + Los 4 Reyes de referencia -->
+  <section class="card p-5 sm:p-8 flex flex-col gap-5" aria-labelledby="lesson7-title">
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+      <div class="flex flex-col gap-3 max-w-[780px]">
+        <div class="flex flex-wrap items-center gap-2">
+          <p class="eyebrow">LECCIÓN 7 · INTEGRACIÓN Y LOCALIZACIÓN AL TACTO</p>
+          <span class="px-2 py-0.5 rounded bg-[#fdf0e5] text-[#9c4c1f] text-[11px] font-bold">
+            Control total de la baraja
+          </span>
+        </div>
+        <h1 id="lesson7-title" class="lesson-h1">
+          Integración y localización al tacto: corte, rifleado y desvío
+        </h1>
+        <p class="text-[15px] leading-relaxed">
+          Ha llegado el momento de unir todas las piezas: combinando los <strong>4 Reinos</strong> (bloques de 13 cartas) con la <strong>posición interna (del 1 al 13)</strong> puedes deducir al instante dónde vive cualquier carta nombrada sin memorizar 52 posiciones fijas, y llegar a ella mediante <strong>corte al tacto y un ligero rifleado</strong>.
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2 self-start shrink-0">
+        <button
+          type="button"
+          class="chip-action"
+          (click)="scrollToSection('guia-baraja-fisica')"
+        >
+          Baraja física ↓
+        </button>
+        <button
+          type="button"
+          class="chip-action chip-action-accent"
+          (click)="scrollToSection('entrenador-corte-fases')"
+        >
+          Ir al entrenador ↓
+        </button>
+      </div>
+    </div>
+
+    <!-- Los 4 Reyes que cierran cada bloque de 13 cartas -->
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5"
+      aria-label="Cartas guía de corte en los cuatro bloques de 13 cartas"
+    >
+      @for (king of landmarkKings; track king.position) {
+        <div class="p-3.5 rounded-[10px] bg-slate-50 border border-slate-200 flex flex-col gap-2">
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-[11px] font-bold uppercase tracking-wide text-slate-500">
+              {{ king.fractionLabel }}
+            </span>
+            <span class="px-2 py-0.5 rounded bg-slate-900 text-white font-mono text-xs font-extrabold tabular-nums">
+              #{{ king.position }}
+            </span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span
+              class="landmark-suit inline-flex items-center gap-1 font-extrabold text-[15px]"
+              [style.color]="cardInkHex(king.card.suit)"
+            >
+              <span>{{ king.card.rank }}</span>
+              <app-suit-icon [suit]="king.card.suit" />
+            </span>
+            <strong class="text-[13.5px] text-slate-900">{{ king.card.fullName }}</strong>
+          </div>
+          <p class="text-[12px] text-slate-600 leading-snug">{{ king.note }}</p>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- 2. Estimación relativa en el Reino + Ejercicios con Baraja Física -->
+  <section
+    id="guia-baraja-fisica"
+    class="card p-5 sm:px-8 sm:py-7 flex flex-col gap-5"
+    aria-labelledby="tactile-method-title"
+    tabindex="-1"
+  >
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2.5">
+      <div class="flex flex-col gap-1.5 max-w-[760px]">
+        <p class="eyebrow">ESTIMACIÓN RELATIVA Y PRÁCTICA CON BARAJA FÍSICA</p>
+        <h2 id="tactile-method-title" class="text-[20px]">
+          Principio, centro o final del reino y ajuste por rifleado
+        </h2>
+        <p class="text-sm leading-relaxed">
+          Con las cartas en las manos no necesitas contar de una en una: ubica primero el <strong>reino (13, 26, 39 o 52)</strong> y siente si su posición interna cae al <strong>principio</strong>, en el <strong>centro</strong> o al <strong>final</strong> de ese paquete de 13 cartas:
+        </p>
+      </div>
+      <span class="self-start shrink-0 px-2.5 py-1.5 rounded-md bg-[#edf2eb] text-[#397153] text-xs font-semibold">
+        Tolerancia física ±3 cartas
+      </span>
+    </div>
+
+    <!-- Las 3 zonas relativas dentro de cada bloque de 13 -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-3.5">
+      @for (zone of kingdomZones; track zone.id) {
+        <article class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col gap-2">
+          <div class="flex items-center justify-between gap-2">
+            <strong class="text-[14.5px] text-slate-900">{{ zone.label }}</strong>
+            <span
+              class="px-2 py-0.5 rounded text-[11px] font-bold"
+              [style.background-color]="zone.badgeBg"
+              [style.color]="zone.badgeText"
+            >
+              {{ zone.rangeText }}
+            </span>
+          </div>
+          <p class="text-[12.5px] font-semibold text-slate-700 leading-snug">
+            {{ zone.indicesText }}
+          </p>
+          <p class="text-[12.5px] text-slate-600 leading-relaxed">{{ zone.tactileTip }}</p>
+        </article>
+      }
+    </div>
+
+    <!-- Comprobador rápido de sensación táctil (Reino + Zona + Posición exacta) -->
+    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col gap-3.5">
+      <div class="flex flex-col gap-2">
+        <span class="text-xs font-bold uppercase tracking-wide text-slate-500">
+          Ejemplos de estimación en el reino (pulsa o elige cualquier carta)
+        </span>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2" role="list">
+          @for (item of tactileExamples; track item.card.code) {
+            <button
+              type="button"
+              class="example-step-card text-left"
+              [class.example-step-card-active]="inspectedCard().code === item.card.code"
+              role="listitem"
+              (click)="inspectCard(item.card)"
+            >
+              <span
+                class="inline-flex items-center gap-1 font-extrabold text-[14.5px]"
+                [style.color]="cardInkHex(item.card.suit)"
+              >
+                <span>{{ item.card.rank }}</span>
+                <app-suit-icon [suit]="item.card.suit" />
+                <span class="text-xs font-semibold text-slate-500">({{ item.card.fullName }})</span>
+              </span>
+              <p class="text-xs text-slate-600 leading-snug">{{ item.summary }}</p>
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-1.5" role="group" aria-label="Índice a consultar">
+        @for (r of ranks; track r.value) {
+          <button
+            type="button"
+            class="mini-rank-btn"
+            [class.mini-rank-btn-active]="inspectedValue() === r.value"
+            [attr.aria-pressed]="inspectedValue() === r.value"
+            (click)="selectInspectorValue(r.value)"
+          >
+            {{ r.rank }}
+          </button>
+        }
+      </div>
+
+      <div class="flex flex-wrap items-center gap-1.5" role="group" aria-label="Palo a consultar">
+        @for (s of suitOptions; track s.code) {
+          <button
+            type="button"
+            class="mini-suit-btn"
+            [class.mini-suit-btn-active]="inspectedSuit() === s.code"
+            [attr.aria-pressed]="inspectedSuit() === s.code"
+            (click)="selectInspectorSuit(s.code)"
+          >
+            <span class="inline-flex" [style.color]="s.inkHex">
+              <app-suit-icon [suit]="s.code" />
+            </span>
+            <span>{{ s.meta.pluralName }}</span>
+          </button>
+        }
+      </div>
+
+      <div
+        class="p-3.5 rounded-[10px] bg-white border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-3"
+        data-testid="lesson7-tactile-inspector"
+        role="status"
+        aria-live="polite"
+      >
+        <div class="flex flex-col gap-1">
+          <div class="flex flex-wrap items-center gap-2 text-sm text-slate-800">
+            <strong
+              class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-50 border border-slate-300 font-bold"
+              [style.color]="cardInkHex(inspectedCard().suit)"
+            >
+              <span>{{ inspectedCard().rank }}</span>
+              <app-suit-icon [suit]="inspectedCard().suit" />
+              <span class="text-slate-900">({{ inspectedCard().fullName }})</span>
+            </strong>
+            <span>→ {{ inspectedBreakdown().kingdom.name }}</span>
+            <strong class="px-2 py-0.5 rounded bg-slate-100 text-slate-800 font-mono font-bold tabular-nums">
+              ({{ inspectedBreakdown().offsetLabel }})
+            </strong>
+            <span>· {{ inspectedBreakdown().internalRule.ordinalLabel }} pos.</span>
+            <span
+              class="px-2 py-0.5 rounded text-xs font-bold"
+              [style.background-color]="inspectedZone().badgeBg"
+              [style.color]="inspectedZone().badgeText"
+            >
+              {{ inspectedZone().label }}
+            </span>
+          </div>
+          <p class="text-[12.5px] text-slate-600">
+            {{ inspectedZone().tactileTip }}
+          </p>
+        </div>
+
+        <strong class="self-start md:self-center shrink-0 px-3 py-1.5 rounded-lg bg-slate-900 text-white font-mono text-[13.5px] font-extrabold tabular-nums">
+          Posición #{{ inspectedBreakdown().absolutePosition }} / 52
+        </strong>
+      </div>
+    </div>
+
+    <!-- Rutina física recomendada en las manos -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+      <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-3">
+        <span class="stat-icon peach"><app-icon name="cards" /></span>
+        <div class="flex flex-col gap-1">
+          <h3 class="text-[15px] text-slate-900">
+            Rutina con tu baraja física: cortes a 26, 13 y 39
+          </h3>
+          <p class="text-[13px] text-slate-600 leading-relaxed">
+            Con la ordenación estándar dorso arriba, practica primero cortar exactamente la mitad (<strong>26 cartas · K<span class="suit-red">♥</span></strong>) buscando quedarte en un margen de <strong>±3 cartas</strong>. Domina después el primer cuarto (<strong>13 cartas · K♠</strong>) y el tercer cuarto (<strong>39 cartas · K♣</strong>) midiendo siempre cuántas cartas te has desviado.
+          </p>
+        </div>
+      </div>
+
+      <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-3">
+        <span class="stat-icon lavender"><app-icon name="star" /></span>
+        <div class="flex flex-col gap-1">
+          <h3 class="text-[15px] text-slate-900">
+            Un «tacto» valioso para toda la cartomagia
+          </h3>
+          <p class="text-[13px] text-slate-600 leading-relaxed">
+            Este entrenamiento de estimación de paquetes y rifleado no solo consolida la <strong>ordenación SSP</strong>: educa en tus dedos una sensibilidad táctil extraordinaria aplicable a cualquier baraja mnemónica o técnica avanzada.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Entrenador interactivo por fases: Barra horizontal, rifleado y cálculo de desvío -->
+  <section
+    id="entrenador-corte-fases"
+    class="card p-5 sm:px-8 sm:py-7 flex flex-col gap-5"
+    aria-labelledby="riffle-trainer-title"
+    tabindex="-1"
+  >
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2.5">
+      <div class="flex flex-col gap-1.5 max-w-[760px]">
+        <p class="eyebrow">ENTRENAMIENTO POR FASES · BARRA DE RIFLEADO Y DESVÍO</p>
+        <h2 id="riffle-trainer-title" class="text-[20px]">
+          Simulador de corte al tacto: 26 → 13 → 39 → Ciclo de 52 cartas
+        </h2>
+        <p class="text-sm leading-relaxed">
+          Arrastra el marcador por la barra horizontal, riflea sobre las 52 cartas y suéltalo donde estimes que está la carta buscada. Si aciertas la carta al corte, avanzas directamente; si no, deberás calcular <strong>cuántas cartas te has pasado, por arriba o por abajo</strong>.
+        </p>
+      </div>
+      <span class="self-start shrink-0 px-2.5 py-1.5 rounded-md bg-[#fdf0e5] text-[#9c4c1f] text-xs font-semibold">
+        4 fases progresivas
+      </span>
+    </div>
+
+    <app-riffle-cut-trainer />
+  </section>
+
+  <!-- 4. Cierre de la Lección 7 -->
+  <section class="card p-5 sm:p-8 flex flex-col gap-5" aria-labelledby="closing-lesson7-title">
+    <div class="flex flex-col gap-2.5 max-w-[780px]">
+      <p class="eyebrow">CIERRE · CONTROL TOTAL DE LA BARAJA SSP</p>
+      <h2 id="closing-lesson7-title" class="text-xl">
+        De la regla matemática al dominio real en las manos
+      </h2>
+      <p>
+        Al integrar la deducción de la carta siguiente, la clasificación en los cuatro reinos, las posiciones internas del 1 al 13 y la estimación al corte con cálculo instantáneo del desvío, tienes el <strong>control absoluto de las 52 cartas</strong> de la ordenación SSP para ejecutar cartomagia del máximo impacto.
+      </p>
+    </div>
+
+    <div class="flex flex-col sm:flex-row flex-wrap gap-3">
+      <button
+        type="button"
+        class="button w-full sm:w-auto"
+        [class.button-accent]="!isLessonCompleted()"
+        [class.button-completed]="isLessonCompleted()"
+        (click)="completeLesson()"
+      >
+        <app-icon name="check" />
+        <span>{{ isLessonCompleted() ? 'Lección 7 completada' : 'Completar Lección 7' }}</span>
+      </button>
+
+      <a routerLink="/curso/leccion-6" class="button button-secondary w-full sm:w-auto">
+        <app-icon name="arrowLeft" />
+        <span>Repasar Lección 6</span>
+      </a>
+
+      <a routerLink="/" class="button button-secondary w-full sm:w-auto">
+        <span>Volver a la portada</span>
+      </a>
+    </div>
+
+    @if (isLessonCompleted()) {
+      <p class="text-[13px] font-medium text-[#397153]" role="status">
+        ¡Enhorabuena! Has completado la Lección 7 y tu progreso ha quedado guardado en este navegador.
+      </p>
+    }
+  </section>
+</main>
+

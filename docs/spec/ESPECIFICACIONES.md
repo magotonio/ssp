@@ -157,7 +157,25 @@ Validaciones: `npm run build` y `npm test -- --watch=false`. La compilación se 
   - Incluye **cronómetro de tiempo** (con parada automática al completar el índice 13), **contador de aciertos**, **contador de fallos**, porcentaje de precisión y barra de progreso del ciclo.
   - Si falla, incrementa los fallos, señala la posición fallada, ofrece una pista contextual mnemotécnica y matemática y mantiene el mismo índice activo para reintentar; si acierta, incrementa los aciertos, confirma la asociación y la fórmula `× 3`, y avanza al siguiente índice hasta mostrar el resumen final del ciclo.
   - Botón **Resetear ciclo** para poner a cero tiempo, aciertos y fallos, volver a ocultar el índice y mezclar de nuevo los 13 índices.
-- Cierre consolidando las piezas de la localización exacta, botón para marcar la **Lección 6** como completada y navegación a **Lección 5** e **Inicio**.
+- Cierre consolidando las piezas de la localización exacta y preparando el entrenamiento al tacto, botón para marcar la **Lección 6** como completada y navegación a **Lección 7**, **Lección 5** e **Inicio**.
+
+### Lección 7 (`/curso/leccion-7`)
+
+- Cabecera de curso con enlace a la portada (`/`), acceso rápido a **Lección 6** (`/curso/leccion-6`), referencia a **Lección 7** e indicador de estado («En progreso» / «Lección 7 completada»).
+- Explicación pedagógica de la **integración final y localización al tacto** conforme a [leccion7.md](../leccion7.md) y [ordenacion-ssp.md](../ordenacion-ssp.md), sin duplicar ni contradecir la definición normativa:
+  - Cartas de referencia al cierre de los cuatro bloques de 13 cartas (`#13`, `#26` con margen físico aceptable de `±3` cartas, `#39` y `#52`).
+  - Estimación relativa dentro de cada reino en tres zonas (**Principio** `1.ª–4.ª`, **Centro** `5.ª–9.ª` y **Final** `10.ª–13.ª`), comprobador interactivo de sensación táctil y guía de ejercicios con baraja física destacando su beneficio general para la cartomagia.
+- **Simulador interactivo por fases de corte, rifleado y cálculo de desvío:**
+  - **Barra horizontal de 52 cartas** sin numerar acompañada de un **marcador / ilustración arrastrable** que el usuario arrastra, riflea visualmente por el canto del mazo y suelta en la posición estimada (con soporte de ratón, pantalla táctil y teclado accesible).
+  - Al soltar revela la **carta en la que se ha cortado**:
+    - Si coincide con la carta buscada, valida el corte como **correcto** de forma directa.
+    - Si no coincide, mantiene ocultas las posiciones numéricas y solicita indicar **cuántas cartas de diferencia hay** (`1` a `51`, con atajos rápidos `1–10` y selector numérico) y el sentido del desvío (**por arriba** hacia `#1` / menos cartas, o **por abajo** hacia `#52` / más cartas), ofreciendo pistas contextuales si falla y mostrando sobre la barra la comparativa real al acertar.
+  - Entrenamiento estructurado en **4 fases progresivas**:
+    1. **Fase 1 · Cortar 26** (mitad de la baraja).
+    2. **Fase 2 · Cortar 13** (primer bloque).
+    3. **Fase 3 · Cortar 39** (tercer bloque).
+    4. **Fase 4 · Ciclo completo de 52 cartas aleatorias** sin repetición (`1 / 52` a `52 / 52`), con cronómetro, contadores de cortes exactos, cortes dentro de `±3`, fallos de desvío, desvío medio, resumen final y reinicio de fase/ciclo.
+- Cierre del dominio práctico de la ordenación SSP, botón para marcar la **Lección 7** como completada y navegación a **Lección 6** e **Inicio**.
 
 ### Ejecución desde la raíz
 

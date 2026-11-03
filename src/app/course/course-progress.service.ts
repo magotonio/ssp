@@ -8,7 +8,8 @@ export type LessonId =
   | 'leccion-3'
   | 'leccion-4'
   | 'leccion-5'
-  | 'leccion-6';
+  | 'leccion-6'
+  | 'leccion-7';
 
 export interface CourseLessonMeta {
   readonly id: LessonId;
@@ -59,6 +60,12 @@ export const COURSE_LESSONS: readonly CourseLessonMeta[] = [
     label: 'Lección 6',
     title: 'Posición interna en cada reino',
     route: '/curso/leccion-6',
+  },
+  {
+    id: 'leccion-7',
+    label: 'Lección 7',
+    title: 'Integración y localización al tacto',
+    route: '/curso/leccion-7',
   },
 ] as const;
 

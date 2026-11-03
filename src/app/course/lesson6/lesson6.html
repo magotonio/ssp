@@ -482,7 +482,7 @@
         Las 13 posiciones de cada reino ya están bajo tu control
       </h2>
       <p>
-        Con el reino localizado (<strong>+0</strong> Picas, <strong>+13</strong> Corazones, <strong>+26</strong> Tréboles y <strong>+39</strong> Diamantes) y la <strong>posición interna del 1 al 13</strong> automatizada para cada índice, ya tienes todas las piezas necesarias para determinar la ubicación exacta de cualquier carta en las 52 posiciones de la SSP.
+        Con el reino localizado (<strong>+0</strong> Picas, <strong>+13</strong> Corazones, <strong>+26</strong> Tréboles y <strong>+39</strong> Diamantes) y la <strong>posición interna del 1 al 13</strong> automatizada para cada índice, ya tienes todas las piezas necesarias para determinar la ubicación exacta de cualquier carta. En la <strong>Lección 7</strong> llevarás este dominio al terreno práctico entrenando el corte al tacto, el rifleado y el cálculo del desvío sobre las 52 cartas.
       </p>
     </div>
 
@@ -497,6 +497,16 @@
         <app-icon name="check" />
         <span>{{ isLessonCompleted() ? 'Lección 6 completada' : 'Completar Lección 6' }}</span>
       </button>
+
+      <a
+        routerLink="/curso/leccion-7"
+        class="button w-full sm:w-auto"
+        [class.button-accent]="isLessonCompleted()"
+        [class.button-secondary]="!isLessonCompleted()"
+      >
+        <span>Ir a la Lección 7</span>
+        <app-icon name="arrow" />
+      </a>
 
       <a routerLink="/curso/leccion-5" class="button button-secondary w-full sm:w-auto">
         <app-icon name="arrowLeft" />

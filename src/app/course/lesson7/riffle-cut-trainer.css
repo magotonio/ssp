@@ -1,0 +1,48 @@
+.phase-tab-btn-active { border-color: var(--color-navy) !important; box-shadow: inset 0 0 0 1px var(--color-navy); }
+.phase-tab-btn-done { border-color: #b7d1be !important; background: #f6faf7 !important; }
+.phase-step-badge { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 6px; background: #f1f5f9; color: #334155; font-size: 11.5px; font-weight: 800; }
+.phase-step-badge app-icon { width: 13px; height: 13px; }
+.phase-step-badge-active { background: var(--color-navy); color: #fff; }
+.phase-step-badge-done { background: #397153; color: #fff; }
+
+.score-pill { display: inline-flex; align-items: center; gap: 7px; padding: 7px 12px; border-radius: 9px; border: 1px solid #cbd5e1; background: #f8fafc; font-size: 13px; }
+.score-pill app-icon { width: 15px; height: 15px; color: #475569; }
+.score-label { font-weight: 600; color: #475569; }
+.score-value { font-size: 15px; font-weight: 800; line-height: 1; color: var(--color-navy); }
+.score-pill-timer { background: #fdf0e5; border-color: #fed7aa; }
+.score-pill-timer app-icon, .score-pill-timer .score-label { color: #9c4c1f; }
+.score-pill-timer .score-value { color: #7c2d12; min-width: 44px; }
+.timer-toggle-btn { display: inline-grid; place-items: center; width: 24px; height: 24px; padding: 0; border-radius: 6px; border: 1px solid #fdba74; background: #fff; color: #9c4c1f; cursor: pointer; }
+.timer-toggle-btn app-icon { width: 13px; height: 13px; color: inherit; }
+.score-pill-hits { background: #f0fdf4; border-color: #bbf7d0; }
+.score-pill-hits .score-label { color: #166534; }
+.score-pill-hits .score-value { color: #15803d; }
+.score-pill-misses { background: #fff1f2; border-color: #fecdd3; }
+.score-pill-misses .score-label { color: #9f1239; }
+.score-pill-misses .score-value { color: #be123c; }
+
+.mini-playing-card { position: relative; width: 66px; height: 92px; border-radius: 10px; border: 2px solid #cbd5e1; background: #fff; display: grid; place-items: center; user-select: none; }
+.mini-playing-card-hit { border-color: #22c55e; background: #f0fdf4; }
+.mini-playing-card-placeholder { border-style: dashed; background: #f8fafc; }
+.mini-card-suit app-suit-icon { width: 18px; height: 18px; }
+
+.riffle-arena { position: relative; display: flex; align-items: flex-end; padding: 58px 12px 18px 8px; border-radius: 12px; border: 1.5px solid #cbd5e1; background: #f1f5f9; user-select: none; touch-action: none; cursor: grab; }
+.riffle-arena-locked { cursor: default; touch-action: auto; }
+.riffle-bar-track { position: relative; flex: 1; height: 54px; display: grid; grid-template-columns: repeat(52, minmax(0, 1fr)); align-items: stretch; padding: 4px 3px; border-radius: 0 9px 9px 0; border: 2px solid #334155; background: #1e293b; }
+
+.deck-slice { height: 100%; margin: 0 0.5px; border-radius: 1.5px; background: #e2e8f0; transition: transform 70ms ease, background-color 70ms ease; }
+.deck-slice:nth-child(odd) { background: #f8fafc; }
+.deck-slice-lifted { transform: translateY(-5px); background: #fed7aa !important; }
+.deck-slice-riffling { transform: translateY(-10px) scaleY(1.06); background: var(--color-accent) !important; }
+.deck-slice-cut-edge { transform: translateY(-11px); background: #f97316 !important; }
+
+.riffle-gap-band { position: absolute; top: 2px; bottom: 2px; background: rgba(249, 115, 22, 0.28); border-block: 2px solid #f97316; pointer-events: none; z-index: 2; }
+.riffle-target-pin { position: absolute; bottom: 100%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; pointer-events: none; z-index: 3; margin-bottom: 2px; }
+.riffle-cutter-handle { position: absolute; bottom: 40px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 2px; z-index: 4; transition: left 45ms linear; }
+.riffle-cutter-dragging { transition: none; }
+.cutter-thumb-figure { width: 34px; height: 38px; color: var(--color-accent); display: inline-flex; }
+.cutter-thumb-figure svg { width: 100%; height: 100%; }
+.riffle-cutter-hit .cutter-thumb-figure { color: #4ade80; }
+
+.direction-choice-btn-active { border-color: var(--color-navy) !important; background: #fff !important; box-shadow: inset 0 0 0 1px var(--color-navy); }
+.quick-distance-btn-active { background: var(--color-navy) !important; border-color: var(--color-navy) !important; color: #fff !important; }
