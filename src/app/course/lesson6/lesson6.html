@@ -1,0 +1,518 @@
+<a href="#contenido-leccion-6" class="skip-link">Saltar al contenido</a>
+
+<header class="sticky top-0 z-30 bg-white border-b border-slate-200">
+  <div class="max-w-[1080px] mx-auto h-14 sm:h-16 px-4 sm:px-6 flex items-center justify-between gap-3">
+    <div class="flex items-center gap-2.5 min-w-0">
+      <a
+        routerLink="/"
+        class="inline-flex items-center gap-2.5 text-lg font-bold tracking-tight text-slate-900 shrink-0"
+        aria-label="Volver a la portada de StackSSP"
+      >
+        <span class="brand-mark brand-mark-sm" aria-hidden="true"><app-icon name="cards" /></span>
+        <span>Stack<span class="brand-light">SSP</span></span>
+      </a>
+      <span class="text-slate-300 font-medium" aria-hidden="true">/</span>
+      <span class="text-[13px] font-semibold text-slate-600 truncate">Lección 6</span>
+    </div>
+
+    <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+      @if (isLessonCompleted()) {
+        <span class="status-pill status-completed">
+          <app-icon name="check" />
+          <span class="hidden sm:inline">Lección 6 completada</span>
+        </span>
+      } @else {
+        <span class="status-pill status-active hidden sm:inline-flex">
+          En progreso
+        </span>
+      }
+      <a routerLink="/curso/leccion-5" class="back-link hidden md:inline-flex">
+        <app-icon name="arrowLeft" />
+        <span>Lección 5</span>
+      </a>
+      <a routerLink="/" class="back-link">
+        <span>Inicio</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main
+  id="contenido-leccion-6"
+  class="max-w-[1080px] mx-auto px-3.5 sm:px-6 pt-5 sm:pt-8 pb-11 sm:pb-16 flex flex-col gap-4.5 sm:gap-6"
+  tabindex="-1"
+>
+  @if (!progress.cookiesAvailable()) {
+    <div
+      class="flex items-start gap-2.5 px-4 py-3 rounded-[10px] bg-orange-50 border border-orange-200 text-orange-800"
+      role="status"
+    >
+      <app-icon name="info" />
+      <p class="text-[13px] text-orange-800">
+        Las cookies están desactivadas en tu navegador. Podrás estudiar y usar el entrenador con normalidad, aunque el progreso no se recordará al cerrar la pestaña.
+      </p>
+    </div>
+  }
+
+  <!-- 1. Introducción de la Lección 6 y desfase de los cuatro reinos -->
+  <section class="card p-5 sm:p-8 flex flex-col gap-5" aria-labelledby="lesson6-title">
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+      <div class="flex flex-col gap-3 max-w-[780px]">
+        <div class="flex flex-wrap items-center gap-2">
+          <p class="eyebrow">LECCIÓN 6 · POSICIÓN INTERNA EN CADA REINO (1 AL 13)</p>
+          <span class="px-2 py-0.5 rounded bg-[#fdf0e5] text-[#9c4c1f] text-[11px] font-bold">
+            Localización exacta
+          </span>
+        </div>
+        <h1 id="lesson6-title" class="lesson-h1">
+          Posición interna exacta: del 1 al 13 dentro de cada reino
+        </h1>
+        <p class="text-[15px] leading-relaxed">
+          En la lección anterior aprendiste a saber en qué <strong>reino</strong> cae cualquier carta. Ahora dominarás la <strong>posición interna exacta (del 1 al 13)</strong> que ocupa cada uno de los 13 índices (del <strong>As al Rey</strong>) dentro de su bloque. Al sumar el <strong>desfase del reino</strong> obtienes al instante su posición del <strong>1 al 52</strong>.
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2 self-start shrink-0">
+        <button
+          type="button"
+          class="chip-action"
+          (click)="scrollToSection('fichas-estudio')"
+        >
+          Fichas de estudio ↓
+        </button>
+        <button
+          type="button"
+          class="chip-action chip-action-accent"
+          (click)="scrollToSection('entrenador-posicion-interna')"
+        >
+          Ir al entrenador ↓
+        </button>
+      </div>
+    </div>
+
+    <!-- Tira resumen de desfases por reino (+0, +13, +26, +39) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5" aria-label="Desfase de posiciones de cada reino">
+      @for (item of kingdomOffsets; track item.kingdom.suit) {
+        <div class="p-3 rounded-[10px] bg-slate-50 border border-slate-200 flex items-center justify-between gap-2.5">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="offset-suit-icon inline-flex shrink-0" [style.color]="item.kingdom.inkHex">
+              <app-suit-icon [suit]="item.kingdom.suit" />
+            </span>
+            <div class="flex flex-col min-w-0">
+              <strong class="text-[13.5px] text-slate-900 truncate">{{ item.kingdom.displaySuitLabel }}</strong>
+              <span class="text-[11.5px] text-slate-500">{{ item.kingdom.rangeLabel }}</span>
+            </div>
+          </div>
+          <span class="px-2.5 py-1 rounded-md bg-white border border-slate-300 font-mono text-[13px] font-extrabold text-slate-900 tabular-nums shrink-0">
+            {{ item.offsetLabel }}
+          </span>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- 2. Enfoque A: El Método Matemático (Fórmula del × 3) -->
+  <section class="card p-5 sm:px-8 sm:py-7 flex flex-col gap-5" aria-labelledby="math-method-title">
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2.5">
+      <div class="flex flex-col gap-1.5 max-w-[760px]">
+        <p class="eyebrow">ENFOQUE A · EL MÉTODO MATEMÁTICO</p>
+        <h2 id="math-method-title" class="text-[20px]">
+          La fórmula del × 3 ajustada al rango del 1 al 13
+        </h2>
+        <p class="text-sm leading-relaxed">
+          Multiplica el valor numérico del índice por <strong>3</strong>. Si el resultado supera <strong>13</strong>, réstale <strong>13</strong> (o réstale <strong>26</strong> si supera <strong>26</strong>) para devolverlo al rango del 1 al 13. Pulsa cualquier casilla para llevarla al comprobador:
+        </p>
+      </div>
+      <span class="self-start shrink-0 px-2.5 py-1.5 rounded-md bg-[#edf2eb] text-[#397153] text-xs font-semibold">
+        Valor × 3 (mód. 13)
+      </span>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-3.5">
+      <!-- Tramo 1: As al 4 (directo × 3) -->
+      <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col gap-3">
+        <div class="flex items-center justify-between gap-2">
+          <strong class="text-sm text-slate-900">As al 4 · Directo (≤ 13)</strong>
+          <span class="px-2 py-0.5 rounded bg-[#edf2eb] text-[#397153] text-[11px] font-bold">
+            Sin resta
+          </span>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          @for (rule of directMathRules; track rule.value) {
+            <button
+              type="button"
+              class="math-rule-tile"
+              [class.math-rule-tile-active]="inspectedValue() === rule.value"
+              (click)="selectInspectorValue(rule.value)"
+            >
+              <div class="flex items-center justify-between w-full">
+                <strong class="text-[14px] text-slate-900">{{ rule.rank }}</strong>
+                <span class="text-xs font-extrabold text-[#397153] tabular-nums">{{ rule.ordinalLabel }} pos.</span>
+              </div>
+              <code class="text-[11px] text-slate-600 font-mono">{{ rule.shortMathLabel }} = {{ rule.internalPosition }}</code>
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Tramo 2: 5 al 8 (resta 13) -->
+      <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col gap-3">
+        <div class="flex items-center justify-between gap-2">
+          <strong class="text-sm text-slate-900">5 al 8 · Supera 13</strong>
+          <span class="px-2 py-0.5 rounded bg-[#fdf0e5] text-[#9c4c1f] text-[11px] font-bold">
+            − 13
+          </span>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          @for (rule of minus13MathRules; track rule.value) {
+            <button
+              type="button"
+              class="math-rule-tile"
+              [class.math-rule-tile-active]="inspectedValue() === rule.value"
+              (click)="selectInspectorValue(rule.value)"
+            >
+              <div class="flex items-center justify-between w-full">
+                <strong class="text-[14px] text-slate-900">{{ rule.rank }}</strong>
+                <span class="text-xs font-extrabold text-[#9c4c1f] tabular-nums">{{ rule.ordinalLabel }} pos.</span>
+              </div>
+              <code class="text-[11px] text-slate-600 font-mono">{{ rule.shortMathLabel }} = {{ rule.internalPosition }}</code>
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Tramo 3: 9 al K (resta 26) -->
+      <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col gap-3">
+        <div class="flex items-center justify-between gap-2">
+          <strong class="text-sm text-slate-900">9 al Rey · Supera 26</strong>
+          <span class="px-2 py-0.5 rounded bg-[#f0eef9] text-[#5b4b8a] text-[11px] font-bold">
+            − 26
+          </span>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-2">
+          @for (rule of minus26MathRules; track rule.value) {
+            <button
+              type="button"
+              class="math-rule-tile"
+              [class.math-rule-tile-active]="inspectedValue() === rule.value"
+              (click)="selectInspectorValue(rule.value)"
+            >
+              <div class="flex items-center justify-between w-full">
+                <strong class="text-[14px] text-slate-900">{{ rule.rank }}</strong>
+                <span class="text-xs font-extrabold text-[#5b4b8a] tabular-nums">{{ rule.ordinalLabel }} pos.</span>
+              </div>
+              <code class="text-[11px] text-slate-600 font-mono">{{ rule.shortMathLabel }} = {{ rule.internalPosition }}</code>
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Enfoque B: El Método Mnemotécnico del autor -->
+  <section class="card p-5 sm:px-8 sm:py-7 flex flex-col gap-5" aria-labelledby="mnemonic-method-title">
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2.5">
+      <div class="flex flex-col gap-1.5 max-w-[760px]">
+        <p class="eyebrow">ENFOQUE B · EL MÉTODO MNEMOTÉCNICO DEL AUTOR</p>
+        <h2 id="mnemonic-method-title" class="text-[20px]">
+          Asociaciones directas para no calcular en pleno acto de magia
+        </h2>
+        <p class="text-sm leading-relaxed">
+          Para evitar restar en mitad de una actuación, el autor divide los 13 índices en dos bloques inmediatos y <strong>siete asociaciones visuales o verbales</strong> inolvidables:
+        </p>
+      </div>
+      <span class="self-start shrink-0 px-2.5 py-1.5 rounded-md bg-[#fdf0e5] text-[#9c4c1f] text-xs font-semibold">
+        Cero cuentas en escena
+      </span>
+    </div>
+
+    <!-- Dos pilares inmediatos: A..4 (×3) + Extremos conocidos (9 y K) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+      <article class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col gap-2">
+        <div class="flex items-center justify-between gap-2">
+          <span class="text-xs font-bold uppercase tracking-wide text-[#397153]">
+            1. Cartas bajas (As al 4)
+          </span>
+          <span class="code-pill">3 · 6 · 9 · 12</span>
+        </div>
+        <h3 class="text-[15.5px] text-slate-900">Multiplicación instantánea por 3</h3>
+        <p class="text-[13px] text-slate-600 leading-relaxed">
+          Del <strong>As al 4</strong> la tabla del 3 es inmediata en la mente sin restar nada: <strong>As → 3.ª</strong>, <strong>2 → 6.ª</strong>, <strong>3 → 9.ª</strong> y <strong>4 → 12.ª</strong>.
+        </p>
+      </article>
+
+      <article class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col gap-2">
+        <div class="flex items-center justify-between gap-2">
+          <span class="text-xs font-bold uppercase tracking-wide text-[#5b4b8a]">
+            2. Extremos conocidos (9 y Rey)
+          </span>
+          <span class="code-pill">9 → 1.ª · K → 13.ª</span>
+        </div>
+        <h3 class="text-[15.5px] text-slate-900">Apertura y cierre de cada reino</h3>
+        <p class="text-[13px] text-slate-600 leading-relaxed">
+          El <strong>9</strong> ocupa siempre la <strong>1.ª posición</strong> (inicio de reino y de la baraja con el 9♠) y el <strong>Rey (K)</strong> cierra siempre en la <strong>13.ª posición</strong>.
+        </p>
+      </article>
+    </div>
+
+    <!-- Las 7 cartas restantes mediante asociaciones visuales y verbales -->
+    <div class="flex flex-col gap-2.5">
+      <h3 class="text-[14.5px] text-slate-900">
+        3. Reglas visuales y verbales para las 7 cartas restantes
+      </h3>
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"
+        role="list"
+        aria-label="Asociaciones mnemotécnicas de las 7 cartas restantes"
+      >
+        @for (item of mnemonicAssociations; track item.badgeRank) {
+          <button
+            type="button"
+            class="mnemonic-card text-left"
+            role="listitem"
+            (click)="selectInspectorValue(item.inspectValue)"
+          >
+            <div class="flex items-center justify-between gap-2 w-full">
+              <span class="px-2.5 py-0.5 rounded-md bg-slate-900 text-white text-xs font-extrabold">
+                Índice {{ item.badgeRank }}
+              </span>
+              <span class="px-2 py-0.5 rounded bg-[#fdf0e5] text-[#9c4c1f] text-xs font-bold tabular-nums">
+                {{ item.positionLabel }}
+              </span>
+            </div>
+            <strong class="text-[14.5px] text-slate-900">{{ item.title }}</strong>
+            <p class="text-[12.5px] text-slate-600 leading-snug">{{ item.description }}</p>
+          </button>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Comprobador interactivo: Posición interna + Desfase del reino = Posición 1..52 -->
+  <section class="card p-5 sm:px-8 sm:py-7 flex flex-col gap-5" aria-labelledby="absolute-inspector-title">
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2.5">
+      <div class="flex flex-col gap-1.5 max-w-[760px]">
+        <p class="eyebrow">UNIÓN CON LOS REINOS · DEL 1 AL 52</p>
+        <h2 id="absolute-inspector-title" class="text-[20px]">
+          Cómo se suma la posición interna con el desfase del reino
+        </h2>
+        <p class="text-sm leading-relaxed">
+          Prueba cualquiera de los ejemplos o elige un índice y palo para ver cómo la <strong>posición interna (1–13)</strong> más el <strong>desfase del reino (+0, +13, +26 o +39)</strong> revela el lugar exacto en la baraja:
+        </p>
+      </div>
+      <span class="self-start shrink-0 px-2.5 py-1.5 rounded-md bg-[#f0eef9] text-[#5b4b8a] text-xs font-semibold">
+        Pos. interna + Reino = #1–52
+      </span>
+    </div>
+
+    <!-- Ejemplos rápidos -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5" role="list" aria-label="Ejemplos de suma con el desfase del reino">
+      @for (example of absoluteExamples; track example.card.code) {
+        <button
+          type="button"
+          class="example-step-card text-left"
+          [class.example-step-card-active]="inspectedCard().code === example.card.code"
+          role="listitem"
+          (click)="inspectCard(example.card)"
+        >
+          <div class="flex items-center justify-between gap-2">
+            <span class="inline-flex items-center gap-1 font-extrabold text-[15px]" [style.color]="cardInkHex(example.card.suit)">
+              <span>{{ example.card.rank }}</span>
+              <app-suit-icon [suit]="example.card.suit" />
+              <span class="text-xs font-semibold text-slate-500">({{ example.card.fullName }})</span>
+            </span>
+          </div>
+          <p class="text-xs text-slate-600 leading-snug">{{ example.summary }}</p>
+        </button>
+      }
+    </div>
+
+    <!-- Selector interactivo de cualquier carta -->
+    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col gap-3.5">
+      <div class="flex flex-col gap-2">
+        <span class="text-xs font-bold uppercase tracking-wide text-slate-500">
+          Inspecciona cualquier carta de la baraja
+        </span>
+        <div class="flex flex-wrap items-center gap-1.5" role="group" aria-label="Índice a consultar">
+          @for (r of ranks; track r.value) {
+            <button
+              type="button"
+              class="mini-rank-btn"
+              [class.mini-rank-btn-active]="inspectedValue() === r.value"
+              [attr.aria-pressed]="inspectedValue() === r.value"
+              (click)="selectInspectorValue(r.value)"
+            >
+              {{ r.rank }}
+            </button>
+          }
+        </div>
+        <div class="flex flex-wrap items-center gap-1.5" role="group" aria-label="Palo a consultar">
+          @for (s of suitOptions; track s.code) {
+            <button
+              type="button"
+              class="mini-suit-btn"
+              [class.mini-suit-btn-active]="inspectedSuit() === s.code"
+              [attr.aria-pressed]="inspectedSuit() === s.code"
+              (click)="selectInspectorSuit(s.code)"
+            >
+              <span class="inline-flex" [style.color]="s.inkHex"><app-suit-icon [suit]="s.code" /></span>
+              <span>{{ s.meta.pluralName }}</span>
+            </button>
+          }
+        </div>
+      </div>
+
+      <div
+        class="p-3.5 rounded-[10px] bg-white border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-3"
+        data-testid="lesson6-position-inspector"
+        role="status"
+        aria-live="polite"
+      >
+        <div class="flex flex-col gap-1.5">
+          <div class="flex flex-wrap items-center gap-2 text-sm text-slate-800">
+            <strong
+              class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-50 border border-slate-300 font-bold"
+              [style.color]="cardInkHex(inspectedCard().suit)"
+            >
+              <span>{{ inspectedCard().rank }}</span>
+              <app-suit-icon [suit]="inspectedCard().suit" />
+              <span class="text-slate-900">({{ inspectedCard().fullName }})</span>
+            </strong>
+            <span>→ Posición interna</span>
+            <strong class="px-2 py-0.5 rounded bg-[#fdf0e5] text-[#9c4c1f] font-bold tabular-nums">
+              {{ inspectedBreakdown().internalRule.ordinalLabel }}
+            </strong>
+            <span>+ {{ inspectedBreakdown().kingdom.name }}</span>
+            <strong class="px-2 py-0.5 rounded bg-slate-100 text-slate-800 font-mono font-bold tabular-nums">
+              ({{ inspectedBreakdown().offsetLabel }})
+            </strong>
+            <span>=</span>
+            <strong class="px-2.5 py-0.5 rounded bg-slate-900 text-white font-bold tabular-nums">
+              Posición #{{ inspectedBreakdown().absolutePosition }}
+            </strong>
+          </div>
+          <p class="text-[12.5px] text-slate-600">
+            <strong>Índice ({{ inspectedCard().rank }}):</strong> {{ inspectedBreakdown().internalRule.mnemonicRule }}
+            (<code class="font-mono text-xs">{{ inspectedBreakdown().internalRule.mathFormulaText }}</code>).
+          </p>
+        </div>
+
+        <code class="self-start md:self-center shrink-0 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-300 font-mono text-[13px] font-extrabold text-slate-900 tabular-nums">
+          {{ inspectedBreakdown().internalPosition }} + {{ inspectedBreakdown().offset }} = #{{ inspectedBreakdown().absolutePosition }}
+        </code>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Enfoque C: Fichas de estudio (Flashcards) y Marcado de Baraja -->
+  <section
+    id="fichas-estudio"
+    class="card p-5 sm:px-8 sm:py-7 flex flex-col gap-5"
+    aria-labelledby="flashcards-section-title"
+    tabindex="-1"
+  >
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2.5">
+      <div class="flex flex-col gap-1.5 max-w-[760px]">
+        <p class="eyebrow">ENFOQUE C · FICHAS DE ESTUDIO Y MARCADO DE BARAJA</p>
+        <h2 id="flashcards-section-title" class="text-[20px]">
+          Mazo de 13 fichas de doble cara (Flashcards)
+        </h2>
+        <p class="text-sm leading-relaxed">
+          Ensaya como con <strong>13 tarjetas físicas de doble cara</strong> (el índice en un lado y su posición del 1 al 13 en el otro). Puedes mezclarlas al azar, girar cada ficha para comprobar tu respuesta o invertir el sentido (<strong>Posición → Índice</strong>):
+        </p>
+      </div>
+      <span class="self-start shrink-0 px-2.5 py-1.5 rounded-md bg-[#edf2eb] text-[#397153] text-xs font-semibold">
+        13 fichas giratorias
+      </span>
+    </div>
+
+    <app-study-flashcards />
+
+    <!-- Marcado de baraja física del 1 al 52 -->
+    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-3">
+      <span class="stat-icon peach"><app-icon name="cards" /></span>
+      <div class="flex flex-col gap-1">
+        <h3 class="text-[15px] text-slate-900">
+          Práctica física recomendada: marcado de una baraja del 1 al 52
+        </h3>
+        <p class="text-[13px] text-slate-600 leading-relaxed">
+          Ordena una baraja de estudio completa en <strong>ordenación SSP</strong> (desde el <strong>9♠</strong> en la posición 1 hasta el <strong>K<span class="suit-red">♦</span></strong> en la 52) y numera sus dorsos del <strong>1 al 52</strong> con rotulador permanente. Así podrás entrenarte mirando caras o dorsos al instante e incluso utilizar esa baraja en juegos mágicos de predicción.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Entrenador cronometrado de posición interna (13 índices) -->
+  <section
+    id="entrenador-posicion-interna"
+    class="card p-5 sm:px-8 sm:py-7 flex flex-col gap-5"
+    aria-labelledby="internal-trainer-title"
+    tabindex="-1"
+  >
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2.5">
+      <div class="flex flex-col gap-1.5 max-w-[760px]">
+        <p class="eyebrow">PRÁCTICA CRONOMETRADA · LOS 13 ÍNDICES SIN REPETICIÓN</p>
+        <h2 id="internal-trainer-title" class="text-[20px]">
+          Entrenador de posición interna (ciclo de 13 índices)
+        </h2>
+        <p class="text-sm leading-relaxed">
+          Los <strong>13 índices (del As al Rey)</strong> se mezclan internamente y aparecen uno a uno para que pulses qué <strong>posición del 1 al 13</strong> ocupan dentro de su reino, con cronómetro, marcador de aciertos y fallos, pistas mnemotécnicas si fallas y opción de resetear el ciclo.
+        </p>
+      </div>
+      <span class="self-start shrink-0 px-2.5 py-1.5 rounded-md bg-[#fdf0e5] text-[#9c4c1f] text-xs font-semibold">
+        13 índices · Posición 1–13
+      </span>
+    </div>
+
+    <app-internal-position-trainer />
+
+    <div class="px-4 py-3 rounded-[10px] bg-slate-50 border border-slate-200 flex items-start gap-2.5">
+      <span class="text-slate-600 mt-0.5"><app-icon name="star" /></span>
+      <p class="text-[13px] text-slate-600">
+        <strong>Meta recomendada:</strong> apóyate primero en las asociaciones del autor (<strong>5→2</strong>, <strong>6→5</strong>, <strong>7→8</strong>, <strong>8→11</strong>, <strong>10→4</strong>, <strong>J→7</strong>, <strong>Q→10</strong>) hasta completar los 13 índices sin errores y en menos de 20 segundos.
+      </p>
+    </div>
+  </section>
+
+  <!-- 7. Cierre de la Lección 6 -->
+  <section class="card p-5 sm:p-8 flex flex-col gap-5" aria-labelledby="closing-lesson6-title">
+    <div class="flex flex-col gap-2.5 max-w-[780px]">
+      <p class="eyebrow">CIERRE · POSICIÓN INTERNA DOMINADA</p>
+      <h2 id="closing-lesson6-title" class="text-xl">
+        Las 13 posiciones de cada reino ya están bajo tu control
+      </h2>
+      <p>
+        Con el reino localizado (<strong>+0</strong> Picas, <strong>+13</strong> Corazones, <strong>+26</strong> Tréboles y <strong>+39</strong> Diamantes) y la <strong>posición interna del 1 al 13</strong> automatizada para cada índice, ya tienes todas las piezas necesarias para determinar la ubicación exacta de cualquier carta en las 52 posiciones de la SSP.
+      </p>
+    </div>
+
+    <div class="flex flex-col sm:flex-row flex-wrap gap-3">
+      <button
+        type="button"
+        class="button w-full sm:w-auto"
+        [class.button-accent]="!isLessonCompleted()"
+        [class.button-completed]="isLessonCompleted()"
+        (click)="completeLesson()"
+      >
+        <app-icon name="check" />
+        <span>{{ isLessonCompleted() ? 'Lección 6 completada' : 'Completar Lección 6' }}</span>
+      </button>
+
+      <a routerLink="/curso/leccion-5" class="button button-secondary w-full sm:w-auto">
+        <app-icon name="arrowLeft" />
+        <span>Repasar Lección 5</span>
+      </a>
+
+      <a routerLink="/" class="button button-secondary w-full sm:w-auto">
+        <span>Volver a la portada</span>
+      </a>
+    </div>
+
+    @if (isLessonCompleted()) {
+      <p class="text-[13px] font-medium text-[#397153]" role="status">
+        ¡Magnífico trabajo! Tu progreso en la Lección 6 ha quedado guardado en este navegador.
+      </p>
+    }
+  </section>
+</main>
+

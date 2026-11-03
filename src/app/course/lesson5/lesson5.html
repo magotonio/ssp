@@ -421,7 +421,7 @@
         De 52 cartas a un único bloque de 13 posiciones
       </h2>
       <p>
-        Dominar los cuatro reinos reduce de un vistazo toda la baraja a un único cuarto de <strong>13 cartas</strong>: ya sabes si cualquier carta nombrada por un espectador está al principio (<strong>1–13</strong>), en el segundo cuarto (<strong>14–26</strong>), en el tercero (<strong>27–39</strong>) o al final (<strong>40–52</strong>). Esta base nos permitirá afinar el cálculo dentro de cada reino para obtener la posición exacta.
+        Dominar los cuatro reinos reduce de un vistazo toda la baraja a un único cuarto de <strong>13 cartas</strong>: ya sabes si cualquier carta nombrada por un espectador está al principio (<strong>1–13</strong>), en el segundo cuarto (<strong>14–26</strong>), en el tercero (<strong>27–39</strong>) o al final (<strong>40–52</strong>). En la <strong>Lección 6</strong> aprenderás a calcular la posición interna exacta del <strong>1 al 13</strong> dentro de cada reino.
       </p>
     </div>
 
@@ -436,6 +436,16 @@
         <app-icon name="check" />
         <span>{{ isLessonCompleted() ? 'Lección 5 completada' : 'Completar Lección 5' }}</span>
       </button>
+
+      <a
+        routerLink="/curso/leccion-6"
+        class="button w-full sm:w-auto"
+        [class.button-accent]="isLessonCompleted()"
+        [class.button-secondary]="!isLessonCompleted()"
+      >
+        <span>Ir a la Lección 6</span>
+        <app-icon name="arrow" />
+      </a>
 
       <a routerLink="/curso/leccion-4" class="button button-secondary w-full sm:w-auto">
         <app-icon name="arrowLeft" />

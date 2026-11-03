@@ -1,0 +1,21 @@
+.flashcard-mode-btn { min-height: 36px; padding: 6px 12px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; color: #334155; font: 600 12.5px inherit; cursor: pointer; touch-action: manipulation; }
+.flashcard-mode-btn:hover { background: #f1f5f9; }
+.flashcard-mode-btn-active { background: var(--color-navy); border-color: var(--color-navy); color: #fff; }
+.flashcard-mode-btn-active:hover { background: #334155; }
+
+.flashcard-tool-btn { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 6px 12px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; color: #1e293b; font: 600 12.5px inherit; cursor: pointer; touch-action: manipulation; }
+.flashcard-tool-btn:hover { background: #f1f5f9; }
+.flashcard-tool-btn app-icon { width: 15px; height: 15px; }
+
+.study-flashcard { display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 12px; min-height: 224px; padding: 18px 22px; border-radius: 12px; border: 2px solid #cbd5e1; background: #fff; font-family: inherit; cursor: pointer; touch-action: manipulation; transition: border-color 140ms ease, background-color 140ms ease; }
+.study-flashcard:hover { border-color: var(--color-accent); background: #fffcf9; }
+.study-flashcard-flipped { border-color: #397153; background: #fafdf9; }
+
+.flashcard-nav-btn { display: inline-flex; align-items: center; justify-content: center; gap: 5px; min-height: 40px; padding: 8px 12px; border-radius: 8px; border: 1px solid #cbd5e1; background: #f8fafc; color: #1e293b; font: 600 12.5px inherit; cursor: pointer; touch-action: manipulation; }
+.flashcard-nav-btn:hover { background: #f1f5f9; }
+.flashcard-nav-btn app-icon { width: 16px; height: 16px; }
+
+.flashcard-pill { min-width: 38px; min-height: 34px; padding: 4px 8px; border-radius: 7px; border: 1px solid #cbd5e1; background: #fff; color: #1e293b; font: 700 12.5px inherit; cursor: pointer; touch-action: manipulation; }
+.flashcard-pill:hover { background: #f1f5f9; }
+.flashcard-pill-active { background: var(--color-navy); border-color: var(--color-navy); color: #fff; }
+

@@ -51,6 +51,12 @@ export const routes: Routes = [
       import('./course/lesson5/lesson5').then((module) => module.Lesson5),
   },
   {
+    path: 'curso/leccion-6',
+    title: 'Lección 6 · Posición interna en cada reino | StackSSP',
+    loadComponent: () =>
+      import('./course/lesson6/lesson6').then((module) => module.Lesson6),
+  },
+  {
     path: '**',
     redirectTo: '',
   },

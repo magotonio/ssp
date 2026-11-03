@@ -7,7 +7,8 @@ export type LessonId =
   | 'leccion-2'
   | 'leccion-3'
   | 'leccion-4'
-  | 'leccion-5';
+  | 'leccion-5'
+  | 'leccion-6';
 
 export interface CourseLessonMeta {
   readonly id: LessonId;
@@ -52,6 +53,12 @@ export const COURSE_LESSONS: readonly CourseLessonMeta[] = [
     label: 'Lección 5',
     title: 'Los cuatro reinos de la baraja',
     route: '/curso/leccion-5',
+  },
+  {
+    id: 'leccion-6',
+    label: 'Lección 6',
+    title: 'Posición interna en cada reino',
+    route: '/curso/leccion-6',
   },
 ] as const;
 

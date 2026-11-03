@@ -141,7 +141,23 @@ Validaciones: `npm run build` y `npm test -- --watch=false`. La compilación se 
   - Incluye **cronómetro de tiempo** (con parada automática al completar la carta 52), **contador de aciertos**, **contador de fallos**, porcentaje de precisión y barra de progreso del ciclo.
   - Si falla, incrementa el contador de fallos, muestra una pista contextual basada en el personaje de la carta y mantiene la misma carta activa para reintentar; si acierta, incrementa los aciertos, confirma la regla aplicada y avanza a la siguiente carta hasta mostrar el resumen final del ciclo al alcanzar 52 aciertos.
   - Botón **Resetear ciclo** para poner a cero tiempo, aciertos y fallos, volver a ocultar la carta y mezclar de nuevo internamente las 52 cartas.
-- Cierre preparando el cálculo de la posición exacta dentro de cada reino, botón para marcar la **Lección 5** como completada y navegación a **Lección 4** e **Inicio**.
+- Cierre preparando el cálculo de la posición exacta dentro de cada reino, botón para marcar la **Lección 5** como completada y navegación a **Lección 6**, **Lección 4** e **Inicio**.
+
+### Lección 6 (`/curso/leccion-6`)
+
+- Cabecera de curso con enlace a la portada (`/`), acceso rápido a **Lección 5** (`/curso/leccion-5`), referencia a **Lección 6** e indicador de estado («En progreso» / «Lección 6 completada»).
+- Explicación pedagógica del cálculo de la **posición interna exacta (`1` al `13`)** que ocupa cada índice dentro de su reino y de cómo se combina con el desfase de cada bloque (**Picas `+0`**, **Corazones `+13`**, **Tréboles `+26`**, **Diamantes `+39`**) para obtener la posición del `1` al `52` conforme a [leccion6.md](../leccion6.md) y [ordenacion-ssp.md](../ordenacion-ssp.md), sin duplicar ni contradecir la definición normativa:
+  - **Enfoque A · Método matemático (fórmula del `× 3`):** desglose interactivo en tres tramos (`As–4` directo `≤ 13`, `5–8` restando `13` y `9–K` restando `26`).
+  - **Enfoque B · Método mnemotécnico del autor:** multiplicación inmediata `× 3` para `A–4`, extremos conocidos (`9` en 1.ª posición y `K` en 13.ª posición) y asociaciones visuales/verbales para las 7 cartas restantes (`5`, `6 y 7`, `8`, `10`, `J` y `Q`).
+  - **Comprobador interactivo de unión con el reino (`1–52`):** ejemplos rápidos y selector de cualquier carta que muestra su posición interna (`1–13`), el desfase de su reino y la suma final en la baraja.
+  - **Enfoque C · Fichas de estudio interactivas (Flashcards) y marcado de baraja:** mazo de **13 tarjetas giratorias de doble cara** con giro anverso/reverso, inversión de sentido (`Índice → Posición` y `Posición → Índice`), mezcla aleatoria y restauración de orden `A → K`, acompañado de la guía de **marcado físico del `1` al `52`** por el dorso.
+- **Entrenador de posición interna (ciclo de 13 índices):**
+  - Mezcla internamente los 13 índices (`A` a `K`) para presentarlos uno a uno sin repeticiones ni omisiones a lo largo de un ciclo completo (`1 / 13` a `13 / 13`).
+  - Mientras el cronómetro no está en marcha (al entrar, al resetear o al pausar), el índice permanece oculto tras una **interrogación (`?`)** y las 13 posiciones (`1.ª` a `13.ª`) quedan deshabilitadas; al pulsar sobre `?` o sobre **Play** se inicia/reanuda el tiempo, se revela el índice y se habilita la respuesta (y al pausar vuelve a ocultarse).
+  - Incluye **cronómetro de tiempo** (con parada automática al completar el índice 13), **contador de aciertos**, **contador de fallos**, porcentaje de precisión y barra de progreso del ciclo.
+  - Si falla, incrementa los fallos, señala la posición fallada, ofrece una pista contextual mnemotécnica y matemática y mantiene el mismo índice activo para reintentar; si acierta, incrementa los aciertos, confirma la asociación y la fórmula `× 3`, y avanza al siguiente índice hasta mostrar el resumen final del ciclo.
+  - Botón **Resetear ciclo** para poner a cero tiempo, aciertos y fallos, volver a ocultar el índice y mezclar de nuevo los 13 índices.
+- Cierre consolidando las piezas de la localización exacta, botón para marcar la **Lección 6** como completada y navegación a **Lección 5** e **Inicio**.
 
 ### Ejecución desde la raíz
 
