@@ -1,7 +1,13 @@
 import { DOCUMENT } from '@angular/common';
 import { computed, inject, Injectable, signal } from '@angular/core';
 
-export type LessonId = 'introduccion' | 'leccion-1' | 'leccion-2' | 'leccion-3' | 'leccion-4';
+export type LessonId =
+  | 'introduccion'
+  | 'leccion-1'
+  | 'leccion-2'
+  | 'leccion-3'
+  | 'leccion-4'
+  | 'leccion-5';
 
 export interface CourseLessonMeta {
   readonly id: LessonId;
@@ -40,6 +46,12 @@ export const COURSE_LESSONS: readonly CourseLessonMeta[] = [
     label: 'Lección 4',
     title: 'Integración de índice y palo',
     route: '/curso/leccion-4',
+  },
+  {
+    id: 'leccion-5',
+    label: 'Lección 5',
+    title: 'Los cuatro reinos de la baraja',
+    route: '/curso/leccion-5',
   },
 ] as const;
 

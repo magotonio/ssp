@@ -1,0 +1,457 @@
+<a href="#contenido-leccion-5" class="skip-link">Saltar al contenido</a>
+
+<header class="sticky top-0 z-30 bg-white border-b border-slate-200">
+  <div class="max-w-[1080px] mx-auto h-14 sm:h-16 px-4 sm:px-6 flex items-center justify-between gap-3">
+    <div class="flex items-center gap-2.5 min-w-0">
+      <a
+        routerLink="/"
+        class="inline-flex items-center gap-2.5 text-lg font-bold tracking-tight text-slate-900 shrink-0"
+        aria-label="Volver a la portada de StackSSP"
+      >
+        <span class="brand-mark brand-mark-sm" aria-hidden="true"><app-icon name="cards" /></span>
+        <span>Stack<span class="brand-light">SSP</span></span>
+      </a>
+      <span class="text-slate-300 font-medium" aria-hidden="true">/</span>
+      <span class="text-[13px] font-semibold text-slate-600 truncate">Lección 5</span>
+    </div>
+
+    <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+      @if (isLessonCompleted()) {
+        <span class="status-pill status-completed">
+          <app-icon name="check" />
+          <span class="hidden sm:inline">Lección 5 completada</span>
+        </span>
+      } @else {
+        <span class="status-pill status-active hidden sm:inline-flex">
+          En progreso
+        </span>
+      }
+      <a routerLink="/curso/leccion-4" class="back-link hidden md:inline-flex">
+        <app-icon name="arrowLeft" />
+        <span>Lección 4</span>
+      </a>
+      <a routerLink="/" class="back-link">
+        <span>Inicio</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main
+  id="contenido-leccion-5"
+  class="max-w-[1080px] mx-auto px-3.5 sm:px-6 pt-5 sm:pt-8 pb-11 sm:pb-16 flex flex-col gap-4.5 sm:gap-6"
+  tabindex="-1"
+>
+  @if (!progress.cookiesAvailable()) {
+    <div
+      class="flex items-start gap-2.5 px-4 py-3 rounded-[10px] bg-orange-50 border border-orange-200 text-orange-800"
+      role="status"
+    >
+      <app-icon name="info" />
+      <p class="text-[13px] text-orange-800">
+        Las cookies están desactivadas en tu navegador. Podrás estudiar y usar el entrenador con normalidad, aunque el progreso no se recordará al cerrar la pestaña.
+      </p>
+    </div>
+  }
+
+  <!-- 1. Introducción de la Lección 5 -->
+  <section class="card p-5 sm:p-8 flex flex-col gap-4" aria-labelledby="lesson5-title">
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+      <div class="flex flex-col gap-3 max-w-[780px]">
+        <div class="flex flex-wrap items-center gap-2">
+          <p class="eyebrow">LECCIÓN 5 · SEGUNDA PARTE DEL CURSO · LOS CUATRO REINOS</p>
+          <span class="px-2 py-0.5 rounded bg-[#fdf0e5] text-[#9c4c1f] text-[11px] font-bold">
+            Localización por bloques
+          </span>
+        </div>
+        <h1 id="lesson5-title" class="lesson-h1">
+          Localización aproximada: divide la baraja en cuatro reinos
+        </h1>
+        <p class="text-[15px] leading-relaxed">
+          Comienza la <strong>segunda parte del curso</strong>, enfocada en localizar cualquier carta dentro de la ordenación estándar de referencia (la que arranca con el <strong>9 de Picas</strong> en la posición 1). El primer paso consiste en dividir las 52 cartas en <strong>cuatro bloques de 13 cartas</strong> llamados <strong>«reinos»</strong>.
+        </p>
+      </div>
+
+      <button
+        type="button"
+        class="chip-action chip-action-accent self-start shrink-0"
+        (click)="scrollToSection('entrenador-reinos')"
+      >
+        Ir al entrenador ↓
+      </button>
+    </div>
+  </section>
+
+  <!-- 2. Estructura de los 4 Reinos (Bloques de 13 cartas) -->
+  <section class="card p-5 sm:px-8 sm:py-7 flex flex-col gap-5" aria-labelledby="kingdoms-structure-title">
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2.5">
+      <div class="flex flex-col gap-1.5 max-w-[760px]">
+        <p class="eyebrow">1. ESTRUCTURA DE LA BARAJA · 4 BLOQUES DE 13 CARTAS</p>
+        <h2 id="kingdoms-structure-title" class="text-[20px]">
+          Los cuatro reinos siguen el orden canónico de los palos
+        </h2>
+        <p class="text-sm leading-relaxed">
+          Las 52 posiciones de la baraja se reparten en cuatro secciones iguales de 13 cartas siguiendo exactamente la rueda <strong>Picas → Corazones → Tréboles → Diamantes</strong>. Pulsa cada reino para explorar las 13 cartas que habitan en él:
+        </p>
+      </div>
+      <span class="self-start shrink-0 px-2.5 py-1.5 rounded-md bg-slate-100 text-slate-700 text-xs font-semibold">
+        4 × 13 = 52 cartas
+      </span>
+    </div>
+
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"
+      role="group"
+      aria-label="Seleccionar reino para ver sus 13 cartas"
+    >
+      @for (kingdom of kingdoms; track kingdom.suit) {
+        <button
+          type="button"
+          class="kingdom-block-card text-left"
+          [class.kingdom-block-card-active]="selectedBlockSuit() === kingdom.suit"
+          [attr.aria-pressed]="selectedBlockSuit() === kingdom.suit"
+          (click)="selectKingdomBlock(kingdom.suit)"
+        >
+          <div class="flex items-center justify-between gap-2">
+            <span class="px-2 py-0.5 rounded bg-white border border-slate-200 text-[11px] font-bold text-slate-700">
+              {{ kingdom.ordinalLabel }}
+            </span>
+            <span class="kingdom-block-suit inline-flex" [style.color]="kingdom.inkHex">
+              <app-suit-icon [suit]="kingdom.suit" />
+            </span>
+          </div>
+
+          <div class="flex flex-col gap-0.5">
+            <strong class="text-[15.5px] text-slate-900">{{ kingdom.name }}</strong>
+            <span class="text-xs font-semibold text-slate-600">{{ kingdom.rangeLabel }}</span>
+          </div>
+        </button>
+      }
+    </div>
+
+    <!-- Vista de las 13 cartas del reino seleccionado -->
+    <div
+      class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col gap-3"
+      data-testid="lesson5-kingdom-block-detail"
+    >
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-2">
+          <span class="inline-flex" [style.color]="selectedKingdomBlock().inkHex">
+            <app-suit-icon [suit]="selectedKingdomBlock().suit" />
+          </span>
+          <strong class="text-sm text-slate-900">
+            {{ selectedKingdomBlock().ordinalLabel }}: {{ selectedKingdomBlock().name }} ({{ selectedKingdomBlock().rangeLabel.toLowerCase() }})
+          </strong>
+        </div>
+        <span class="text-xs text-slate-500">
+          5 Nobles · 4 Científicos · 4 Políticos
+        </span>
+      </div>
+
+      <div class="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-7 lg:grid-cols-13 gap-1.5">
+        @for (item of selectedBlockCards(); track item.card.code) {
+          <button
+            type="button"
+            class="block-mini-card"
+            [attr.aria-label]="
+              'Posición ' + item.card.position + ': ' + item.card.fullName + ' (' + item.character.singularName + ')'
+            "
+            (click)="inspectCard(item.card)"
+          >
+            <span class="text-[10px] font-semibold text-slate-400 tabular-nums">
+              #{{ item.card.position }}
+            </span>
+            <span class="inline-flex items-center gap-0.5 font-extrabold text-[13px]" [style.color]="item.inkHex">
+              <span>{{ item.card.rank }}</span>
+              <app-suit-icon [suit]="item.card.suit" />
+            </span>
+            <span
+              class="px-1 py-px rounded text-[9.5px] font-bold leading-tight"
+              [style.background-color]="item.character.badgeBg"
+              [style.color]="item.character.badgeText"
+            >
+              {{ item.character.singularName }}
+            </span>
+          </button>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Clasificación de las cartas por categorías o personajes -->
+  <section class="grid grid-cols-1 lg:grid-cols-3 gap-4.5 sm:gap-6" aria-label="Clasificación de cartas por personajes">
+    <!-- Los Nobles (9 al K) -->
+    <article class="card p-5 sm:p-6 flex flex-col justify-between gap-4">
+      <div class="flex flex-col gap-3">
+        <div class="flex items-center justify-between gap-2">
+          <span class="stat-icon sage"><app-icon name="star" /></span>
+          <span class="px-2.5 py-1 rounded-md bg-[#edf2eb] text-[#397153] text-xs font-bold">
+            Altas: 9, 10, J, Q y K
+          </span>
+        </div>
+
+        <h2 class="text-[18.5px]">Los Nobles: «Dicen la verdad»</h2>
+        <p class="text-sm leading-relaxed">
+          Las cartas altas (del <strong>9 al Rey</strong>) son sinceras: se ubican directamente en el <strong>reino que coincide con su propio palo</strong>.
+        </p>
+
+        <div class="p-3 rounded-[9px] bg-slate-50 border border-slate-200 flex flex-col gap-1">
+          <span class="text-xs font-bold text-[#397153]">Regla directa</span>
+          <span class="text-[13px] text-slate-700">Mismo palo de la carta (sin cambios).</span>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap gap-1.5 pt-1">
+        <span class="code-pill">10♥ → Corazones (2.º)</span>
+        <span class="code-pill">K♣ → Tréboles (3.º)</span>
+        <span class="code-pill">K♠ → Picas (1.º)</span>
+      </div>
+    </article>
+
+    <!-- Los Políticos (A, 2, 3 y 4) -->
+    <article class="card p-5 sm:p-6 flex flex-col justify-between gap-4">
+      <div class="flex flex-col gap-3">
+        <div class="flex items-center justify-between gap-2">
+          <span class="stat-icon peach"><app-icon name="cycle" /></span>
+          <span class="px-2.5 py-1 rounded-md bg-[#fdf0e5] text-[#9c4c1f] text-xs font-bold">
+            Bajas: As, 2, 3 y 4
+          </span>
+        </div>
+
+        <h2 class="text-[18.5px]">Los Políticos: «Mienten en el palo»</h2>
+        <p class="text-sm leading-relaxed">
+          Las cartas bajas (<strong>As, 2, 3 y 4</strong>) mienten sobre su palo exacto y solo dicen la verdad sobre el <strong>color</strong>: están en el reino del <strong>otro palo de su mismo color</strong>.
+        </p>
+
+        <div class="p-3 rounded-[9px] bg-slate-50 border border-slate-200 flex flex-col gap-1">
+          <span class="text-xs font-bold text-[#9c4c1f]">Palo homólogo (+2)</span>
+          <span class="text-[13px] text-slate-700">Picas ↔ Tréboles · Corazones ↔ Diamantes.</span>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap gap-1.5 pt-1">
+        <span class="code-pill">3♥ → Diamantes (rojos)</span>
+        <span class="code-pill">2♣ → Picas (negros)</span>
+      </div>
+    </article>
+
+    <!-- Los Científicos (5, 6, 7 y 8) -->
+    <article class="card p-5 sm:p-6 flex flex-col justify-between gap-4">
+      <div class="flex flex-col gap-3">
+        <div class="flex items-center justify-between gap-2">
+          <span class="stat-icon lavender"><app-icon name="clock" /></span>
+          <span class="px-2.5 py-1 rounded-md bg-[#f0eef9] text-[#5b4b8a] text-xs font-bold">
+            Intermedias: 5, 6, 7 y 8
+          </span>
+        </div>
+
+        <h2 class="text-[18.5px]">Los Científicos: «Adelantados»</h2>
+        <p class="text-sm leading-relaxed">
+          Las cartas intermedias (<strong>5, 6, 7 y 8</strong>) van adelantadas a su época: se sitúan en el <strong>reino que antecede a su palo</strong> en el ciclo canónico.
+        </p>
+
+        <div class="p-3 rounded-[9px] bg-slate-50 border border-slate-200 flex flex-col gap-1">
+          <span class="text-xs font-bold text-[#5b4b8a]">Reino anterior (−1 en P→C→T→D)</span>
+          <span class="text-[13px] text-slate-700">♥→Picas · ♣→Corazones · ♦→Tréboles · ♠→Diamantes.</span>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap gap-1.5 pt-1">
+        <span class="code-pill">8♥ → Picas</span>
+        <span class="code-pill">5♣ → Corazones</span>
+        <span class="code-pill">7♦ → Tréboles</span>
+      </div>
+    </article>
+  </section>
+
+  <!-- 4. Ejemplos guiados y comprobador interactivo de reinos -->
+  <section class="card p-5 sm:px-8 sm:py-7 flex flex-col gap-5" aria-labelledby="kingdom-inspector-title">
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2.5">
+      <div class="flex flex-col gap-1.5 max-w-[760px]">
+        <p class="eyebrow">2. APLICACIÓN PRÁCTICA · EJEMPLOS Y COMPROBADOR</p>
+        <h2 id="kingdom-inspector-title" class="text-[20px]">
+          Comprueba el personaje y el reino de cualquier carta
+        </h2>
+        <p class="text-sm leading-relaxed">
+          Pulsa cualquiera de los ejemplos de referencia o elige un índice y palo debajo para ver qué metáfora se aplica y en qué bloque de 13 cartas cae exactamente:
+        </p>
+      </div>
+      <span class="self-start shrink-0 px-2.5 py-1.5 rounded-md bg-[#f0eef9] text-[#5b4b8a] text-xs font-semibold">
+        3 personajes · 52 cartas
+      </span>
+    </div>
+
+    <!-- Ejemplos rápidos -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5" role="list" aria-label="Ejemplos de clasificación por reinos">
+      @for (example of examples; track example.card.code) {
+        <button
+          type="button"
+          class="example-step-card text-left"
+          [class.example-step-card-active]="inspectedCard().code === example.card.code"
+          role="listitem"
+          (click)="inspectCard(example.card)"
+        >
+          <div class="flex items-center justify-between gap-2">
+            <span class="inline-flex items-center gap-1 font-extrabold text-[15px]" [style.color]="cardInkHex(example.card.suit)">
+              <span>{{ example.card.rank }}</span>
+              <app-suit-icon [suit]="example.card.suit" />
+              <span class="text-xs font-semibold text-slate-500">({{ example.card.fullName }})</span>
+            </span>
+          </div>
+          <p class="text-xs text-slate-600 leading-snug">{{ example.summary }}</p>
+        </button>
+      }
+    </div>
+
+    <!-- Selector interactivo de cualquier carta -->
+    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col gap-3.5">
+      <div class="flex flex-col gap-2">
+        <span class="text-xs font-bold uppercase tracking-wide text-slate-500">
+          Inspecciona cualquier carta de la baraja
+        </span>
+        <div class="flex flex-wrap items-center gap-1.5" role="group" aria-label="Índice a consultar">
+          @for (r of ranks; track r.value) {
+            <button
+              type="button"
+              class="mini-rank-btn"
+              [class.mini-rank-btn-active]="inspectedValue() === r.value"
+              [attr.aria-pressed]="inspectedValue() === r.value"
+              (click)="selectInspectorValue(r.value)"
+            >
+              {{ r.rank }}
+            </button>
+          }
+        </div>
+        <div class="flex flex-wrap items-center gap-1.5" role="group" aria-label="Palo a consultar">
+          @for (s of suitOptions; track s.code) {
+            <button
+              type="button"
+              class="mini-suit-btn"
+              [class.mini-suit-btn-active]="inspectedSuit() === s.code"
+              [attr.aria-pressed]="inspectedSuit() === s.code"
+              (click)="selectInspectorSuit(s.code)"
+            >
+              <span class="inline-flex" [style.color]="s.inkHex"><app-suit-icon [suit]="s.code" /></span>
+              <span>{{ s.meta.pluralName }}</span>
+            </button>
+          }
+        </div>
+      </div>
+
+      <div
+        class="p-3.5 rounded-[10px] bg-white border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-3"
+        data-testid="lesson5-kingdom-inspector"
+        role="status"
+        aria-live="polite"
+      >
+        <div class="flex flex-col gap-1">
+          <div class="flex flex-wrap items-center gap-2 text-sm text-slate-800">
+            <span>El</span>
+            <strong
+              class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-50 border border-slate-300 font-bold"
+              [style.color]="cardInkHex(inspectedCard().suit)"
+            >
+              <span>{{ inspectedCard().rank }}</span>
+              <app-suit-icon [suit]="inspectedCard().suit" />
+              <span class="text-slate-900">({{ inspectedCard().fullName }})</span>
+            </strong>
+            <span>habita en el</span>
+            <strong
+              class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-slate-900 text-white font-bold"
+            >
+              <span>{{ inspectedDetail().kingdom.name }}</span>
+              <span class="text-xs font-normal text-slate-300">
+                ({{ inspectedDetail().kingdom.rangeLabel.toLowerCase() }})
+              </span>
+            </strong>
+          </div>
+          <p class="text-[12.5px] text-slate-600">
+            {{ inspectedDetail().explanation }} (Posición exacta de verificación: <strong>#{{ inspectedCard().position }}</strong>).
+          </p>
+        </div>
+
+        <span
+          class="self-start md:self-center shrink-0 px-2.5 py-1 rounded-md text-xs font-bold"
+          [style.background-color]="inspectedDetail().character.badgeBg"
+          [style.color]="inspectedDetail().character.badgeText"
+        >
+          {{ inspectedDetail().character.singularName }} · {{ inspectedDetail().character.motto }}
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Entrenador interactivo de los 4 Reinos (52 cartas mezcladas) -->
+  <section
+    id="entrenador-reinos"
+    class="card p-5 sm:px-8 sm:py-7 flex flex-col gap-5"
+    aria-labelledby="kingdom-trainer-title"
+    tabindex="-1"
+  >
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2.5">
+      <div class="flex flex-col gap-1.5 max-w-[760px]">
+        <p class="eyebrow">PRÁCTICA CRONOMETRADA · BARAJA COMPLETA SIN REPETICIONES</p>
+        <h2 id="kingdom-trainer-title" class="text-[20px]">
+          Entrenador de los cuatro reinos (ciclo de 52 cartas)
+        </h2>
+        <p class="text-sm leading-relaxed">
+          Las <strong>52 cartas se mezclan internamente</strong> y aparecen una a una para que indiques a qué <strong>reino</strong> pertenecen. Practicas el mazo completo sin repeticiones, con cronómetro, marcador de aciertos y errores, pistas por personaje si fallas y opción de resetear el ciclo en cualquier momento.
+        </p>
+      </div>
+      <span class="self-start shrink-0 px-2.5 py-1.5 rounded-md bg-[#fdf0e5] text-[#9c4c1f] text-xs font-semibold">
+        52 cartas · 4 reinos
+      </span>
+    </div>
+
+    <app-kingdom-trainer />
+
+    <div class="px-4 py-3 rounded-[10px] bg-slate-50 border border-slate-200 flex items-start gap-2.5">
+      <span class="text-slate-600 mt-0.5"><app-icon name="cards" /></span>
+      <p class="text-[13px] text-slate-600">
+        <strong>Consejo de entrenamiento:</strong> mira primero el <strong>valor</strong> para reconocer al personaje al instante (<strong>9–K</strong> Noble, <strong>A–4</strong> Político, <strong>5–8</strong> Científico) y aplica después su transformación de palo. En pocas rondas ubicarás cualquier carta en menos de dos segundos.
+      </p>
+    </div>
+  </section>
+
+  <!-- 6. Cierre de la Lección 5 -->
+  <section class="card p-5 sm:p-8 flex flex-col gap-5" aria-labelledby="closing-lesson5-title">
+    <div class="flex flex-col gap-2.5 max-w-[780px]">
+      <p class="eyebrow">CIERRE · PRIMERA FASE DE LOCALIZACIÓN DOMINADA</p>
+      <h2 id="closing-lesson5-title" class="text-xl">
+        De 52 cartas a un único bloque de 13 posiciones
+      </h2>
+      <p>
+        Dominar los cuatro reinos reduce de un vistazo toda la baraja a un único cuarto de <strong>13 cartas</strong>: ya sabes si cualquier carta nombrada por un espectador está al principio (<strong>1–13</strong>), en el segundo cuarto (<strong>14–26</strong>), en el tercero (<strong>27–39</strong>) o al final (<strong>40–52</strong>). Esta base nos permitirá afinar el cálculo dentro de cada reino para obtener la posición exacta.
+      </p>
+    </div>
+
+    <div class="flex flex-col sm:flex-row flex-wrap gap-3">
+      <button
+        type="button"
+        class="button w-full sm:w-auto"
+        [class.button-accent]="!isLessonCompleted()"
+        [class.button-completed]="isLessonCompleted()"
+        (click)="completeLesson()"
+      >
+        <app-icon name="check" />
+        <span>{{ isLessonCompleted() ? 'Lección 5 completada' : 'Completar Lección 5' }}</span>
+      </button>
+
+      <a routerLink="/curso/leccion-4" class="button button-secondary w-full sm:w-auto">
+        <app-icon name="arrowLeft" />
+        <span>Repasar Lección 4</span>
+      </a>
+
+      <a routerLink="/" class="button button-secondary w-full sm:w-auto">
+        <span>Volver a la portada</span>
+      </a>
+    </div>
+
+    @if (isLessonCompleted()) {
+      <p class="text-[13px] font-medium text-[#397153]" role="status">
+        ¡Excelente trabajo! Tu progreso en la Lección 5 ha quedado guardado en este navegador.
+      </p>
+    }
+  </section>
+</main>
+

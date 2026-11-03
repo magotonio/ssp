@@ -45,6 +45,12 @@ export const routes: Routes = [
       import('./course/lesson4/lesson4').then((module) => module.Lesson4),
   },
   {
+    path: 'curso/leccion-5',
+    title: 'Lección 5 · Los cuatro reinos de la baraja | StackSSP',
+    loadComponent: () =>
+      import('./course/lesson5/lesson5').then((module) => module.Lesson5),
+  },
+  {
     path: '**',
     redirectTo: '',
   },
