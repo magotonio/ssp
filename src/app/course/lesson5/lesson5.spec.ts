@@ -115,6 +115,12 @@ describe('Lección 5 · Los cuatro reinos y entrenador de clasificación de 52 c
       const inspector = page?.querySelector('[data-testid="lesson5-kingdom-inspector"]');
       expect(inspector?.textContent).toContain('10 de Corazones');
       expect(inspector?.textContent).toContain('Reino de Corazones');
+
+      const redSuitSpans = Array.from(page?.querySelectorAll<HTMLElement>('.suit-red') ?? []);
+      expect(redSuitSpans).toHaveLength(6);
+      expect(redSuitSpans.every((el) => el.textContent === '♥' || el.textContent === '♦')).toBe(
+        true,
+      );
     });
 
     it('redirige /curso a /curso/leccion-5 cuando el usuario se quedó en la Lección 5', async () => {

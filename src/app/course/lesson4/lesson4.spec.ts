@@ -93,6 +93,12 @@ describe('Lección 4 · Integración de índice y palo y entrenador de ciclo com
       const inspector = page?.querySelector('[data-testid="lesson4-card-inspector"]');
       expect(inspector?.textContent).toContain('9 de Picas');
       expect(inspector?.textContent).toContain('5 de Corazones');
+
+      const redSuitSpans = Array.from(page?.querySelectorAll<HTMLElement>('.suit-red') ?? []);
+      expect(redSuitSpans).toHaveLength(8);
+      expect(redSuitSpans.every((el) => el.textContent === '♥' || el.textContent === '♦')).toBe(
+        true,
+      );
     });
 
     it('redirige /curso a /curso/leccion-4 cuando el usuario se quedó en la Lección 4', async () => {

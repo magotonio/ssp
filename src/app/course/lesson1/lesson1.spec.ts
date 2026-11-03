@@ -84,6 +84,9 @@ describe('Lección 1 · Montaje físico de la baraja SSP', () => {
       expect(page?.querySelectorAll('.step-nav-pill')).toHaveLength(4);
       expect(page?.querySelectorAll('.stack-layer-card')).toHaveLength(4);
       expect(page?.querySelectorAll('.cut-step-card')).toHaveLength(3);
+
+      const redSuitSpans = Array.from(page?.querySelectorAll<HTMLElement>('.suit-red') ?? []);
+      expect(redSuitSpans.map((el) => el.textContent)).toEqual(['♥', '♦', '♥', '♦', '♦']);
     });
 
     it('redirige /curso a /curso/leccion-1 cuando el usuario se quedó en la Lección 1', async () => {

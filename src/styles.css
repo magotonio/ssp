@@ -5,6 +5,7 @@
   --color-canvas: #f8f9fa;
   --color-navy: #1e293b;
   --color-accent: #f97316;
+  --color-suit-red: #e11d48;
 }
 
 :root { color-scheme: light; font-family: var(--font-sans); color: #1a202c; background: var(--color-canvas); font-synthesis: none; }
@@ -28,4 +29,5 @@ strong { font-weight: 600; }
 .peach { background: #fdf0e5; color: #9c4c1f; }
 .sage { background: #edf2eb; color: #4c6a50; }
 .lavender { background: #f0eef9; color: #6b5c9d; }
+.suit-red { color: var(--color-suit-red); font-variant-emoji: text; }
 .card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; min-width: 0; }
