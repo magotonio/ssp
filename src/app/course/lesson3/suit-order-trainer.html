@@ -1,0 +1,196 @@
+<div class="flex flex-col gap-4.5 p-4 sm:p-5 rounded-xl bg-slate-50 border border-slate-200">
+  <!-- Selector de modo de práctica -->
+  <div class="flex flex-wrap items-center gap-2" role="group" aria-label="Modo de práctica de palos">
+    <button
+      type="button"
+      class="mode-tab-btn"
+      [class.mode-tab-btn-active]="mode() === 'next'"
+      [attr.aria-pressed]="mode() === 'next'"
+      data-testid="mode-next"
+      (click)="setMode('next')"
+    >
+      Siguiente palo (+1)
+    </button>
+    <button
+      type="button"
+      class="mode-tab-btn"
+      [class.mode-tab-btn-active]="mode() === 'points'"
+      [attr.aria-pressed]="mode() === 'points'"
+      data-testid="mode-points"
+      (click)="setMode('points')"
+    >
+      Por nº de puntas (1–4)
+    </button>
+    <button
+      type="button"
+      class="mode-tab-btn"
+      [class.mode-tab-btn-active]="mode() === 'steps'"
+      [attr.aria-pressed]="mode() === 'steps'"
+      data-testid="mode-steps"
+      (click)="setMode('steps')"
+    >
+      Salto +1 o +2 palos
+    </button>
+  </div>
+
+  <!-- Barra de contadores y botón de reseteo -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3.5 border-b border-slate-200">
+    <div class="flex flex-wrap items-center gap-2.5" aria-label="Marcador del entrenador de palos">
+      <div class="score-pill score-pill-hits" data-testid="suit-trainer-hits">
+        <span class="score-label">Aciertos</span>
+        <strong class="score-value">{{ hits() }}</strong>
+      </div>
+
+      <div class="score-pill score-pill-misses" data-testid="suit-trainer-misses">
+        <span class="score-label">Fallos</span>
+        <strong class="score-value">{{ misses() }}</strong>
+      </div>
+
+      @if (accuracyPercent() !== null) {
+        <div class="score-pill score-pill-neutral">
+          <span class="score-label">Precisión</span>
+          <strong class="score-value">{{ accuracyPercent() }}%</strong>
+        </div>
+      }
+    </div>
+
+    <button
+      type="button"
+      class="reset-counter-btn self-start sm:self-auto"
+      data-testid="suit-trainer-reset"
+      (click)="resetCounters()"
+    >
+      <app-icon name="reset" />
+      <span>Resetear contador</span>
+    </button>
+  </div>
+
+  <!-- Arena central: pregunta actual + botones de los 4 palos -->
+  <div class="trainer-arena">
+    <!-- Tarjeta preguntada -->
+    <div class="flex flex-col items-center justify-center gap-2.5 p-4 sm:p-5 rounded-[11px] bg-white border border-slate-200">
+      @if (mode() === 'points') {
+        <span class="text-xs font-bold uppercase tracking-wide text-slate-500">
+          Posición / puntas
+        </span>
+        <div
+          class="prompt-card"
+          data-testid="suit-trainer-prompt"
+          [attr.aria-label]="'Palo número ' + prompt().targetOrder + ': ' + pointDescription()"
+        >
+          <span class="prompt-number-main">{{ prompt().targetOrder }}</span>
+        </div>
+        <span class="text-[12.5px] font-semibold text-slate-600 text-center">
+          {{ pointDescription() }}
+        </span>
+      } @else {
+        <span class="text-xs font-bold uppercase tracking-wide text-slate-500">
+          Palo actual
+        </span>
+        <div
+          class="prompt-card"
+          data-testid="suit-trainer-prompt"
+          [style.color]="promptOption().inkHex"
+          [attr.aria-label]="'Palo actual: ' + promptOption().displayLabel"
+        >
+          <span class="prompt-suit-corner prompt-suit-corner-top" aria-hidden="true">
+            <app-suit-icon [suit]="promptOption().code" />
+          </span>
+          <span class="prompt-suit-main">
+            <app-suit-icon [suit]="promptOption().code" />
+          </span>
+          <span class="prompt-suit-corner prompt-suit-corner-bottom" aria-hidden="true">
+            <app-suit-icon [suit]="promptOption().code" />
+          </span>
+        </div>
+        <div class="flex flex-col items-center gap-1">
+          <span class="text-[13px] font-semibold text-slate-800">
+            {{ promptOption().displayLabel }}
+          </span>
+          @if (mode() === 'steps') {
+            <span
+              class="px-2 py-0.5 rounded text-xs font-bold"
+              [class.bg-[#edf2eb]]="prompt().step === 1"
+              [class.text-[#397153]]="prompt().step === 1"
+              [class.bg-[#fdf0e5]]="prompt().step === 2"
+              [class.text-[#9c4c1f]]="prompt().step === 2"
+            >
+              Avanza +{{ prompt().step }} {{ prompt().step === 1 ? 'palo' : 'palos (gemelo)' }}
+            </span>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Opciones de respuesta -->
+    <div class="flex flex-col justify-between gap-4 p-4 sm:p-5 rounded-[11px] bg-white border border-slate-200">
+      <div class="flex flex-col gap-1">
+        @if (mode() === 'points') {
+          <h3 class="text-[15.5px] text-slate-900">
+            ¿Qué palo ocupa el lugar <strong class="text-slate-950">{{ prompt().targetOrder }}</strong> ({{ pointDescription() }})?
+          </h3>
+          <p class="text-[13px] text-slate-600">
+            Elige el palo cuya forma tiene exactamente {{ prompt().targetOrder }} {{ prompt().targetOrder === 1 ? 'punta' : 'puntas o sobresalientes' }}:
+          </p>
+        } @else if (mode() === 'steps' && prompt().step === 2) {
+          <h3 class="text-[15.5px] text-slate-900">
+            Si avanzas <strong class="text-[#9c4c1f]">+2 palos</strong> desde <strong class="text-slate-950">{{ promptOption().displayLabel }}</strong>, ¿a cuál llegas?
+          </h3>
+          <p class="text-[13px] text-slate-600">
+            Recuerda: un salto de 2 posiciones te lleva siempre al palo gemelo del mismo color.
+          </p>
+        } @else {
+          <h3 class="text-[15.5px] text-slate-900">
+            ¿Qué palo sigue inmediatamente después de <strong class="text-slate-950">{{ promptOption().displayLabel }}</strong>?
+          </h3>
+          <p class="text-[13px] text-slate-600">
+            Pulsa el siguiente palo en la rueda canónica SSP:
+          </p>
+        }
+      </div>
+
+      <div
+        class="suit-choices-grid"
+        role="group"
+        aria-label="Palos disponibles para responder"
+      >
+        @for (opt of options; track opt.code) {
+          <button
+            type="button"
+            class="suit-choice-btn"
+            [class.suit-choice-btn-wrong]="isFailedOption(opt.code)"
+            [attr.data-suit]="opt.code"
+            [attr.aria-label]="'Elegir ' + opt.displayLabel"
+            (click)="selectAnswer(opt.code)"
+          >
+            <span class="suit-choice-icon" [style.color]="opt.inkHex">
+              <app-suit-icon [suit]="opt.code" />
+            </span>
+            <span class="font-bold text-[13.5px]">{{ opt.displayLabel }}</span>
+          </button>
+        }
+      </div>
+
+      <!-- Mensaje accesible de resultado -->
+      <div
+        class="feedback-box"
+        [class.feedback-box-hit]="feedback()?.kind === 'hit'"
+        [class.feedback-box-miss]="feedback()?.kind === 'miss'"
+        role="status"
+        aria-live="polite"
+      >
+        @if (feedback(); as fb) {
+          <div class="flex flex-col gap-0.5">
+            <strong class="text-[13.5px]">{{ fb.heading }}</strong>
+            <span class="text-[12.5px] opacity-90">{{ fb.detail }}</span>
+          </div>
+        } @else {
+          <p class="text-[13px] text-slate-600">
+            Apóyate en las puntas (<strong>1 → 2 → 3 → 4</strong>) o en la palabra clave <strong>PI-CO-TRI-DIA</strong>.
+          </p>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+

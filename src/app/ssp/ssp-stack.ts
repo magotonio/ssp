@@ -94,12 +94,24 @@ export const SUIT_BY_CODE: Readonly<Record<SuitCode, SuitMeta>> = {
   D: SUITS[3],
 };
 
+export const SUIT_CYCLE: readonly SuitCode[] = ['P', 'C', 'T', 'D'] as const;
+
 const SUIT_BY_ORDER: Readonly<Record<number, SuitCode>> = {
   1: 'P',
   2: 'C',
   3: 'T',
   4: 'D',
 };
+
+/**
+ * Calcula el palo tras avanzar 1 posición (palo siguiente) o 2 posiciones
+ * (palo gemelo del mismo color) en el ciclo canónico P -> C -> T -> D.
+ */
+export function getNextSuit(suit: SuitCode, step: 1 | 2 = 1): SuitCode {
+  const currentOrder = SUIT_BY_CODE[suit].order;
+  const nextOrder = ((currentOrder - 1 + step) % 4) + 1;
+  return SUIT_BY_ORDER[nextOrder];
+}
 
 const RANK_BY_VALUE: Readonly<Record<CardValue, string>> = {
   1: 'A',

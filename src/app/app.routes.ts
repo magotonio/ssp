@@ -33,6 +33,12 @@ export const routes: Routes = [
       import('./course/lesson2/lesson2').then((module) => module.Lesson2),
   },
   {
+    path: 'curso/leccion-3',
+    title: 'Lección 3 · El orden de los palos | StackSSP',
+    loadComponent: () =>
+      import('./course/lesson3/lesson3').then((module) => module.Lesson3),
+  },
+  {
     path: '**',
     redirectTo: '',
   },

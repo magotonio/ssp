@@ -1,0 +1,13 @@
+.toggle-markers-btn { min-height: 36px; padding: 6px 12px; border-radius: 8px; border: 1px solid #cbd5e1; background: #f8fafc; color: #1e293b; font: 600 12px inherit; cursor: pointer; touch-action: manipulation; }
+.toggle-markers-btn:hover { background: #f1f5f9; }
+
+.anatomy-card { display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 10px; padding: 14px; border-radius: 12px; border: 1.5px solid #e2e8f0; background: #fff; font-family: inherit; text-align: left; cursor: pointer; touch-action: manipulation; }
+.anatomy-card:hover { border-color: #94a3b8; background: #fcfcfd; }
+.anatomy-card-active { border-color: var(--color-navy); background: #f8fafc; box-shadow: inset 0 0 0 1px var(--color-navy); }
+
+.order-badge { display: inline-flex; align-items: center; padding: 3px 8px; border-radius: 6px; background: var(--color-navy); color: #fff; font-size: 11.5px; font-weight: 700; }
+.points-pill { display: inline-flex; align-items: center; padding: 3px 8px; border-radius: 6px; background: #fdf0e5; color: #9c4c1f; border: 1px solid #fed7aa; font-size: 11.5px; font-weight: 750; }
+
+.svg-stage { width: 100%; max-width: 210px; aspect-ratio: 220 / 200; display: grid; place-items: center; border-radius: 10px; background: #ffffff; border: 1px solid #f1f5f9; }
+.suit-anatomy-svg { width: 100%; height: 100%; display: block; overflow: visible; }
+

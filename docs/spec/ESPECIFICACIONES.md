@@ -99,7 +99,19 @@ Validaciones: `npm run build` y `npm test -- --watch=false`. La compilación se 
   - Muestra aleatoriamente uno de los 13 índices (`A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K`) para que el usuario pulse cuál es el índice siguiente.
   - Si falla, incrementa el **contador de fallos**, señala el error con una pista de la regla y permite volver a intentarlo sobre el mismo índice; si acierta, incrementa el **contador de aciertos**, confirma el cálculo aplicado y pasa automáticamente a un nuevo índice aleatorio distinto.
   - Botón **Resetear contador** para poner a cero los contadores de aciertos y fallos en cualquier momento.
-- Cierre con adelanto de la **Lección 3** (funcionamiento y secuencia de los palos), botón para marcar la **Lección 2** como completada y navegación a **Lección 1** e **Inicio**.
+- Cierre con adelanto de la **Lección 3** (funcionamiento y secuencia de los palos), botón para marcar la **Lección 2** como completada y navegación a **Lección 3**, **Lección 1** e **Inicio**.
+
+### Lección 3 (`/curso/leccion-3`)
+
+- Cabecera de curso con enlace a la portada (`/`), acceso rápido a **Lección 2** (`/curso/leccion-2`), referencia a **Lección 3** e indicador de estado («En progreso» / «Lección 3 completada»).
+- Explicación pedagógica de la secuencia canónica de los palos conforme a [leccion3.md](../leccion3.md) y [ordenacion-ssp.md](../ordenacion-ssp.md), sin duplicar ni contradecir la definición normativa:
+  - Presentación del ciclo continuo de los cuatro palos con su numeración y color en baraja.
+  - **Representación gráfica interactiva de puntas y sobresalientes por palo:** ilustraciones vectoriales SVG locales para cada uno de los 4 palos con marcadores numerados, líneas guía y opción para ocultar/mostrar marcadores, señalando visualmente dónde están la punta o partes sobresalientes de cada figura (1 en Picas, 2 en Corazones, 3 en Tréboles y 4 en Diamantes/Rombos), junto con ficha activa del palo seleccionado, su siguiente palo y su palo gemelo.
+  - Recursos mnemotécnicos verbales (*«picotridia»*, *«picotudo»*, siglas en inglés *S·H·C·D*) y justificación del uso del orden estándar en los vídeos y herramientas de la plataforma.
+- **Entrenador del orden de los palos:**
+  - Tres modos de práctica intercambiables: siguiente palo en el ciclo, identificación por número de puntas/sobresalientes (`1–4`) y saltos combinados en el ciclo (`+1` y `+2`).
+  - Contadores de **aciertos**, **fallos** y porcentaje de precisión, pistas contextuales al fallar manteniendo la pregunta activa, avance automático a una pregunta distinta al acertar y botón **Resetear contador**.
+- Cierre preparando la unión de índices y palos en la siguiente lección, botón para marcar la **Lección 3** como completada y navegación a **Lección 2** e **Inicio**.
 
 ### Ejecución desde la raíz
 

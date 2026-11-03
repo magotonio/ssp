@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { computed, inject, Injectable, signal } from '@angular/core';
 
-export type LessonId = 'introduccion' | 'leccion-1' | 'leccion-2';
+export type LessonId = 'introduccion' | 'leccion-1' | 'leccion-2' | 'leccion-3';
 
 export interface CourseLessonMeta {
   readonly id: LessonId;
@@ -28,6 +28,12 @@ export const COURSE_LESSONS: readonly CourseLessonMeta[] = [
     label: 'Lección 2',
     title: 'Cálculo del siguiente índice',
     route: '/curso/leccion-2',
+  },
+  {
+    id: 'leccion-3',
+    label: 'Lección 3',
+    title: 'El orden de los palos',
+    route: '/curso/leccion-3',
   },
 ] as const;
 
