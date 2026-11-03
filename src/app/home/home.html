@@ -9,8 +9,19 @@
       Aprende la ordenación SSP de manera fácil y a tu propio ritmo. Diseñada para magos, la SSP va un paso más allá de la Si Stebbins estándar: te permite localizar cualquier carta rápidamente y tener el control absoluto de la baraja sin tener que memorizar las 52 posiciones. Prepárate para realizar juegos de magia verdaderamente potentes.
     </p>
     <div class="hero-actions">
-      <button type="button" class="button button-accent">Iniciar el Curso</button>
+      <a [routerLink]="courseRoute()" class="button button-accent">
+        <span>{{ hasSavedCourse() ? 'Continuar curso' : 'Iniciar el Curso' }}</span>
+        <app-icon name="arrow" />
+      </a>
     </div>
+    @if (savedLesson(); as lesson) {
+      <p class="resume-hint" role="status">
+        Progreso guardado: <strong>{{ lesson.label }} · {{ lesson.title }}</strong>
+        @if (savedLessonCompleted()) {
+          <span class="resume-completed">· Completada</span>
+        }
+      </p>
+    }
   </section>
 
   <section class="benefits-grid" aria-label="Por qué aprender la SSP">
@@ -35,6 +46,9 @@
 
   <section class="cta-banner" aria-label="Llamado a la acción final">
     <p class="cta-message">Coge tu baraja, pon el 9 de Picas arriba y descubre de lo que eres capaz.</p>
-    <button type="button" class="button button-accent">Empezar el Curso</button>
+    <a [routerLink]="courseRoute()" class="button button-accent">
+      <span>{{ hasSavedCourse() ? 'Continuar curso' : 'Empezar el Curso' }}</span>
+      <app-icon name="arrow" />
+    </a>
   </section>
 </main>

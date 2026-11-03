@@ -1,0 +1,592 @@
+<a href="#contenido-leccion-1" class="skip-link">Saltar al contenido</a>
+
+<header class="sticky top-0 z-30 bg-white border-b border-slate-200">
+  <div class="max-w-[1080px] mx-auto h-14 sm:h-16 px-4 sm:px-6 flex items-center justify-between gap-3">
+    <div class="flex items-center gap-2.5 min-w-0">
+      <a
+        routerLink="/"
+        class="inline-flex items-center gap-2.5 text-lg font-bold tracking-tight text-slate-900 shrink-0"
+        aria-label="Volver a la portada de StackSSP"
+      >
+        <span class="brand-mark brand-mark-sm" aria-hidden="true"><app-icon name="cards" /></span>
+        <span>Stack<span class="brand-light">SSP</span></span>
+      </a>
+      <span class="text-slate-300 font-medium" aria-hidden="true">/</span>
+      <span class="text-[13px] font-semibold text-slate-600 truncate">Lección 1</span>
+    </div>
+
+    <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+      @if (isLessonCompleted()) {
+        <span class="status-pill status-completed">
+          <app-icon name="check" />
+          <span class="hidden sm:inline">Lección 1 completada</span>
+        </span>
+      } @else {
+        <span class="status-pill status-active hidden sm:inline-flex">
+          En progreso · {{ completedStepCount() }}/4 pasos
+        </span>
+      }
+      <a routerLink="/curso/introduccion" class="back-link hidden md:inline-flex">
+        <app-icon name="arrowLeft" />
+        <span>Introducción</span>
+      </a>
+      <a routerLink="/" class="back-link">
+        <span>Inicio</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main
+  id="contenido-leccion-1"
+  class="max-w-[1080px] mx-auto px-3.5 sm:px-6 pt-5 sm:pt-8 pb-11 sm:pb-16 flex flex-col gap-4.5 sm:gap-6"
+  tabindex="-1"
+>
+  @if (!progress.cookiesAvailable()) {
+    <div
+      class="flex items-start gap-2.5 px-4 py-3 rounded-[10px] bg-orange-50 border border-orange-200 text-orange-800"
+      role="status"
+    >
+      <app-icon name="info" />
+      <p class="text-[13px] text-orange-800">
+        Las cookies están desactivadas en tu navegador. Podrás completar el montaje con normalidad, aunque el progreso no se recordará al cerrar la pestaña.
+      </p>
+    </div>
+  }
+
+  <!-- Cabecera de la lección y barra de pasos con baraja en mano -->
+  <section class="card p-5 sm:p-8 flex flex-col gap-5" aria-labelledby="lesson1-title">
+    <div class="flex flex-col gap-3 max-w-[820px]">
+      <div class="flex flex-wrap items-center gap-2">
+        <p class="eyebrow">LECCIÓN 1 · MONTAJE PRÁCTICO EN LAS MANOS</p>
+        <span class="px-2 py-0.5 rounded bg-[#fdf0e5] text-[#9c4c1f] text-[11px] font-bold">
+          Con tu baraja física
+        </span>
+      </div>
+      <h1 id="lesson1-title" class="lesson-h1">Monta la ordenación SSP paso a paso en tus manos</h1>
+      <p class="text-[15px] leading-relaxed">
+        Coge tu baraja de <strong>52 cartas (sin comodines)</strong>. No necesitas memorizar posiciones ni contar huecos: siguiendo estos cuatro pasos mecánicos construirás toda la ordenación SSP de forma directa y exacta.
+      </p>
+    </div>
+
+    <!-- Navegador rápido de los 4 pasos físicos -->
+    <nav aria-label="Pasos del montaje físico" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+      @for (step of guidedSteps; track step.number) {
+        <button
+          type="button"
+          class="step-nav-pill"
+          [class.step-nav-pill-done]="isStepDone(step.number)"
+          (click)="scrollToSection(step.sectionId)"
+        >
+          <span class="step-nav-num" [class.step-nav-num-done]="isStepDone(step.number)">
+            @if (isStepDone(step.number)) {
+              <app-icon name="check" />
+            } @else {
+              {{ step.number }}
+            }
+          </span>
+          <span class="text-[13px] font-semibold text-slate-800">{{ step.shortLabel }}</span>
+        </button>
+      }
+    </nav>
+  </section>
+
+  <!-- PASO 1: Preparación previa de la baraja -->
+  <section
+    id="paso-1"
+    class="card p-5 sm:px-8 sm:py-7 flex flex-col gap-5"
+    aria-labelledby="step1-title"
+    tabindex="-1"
+  >
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2.5">
+      <div class="flex flex-col gap-1.5 max-w-[740px]">
+        <p class="eyebrow">PASO 1 DE 4 · PREPARACIÓN PREVIA</p>
+        <h2 id="step1-title" class="text-[20px]">1. Ordena cada palo de Rey a As y apílalos cara arriba</h2>
+        <p class="text-sm leading-relaxed">
+          Separa las 52 cartas en los cuatro palos. Sujetando las cartas <strong>cara arriba</strong> (mirando las figuras), ordena cada paquete poniendo el <strong>Rey (K) abajo</strong>, encima <strong>Q, J, 10, 9, 8, 7, 6, 5, 4, 3, 2</strong> y el <strong>As (A) visible arriba</strong>.
+        </p>
+      </div>
+      <span class="self-start shrink-0 px-2.5 py-1.5 rounded-md bg-slate-100 text-slate-700 text-xs font-semibold">
+        Mazo cara arriba
+      </span>
+    </div>
+
+    <!-- Orden interno de cada palo -->
+    <div class="px-4 py-3 rounded-[10px] bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-2" aria-label="Secuencia interna dentro de cada palo">
+      <span class="text-xs font-bold uppercase tracking-wide text-slate-500">
+        Dentro de cada palo (cara arriba):
+      </span>
+      <p class="text-[13.5px] font-semibold text-slate-800">
+        Fondo del paquete →
+        <code class="font-mono text-xs bg-white px-2 py-0.5 rounded border border-slate-300 text-slate-900">K · Q · J · 10 · 9 · 8 · 7 · 6 · 5 · 4 · 3 · 2 · A</code>
+        ← Visible arriba
+      </p>
+    </div>
+
+    <!-- Pila visual de los 4 bloques desde arriba hacia el fondo -->
+    <div class="flex flex-col gap-2.5">
+      <h3 class="text-[14.5px] text-slate-900">
+        Apila ahora los 4 paquetes cara arriba en este orden exacto (del fondo hacia arriba):
+      </h3>
+
+      <div class="flex flex-col gap-2.5" role="list" aria-label="Orden de apilado de los cuatro palos">
+        @for (packet of preparationPackets; track packet.suit) {
+          <div
+            class="stack-layer-card flex flex-col md:flex-row md:items-center justify-between gap-3.5 px-4 py-3.5 rounded-[10px] bg-white"
+            [style.--suit-border]="packet.suitMeta.surfaceBorder"
+            [style.--suit-bg]="packet.suitMeta.surfaceBg"
+            role="listitem"
+          >
+            <div class="flex items-center gap-3 min-w-0">
+              <span
+                class="suit-badge-lg"
+                [style.background]="packet.suitMeta.surfaceBg"
+                [style.border-color]="packet.suitMeta.surfaceBorder"
+                [style.color]="packet.suitMeta.dotColor"
+              >
+                <app-suit-icon [suit]="packet.suit" />
+              </span>
+              <div class="flex flex-col gap-0.5 min-w-0">
+                <div class="flex flex-wrap items-center gap-2">
+                  <strong class="text-[14.5px] text-slate-900">{{ packet.suitDisplayName }}</strong>
+                  <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-[11.5px] font-semibold">{{ packet.stackLayerLabel }}</span>
+                </div>
+                <p class="text-[13px] leading-snug text-slate-600">{{ packet.instruction }}</p>
+              </div>
+            </div>
+
+            <div class="layer-range shrink-0 self-start md:self-auto" [style.color]="packet.suitMeta.textColor">
+              <span>Fondo: <strong>{{ packet.bottomCard.rank }}</strong></span>
+              <span aria-hidden="true">→</span>
+              <span>Arriba: <strong>{{ packet.topCard.rank }}</strong></span>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Punto de control físico Paso 1 -->
+    <div class="checkpoint-box p-4 rounded-[10px] bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-3" [class.checkpoint-box-done]="isStepDone(1)">
+      <div class="flex flex-col gap-1">
+        <strong class="text-[13.5px] text-slate-900">Comprobación rápida en tus manos</strong>
+        <p class="text-[13px] text-slate-600">
+          Mira tu mazo cara arriba: arriba del todo debes ver el <strong>As de Diamantes (rombos)</strong>, y abajo del todo (pegado a tu palma) debe estar el <strong>Rey de Picas</strong>.
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center gap-2.5">
+        <button
+          type="button"
+          class="check-toggle-btn"
+          [class.check-toggle-btn-done]="isStepDone(1)"
+          [attr.aria-pressed]="isStepDone(1)"
+          (click)="toggleStepDone(1)"
+        >
+          <app-icon name="check" />
+          <span>{{ isStepDone(1) ? 'Paso 1 listo' : 'Ya tengo el mazo preparado' }}</span>
+        </button>
+        @if (!isStepDone(1)) {
+          <button
+            type="button"
+            class="chip-action chip-action-accent"
+            (click)="markStepAndGoNext(1, 'paso-2')"
+          >
+            Listo, ir al Paso 2 →
+          </button>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- PASO 2: División en 3 montones -->
+  <section
+    id="paso-2"
+    class="card p-5 sm:px-8 sm:py-7 flex flex-col gap-5"
+    aria-labelledby="step2-title"
+    tabindex="-1"
+  >
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2.5">
+      <div class="flex flex-col gap-1.5 max-w-[740px]">
+        <p class="eyebrow">PASO 2 DE 4 · DIVISIÓN SOBRE LA MESA</p>
+        <h2 id="step2-title" class="text-[20px]">2. Divide el mazo en 3 montones sin contar cartas</h2>
+        <p class="text-sm leading-relaxed">
+          Con el mazo <strong>cara arriba</strong> en tus manos, no hace falta contar cartas: basta con abrir en abanico o pasar cartas buscando dos puntos de corte visuales (el <strong>5 de Tréboles</strong> y el <strong>9 de Corazones</strong>) y depositar los tres bloques de <strong>derecha a izquierda</strong> sobre la mesa.
+        </p>
+      </div>
+      <span class="self-start shrink-0 px-2.5 py-1.5 rounded-md bg-[#f0eef9] text-[#5b4b8a] text-xs font-semibold">
+        3 montones cara arriba
+      </span>
+    </div>
+
+    <!-- Los 3 cortes en orden de separación -->
+    <ol class="list-none m-0 p-0 grid grid-cols-1 lg:grid-cols-3 gap-3.5">
+      @for (pile of separationPiles; track pile.separationOrder) {
+        <li class="cut-step-card flex flex-col gap-3 p-4 rounded-[11px] border border-slate-200 bg-white">
+          <div class="flex items-center justify-between gap-2">
+            <span class="px-2.5 py-0.5 rounded-md bg-slate-800 text-white text-[11.5px] font-bold">
+              Corte {{ pile.separationOrder }}º
+            </span>
+            <span class="text-xs font-semibold text-slate-500">{{ pile.tablePositionLabel }}</span>
+          </div>
+
+          <div
+            class="visible-top-callout flex items-center gap-3 p-3 rounded-[9px]"
+            [style.background]="suitByCode[pile.topVisibleCard.suit].surfaceBg"
+            [style.border-color]="suitByCode[pile.topVisibleCard.suit].surfaceBorder"
+          >
+            <span
+              class="w-11 h-12 rounded-lg bg-white border border-slate-200 flex flex-col items-center justify-center gap-0.5 shrink-0"
+              [style.color]="suitByCode[pile.topVisibleCard.suit].dotColor"
+            >
+              <span class="text-lg font-extrabold leading-none">{{ pile.topVisibleCard.rank }}</span>
+              <app-suit-icon [suit]="pile.topVisibleCard.suit" />
+            </span>
+            <div class="flex flex-col">
+              <span class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Queda visible arriba
+              </span>
+              <strong class="text-[14.5px] text-slate-900">{{ pile.topVisibleCard.fullName }}</strong>
+              <span class="text-xs text-slate-600">{{ pile.cardCount }} cartas (base: {{ pile.bottomCard.code }})</span>
+            </div>
+          </div>
+
+          <p class="text-[13px] leading-relaxed text-slate-600">
+            {{ pile.cutLandmarkHint }}
+          </p>
+        </li>
+      }
+    </ol>
+
+    <!-- Vista superior de cómo deben quedar en tu mesa de izquierda a derecha -->
+    <div class="p-4 rounded-[10px] bg-[#fffaf5] border border-orange-200 flex flex-col gap-3">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5">
+        <strong class="text-[13.5px] text-slate-900">
+          Así debes ver ahora tu mesa de izquierda a derecha:
+        </strong>
+        <span class="text-xs text-slate-600">
+          Preparados para contar cómodamente de izquierda a derecha («uno, dos, tres…»)
+        </span>
+      </div>
+
+      <div class="grid grid-cols-3 gap-2.5 sm:gap-4">
+        @for (pile of tablePilesLeftToRight; track pile.pickupBeat) {
+          <div class="flex flex-col items-center gap-1 p-2.5 rounded-[9px] bg-white border border-orange-300">
+            <span class="text-[11px] font-bold uppercase tracking-wide text-[#9c4c1f]">
+              «{{ pile.beatWord }}»
+            </span>
+            <div
+              class="flex items-center justify-center gap-1.5 font-bold text-sm sm:text-base"
+              [style.color]="suitByCode[pile.topVisibleCard.suit].dotColor"
+            >
+              <span>{{ pile.topVisibleCard.rank }}</span>
+              <app-suit-icon [suit]="pile.topVisibleCard.suit" />
+            </div>
+            <span class="text-xs font-semibold text-slate-700 text-center">
+              {{ pile.topVisibleCard.fullName }}
+            </span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Punto de control físico Paso 2 -->
+    <div class="checkpoint-box p-4 rounded-[10px] bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-3" [class.checkpoint-box-done]="isStepDone(2)">
+      <div class="flex flex-col gap-1">
+        <strong class="text-[13.5px] text-slate-900">Comprobación de las 3 cartas superiores</strong>
+        <p class="text-[13px] text-slate-600">
+          Asegúrate de que las cartas visibles en lo alto de los tres montones sean el <strong>9 de Corazones</strong> (izquierda), el <strong>5 de Tréboles</strong> (centro) y el <strong>As de Diamantes / rombos</strong> (derecha).
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center gap-2.5">
+        <button
+          type="button"
+          class="check-toggle-btn"
+          [class.check-toggle-btn-done]="isStepDone(2)"
+          [attr.aria-pressed]="isStepDone(2)"
+          (click)="toggleStepDone(2)"
+        >
+          <app-icon name="check" />
+          <span>{{ isStepDone(2) ? 'Paso 2 listo' : 'Tengo los 3 montones colocados' }}</span>
+        </button>
+        @if (!isStepDone(2)) {
+          <button
+            type="button"
+            class="chip-action chip-action-accent"
+            (click)="markStepAndGoNext(2, 'paso-3')"
+          >
+            Listo, ir al Paso 3 →
+          </button>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- PASO 3: Recogida alternada y generación de la secuencia -->
+  <section
+    id="paso-3"
+    class="card p-5 sm:px-8 sm:py-7 flex flex-col gap-5"
+    aria-labelledby="step3-title"
+    tabindex="-1"
+  >
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2.5">
+      <div class="flex flex-col gap-1.5 max-w-[760px]">
+        <p class="eyebrow">PASO 3 DE 4 · RECOGIDA ALTERNADA</p>
+        <h2 id="step3-title" class="text-[20px]">3. Recoge de una en una al ritmo de «uno, dos, tres…»</h2>
+        <p class="text-sm leading-relaxed">
+          Recoge las cartas <strong>de una en una</strong> de izquierda a derecha (<strong>«uno»</strong> en el montón del 9<span class="suit-red">♥</span>, <strong>«dos»</strong> en el del 5♣, <strong>«tres»</strong> en el del A<span class="suit-red">♦</span>) y vuelve a empezar «uno, dos, tres…».
+        </p>
+      </div>
+      <span class="self-start shrink-0 px-2.5 py-1.5 rounded-md bg-[#fdf0e5] text-[#9c4c1f] text-xs font-semibold">
+        Asistente en vivo
+      </span>
+    </div>
+
+    <!-- Regla de oro para las manos + fórmula de valores -->
+    <div class="p-4 rounded-[10px] bg-slate-50 border border-slate-200 flex flex-col gap-2.5">
+      <div class="flex flex-col gap-1">
+        <strong class="text-[13.5px] text-slate-900">
+          Cómo apilarlas en tu mano para que no queden al revés:
+        </strong>
+        <p class="text-[13px] leading-relaxed text-slate-700">
+          Mantén las cartas <strong>cara arriba</strong> también en tu mano receptora: pon cada carta nueva <strong>cara arriba encima</strong> de la anterior (cubriendo su figura). Verás desfilar automáticamente la secuencia característica de valores de la SSP:
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-1.5" aria-label="Secuencia característica de valores SSP">
+        @for (val of valueSequencePreview; track val) {
+          <span class="px-2.5 py-1 rounded-md bg-white border border-slate-300 text-slate-900 text-xs font-bold">{{ val }}</span>
+        }
+        <span class="text-xs font-bold text-slate-500 self-center">…</span>
+      </div>
+      <p class="text-xs text-slate-600">
+        En la ronda 17 se agotarán a la vez el montón central y el derecho, quedando sola la carta nº 52 en el montón izquierdo (el <strong>Rey de Picas</strong>). Colócala encima y <strong>voltea todo el mazo dorso arriba</strong>.
+      </p>
+    </div>
+
+    <!-- Entrenador interactivo de recogida -->
+    <app-pickup-trainer (completedDeck)="onTrainerCompleted()" />
+
+    <!-- Punto de control físico Paso 3 -->
+    <div class="checkpoint-box p-4 rounded-[10px] bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-3" [class.checkpoint-box-done]="isStepDone(3)">
+      <div class="flex flex-col gap-1">
+        <strong class="text-[13.5px] text-slate-900">Voltea ahora toda la baraja dorso arriba</strong>
+        <p class="text-[13px] text-slate-600">
+          Tras colocar la última carta (Rey de Picas) cara arriba encima del paquete, cuadra las 52 cartas y dales la vuelta completa para dejar el mazo <strong>dorso arriba</strong>.
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center gap-2.5">
+        <button
+          type="button"
+          class="check-toggle-btn"
+          [class.check-toggle-btn-done]="isStepDone(3)"
+          [attr.aria-pressed]="isStepDone(3)"
+          (click)="toggleStepDone(3)"
+        >
+          <app-icon name="check" />
+          <span>{{ isStepDone(3) ? 'Paso 3 listo' : 'Ya he recogido y volteado el mazo' }}</span>
+        </button>
+        @if (!isStepDone(3)) {
+          <button
+            type="button"
+            class="chip-action chip-action-accent"
+            (click)="markStepAndGoNext(3, 'paso-4')"
+          >
+            Listo, comprobar mi baraja →
+          </button>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- PASO 4: Propiedad cíclica y comprobador de baraja física -->
+  <section
+    id="paso-4"
+    class="card p-5 sm:px-8 sm:py-7 flex flex-col gap-5"
+    aria-labelledby="step4-title"
+    tabindex="-1"
+  >
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2.5">
+      <div class="flex flex-col gap-1.5 max-w-[760px]">
+        <p class="eyebrow">PASO 4 DE 4 · VERIFICACIÓN Y PROPIEDAD CÍCLICA</p>
+        <h2 id="step4-title" class="text-[20px]">4. Comprueba tu baraja física y corta sin miedo</h2>
+        <p class="text-sm leading-relaxed">
+          ¡Tu baraja ya está montada en <strong>SSP</strong>! Su propiedad fundamental es su <strong>naturaleza cíclica</strong>: puedes realizar todos los cortes completos que quieras y la secuencia interna nunca se rompe. Si deseas dejarla en la posición nº 1 de referencia, busca el <strong>Rey de Diamantes (rombos)</strong> y corta para dejarlo en la cara inferior (quedando el <strong>9 de Picas</strong> arriba).
+        </p>
+      </div>
+      <span class="self-start shrink-0 px-2.5 py-1.5 rounded-md bg-[#edf2eb] text-[#397153] text-xs font-semibold">
+        Ciclo continuo
+      </span>
+    </div>
+
+    <!-- Comprobador interactivo para la baraja física -->
+    <div class="p-4 sm:p-4.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-col gap-4">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5">
+        <div>
+          <h3 class="text-[15px] text-slate-900">Verificador rápido para tu baraja en mano</h3>
+          <p class="text-[13px] text-slate-600">
+            Corta tu baraja dorso arriba, mira la carta que quedó en la <strong>cara inferior</strong> (abajo) y selecciónala aquí para comprobar qué 6 cartas deben salir arriba en orden:
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-1.5 shrink-0">
+          <button
+            type="button"
+            class="preset-btn"
+            (click)="setCheckerPreset('freshFlip')"
+          >
+            Recién volteada (K♠ abajo)
+          </button>
+          <button
+            type="button"
+            class="preset-btn"
+            (click)="setCheckerPreset('canonicalStart')"
+          >
+            Posición 1 (K<span class="suit-red">♦</span> abajo)
+          </button>
+        </div>
+      </div>
+
+      <!-- Selector de palo y valor con botones accesibles -->
+      <div class="flex flex-col gap-3">
+        <div class="flex flex-wrap items-center gap-2" role="group" aria-label="Palo de la carta vista en el corte">
+          <span class="text-xs font-semibold text-slate-600 mr-1">Palo:</span>
+          @for (s of suits; track s.code) {
+            <button
+              type="button"
+              class="suit-select-btn"
+              [class.suit-select-btn-active]="checkerSuit() === s.code"
+              [style.--s-color]="s.dotColor"
+              [style.--s-bg]="s.surfaceBg"
+              [attr.aria-pressed]="checkerSuit() === s.code"
+              (click)="selectCheckerSuit(s.code)"
+            >
+              <span [style.color]="s.dotColor" class="inline-flex"><app-suit-icon [suit]="s.code" /></span>
+              <span>{{ s.pluralName }}</span>
+            </button>
+          }
+        </div>
+
+        <div class="flex flex-wrap items-center gap-1.5" role="group" aria-label="Valor de la carta vista en el corte">
+          <span class="text-xs font-semibold text-slate-600 mr-1">Valor:</span>
+          @for (r of rankOptions; track r.value) {
+            <button
+              type="button"
+              class="rank-select-btn"
+              [class.rank-select-btn-active]="checkerValue() === r.value"
+              [attr.aria-pressed]="checkerValue() === r.value"
+              [attr.aria-label]="r.label"
+              (click)="selectCheckerValue(r.value)"
+            >
+              {{ r.rank }}
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Resultado de las 6 cartas siguientes -->
+      <div class="checker-result p-3.5 rounded-[10px] bg-white border border-slate-200 flex flex-col gap-3" role="status" aria-live="polite">
+        <div class="flex flex-wrap items-center gap-2 text-[13px] text-slate-700">
+          <span>Si en la cara inferior ves el</span>
+          <strong
+            class="inline-flex items-center gap-1 px-2 py-0.5 rounded border font-bold"
+            [style.background]="selectedCheckerSuitMeta().surfaceBg"
+            [style.border-color]="selectedCheckerSuitMeta().surfaceBorder"
+            [style.color]="selectedCheckerSuitMeta().textColor"
+          >
+            <app-suit-icon [suit]="selectedCheckerCard().suit" />
+            <span>{{ selectedCheckerCard().fullName }}</span>
+          </strong>
+          <span>(pos. {{ selectedCheckerCard().position }}), desde arriba dorso arriba siguen:</span>
+        </div>
+
+        <ol class="list-none m-0 p-0 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2.5">
+          @for (nextCard of followingCards(); track nextCard.code; let idx = $index) {
+            <li
+              class="following-card-tile flex flex-col items-center gap-1 p-2.5 rounded-[9px]"
+              [style.background]="suitByCode[nextCard.suit].surfaceBg"
+              [style.border-color]="suitByCode[nextCard.suit].surfaceBorder"
+            >
+              <span class="text-[11px] font-semibold text-slate-500">{{ idx + 1 }}ª arriba</span>
+              <div
+                class="flex items-center gap-1 font-extrabold text-base"
+                [style.color]="suitByCode[nextCard.suit].dotColor"
+              >
+                <span>{{ nextCard.rank }}</span>
+                <app-suit-icon [suit]="nextCard.suit" />
+              </div>
+              <span class="text-[11.5px] font-semibold text-slate-800 text-center leading-tight">
+                {{ nextCard.fullName }}
+              </span>
+            </li>
+          }
+        </ol>
+      </div>
+    </div>
+
+    <!-- Punto de control físico Paso 4 -->
+    <div class="checkpoint-box p-4 rounded-[10px] bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-3" [class.checkpoint-box-done]="isStepDone(4)">
+      <div class="flex flex-col gap-1">
+        <strong class="text-[13.5px] text-slate-900">¡Montaje verificado!</strong>
+        <p class="text-[13px] text-slate-600">
+          Si esas 6 cartas coinciden con las de tu mazo físico, has construido la ordenación SSP a la perfección.
+        </p>
+      </div>
+      <button
+        type="button"
+        class="check-toggle-btn"
+        [class.check-toggle-btn-done]="isStepDone(4)"
+        [attr.aria-pressed]="isStepDone(4)"
+        (click)="toggleStepDone(4)"
+      >
+        <app-icon name="check" />
+        <span>{{ isStepDone(4) ? 'Baraja comprobada' : 'Mi baraja coincide' }}</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Cierre de la Lección 1 y adelanto de la siguiente lección -->
+  <section class="card p-5 sm:p-8 flex flex-col gap-5" aria-labelledby="closing-lesson1-title">
+    <div class="flex flex-col gap-2.5 max-w-[780px]">
+      <p class="eyebrow">CIERRE · ADELANTO DE LA SIGUIENTE LECCIÓN</p>
+      <h2 id="closing-lesson1-title" class="text-xl">Una baraja cíclica lista para la magia</h2>
+      <p>
+        Con tu baraja ya ordenada en las manos, puedes cortarla tantas veces como quieras sin perder jamás su estructura interna. En la próxima lección descubrirás la <strong>regla sencilla para deducir al instante qué carta sigue a cualquier otra</strong> al cortar por cualquier posición.
+      </p>
+    </div>
+
+    <div class="flex flex-col sm:flex-row flex-wrap gap-3">
+      <button
+        type="button"
+        class="button w-full sm:w-auto"
+        [class.button-accent]="!isLessonCompleted()"
+        [class.button-completed]="isLessonCompleted()"
+        (click)="completeLesson()"
+      >
+        <app-icon name="check" />
+        <span>{{ isLessonCompleted() ? 'Lección 1 completada' : 'Completar Lección 1' }}</span>
+      </button>
+
+      <a
+        routerLink="/curso/leccion-2"
+        class="button w-full sm:w-auto"
+        [class.button-accent]="isLessonCompleted()"
+        [class.button-secondary]="!isLessonCompleted()"
+      >
+        <span>Ir a la Lección 2</span>
+        <app-icon name="arrow" />
+      </a>
+
+      <a routerLink="/curso/introduccion" class="button button-secondary w-full sm:w-auto">
+        <app-icon name="arrowLeft" />
+        <span>Repasar Introducción</span>
+      </a>
+
+      <a routerLink="/" class="button button-secondary w-full sm:w-auto">
+        <span>Volver a la portada</span>
+      </a>
+    </div>
+
+    @if (isLessonCompleted()) {
+      <p class="text-[13px] font-medium text-[#397153]" role="status">
+        ¡Enhorabuena! Tu progreso en la Lección 1 ha quedado guardado en este navegador. Continúa con la Lección 2 para dominar el cálculo del siguiente índice.
+      </p>
+    }
+  </section>
+</main>

@@ -1,0 +1,34 @@
+.rhythm-banner-done { background: #f0fdf4; border-color: #86efac; }
+.rhythm-badge { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 6px; background: #fdf0e5; color: #9c4c1f; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; }
+.rhythm-badge-done { background: #dcfce7; color: #166534; }
+
+.mat-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.9fr); gap: 18px; align-items: stretch; }
+.pile-slot { border: 1.5px solid #e2e8f0; }
+.pile-slot-next { border-color: var(--color-accent); background: #fffaf5; }
+.pile-slot-empty { background: #f8fafc; border-style: dashed; }
+
+.beat-tag { padding: 2px 7px; border-radius: 5px; background: #f1f5f9; color: #334155; font-size: 11px; font-weight: 700; }
+.beat-tag-next { background: var(--color-accent); color: #301a09; }
+
+.mini-card-face { min-height: 112px; border: 1.5px solid transparent; }
+.mini-card-empty { min-height: 112px; }
+.mini-card-center app-suit-icon { width: 24px; height: 24px; }
+.hand-card-display { border: 1.5px solid transparent; }
+
+.seq-chip { display: inline-flex; align-items: center; gap: 2px; padding: 3px 6px; border-radius: 6px; border: 1px solid #e2e8f0; font-size: 11.5px; font-weight: 700; }
+.seq-chip app-suit-icon { width: 12px; height: 12px; }
+.seq-chip-latest { border-width: 1.5px; }
+
+.ctrl-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 40px; padding: 8px 13px; border-radius: 8px; border: 1px solid #cbd5e1; background: #f8fafc; color: #1e293b; font: 600 12.5px inherit; cursor: pointer; touch-action: manipulation; }
+.ctrl-btn:hover:not(:disabled) { background: #f1f5f9; }
+.ctrl-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.ctrl-btn app-icon { width: 16px; height: 16px; }
+.ctrl-btn-primary { background: var(--color-accent); border-color: var(--color-accent); color: #301a09; }
+.ctrl-btn-primary:hover:not(:disabled) { background: var(--color-accent); filter: brightness(0.94); }
+
+.speed-pill, .jump-pill { min-height: 32px; padding: 4px 10px; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff; color: #334155; font: 600 11.5px inherit; cursor: pointer; touch-action: manipulation; }
+.speed-pill:hover, .jump-pill:hover { background: #f1f5f9; }
+.speed-pill-active { background: var(--color-navy); border-color: var(--color-navy); color: #fff; }
+.speed-pill-active:hover { background: #334155; }
+
+@media (max-width: 920px) { .mat-grid { grid-template-columns: 1fr; } }

@@ -1,0 +1,299 @@
+<div class="flex flex-col gap-4.5 p-4 sm:p-5 rounded-xl bg-slate-50 border border-slate-200">
+  <!-- Barra superior: progreso del ciclo de 13 índices, cronómetro, aciertos, fallos y botón de reseteo -->
+  <div class="flex flex-col gap-3 pb-3.5 border-b border-slate-200">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+      <div
+        class="flex flex-wrap items-center gap-2 sm:gap-2.5"
+        aria-label="Marcador y cronómetro del entrenador de posición interna"
+      >
+        <!-- Progreso en el ciclo de 13 índices -->
+        <div class="score-pill score-pill-progress" data-testid="internal-trainer-progress">
+          <span class="score-label">Ciclo</span>
+          <strong class="score-value tabular-nums">
+            {{ isCycleCompleted() ? cycleSize : stepNumber() }} / {{ cycleSize }}
+          </strong>
+        </div>
+
+        <!-- Cronómetro de tiempo -->
+        <div class="score-pill score-pill-timer" data-testid="internal-trainer-timer">
+          <app-icon name="clock" />
+          <span class="score-label">Tiempo</span>
+          <strong class="score-value tabular-nums">{{ formattedTime() }}</strong>
+          @if (!isCycleCompleted()) {
+            <button
+              type="button"
+              class="timer-toggle-btn"
+              [attr.aria-label]="
+                isTimerRunning()
+                  ? 'Pausar cronómetro y ocultar índice'
+                  : 'Iniciar cronómetro y revelar índice'
+              "
+              [attr.aria-pressed]="isTimerRunning()"
+              data-testid="internal-trainer-timer-toggle"
+              (click)="toggleTimer()"
+            >
+              <app-icon [name]="isTimerRunning() ? 'pause' : 'play'" />
+            </button>
+          }
+        </div>
+
+        <!-- Aciertos -->
+        <div class="score-pill score-pill-hits" data-testid="internal-trainer-hits">
+          <span class="score-label">Aciertos</span>
+          <strong class="score-value tabular-nums">{{ hits() }}</strong>
+        </div>
+
+        <!-- Fallos -->
+        <div class="score-pill score-pill-misses" data-testid="internal-trainer-misses">
+          <span class="score-label">Fallos</span>
+          <strong class="score-value tabular-nums">{{ misses() }}</strong>
+        </div>
+
+        @if (accuracyPercent() !== null) {
+          <div class="score-pill score-pill-neutral">
+            <span class="score-label">Precisión</span>
+            <strong class="score-value tabular-nums">{{ accuracyPercent() }}%</strong>
+          </div>
+        }
+      </div>
+
+      <button
+        type="button"
+        class="reset-counter-btn self-start lg:self-auto shrink-0"
+        data-testid="internal-trainer-reset"
+        (click)="resetCycle()"
+      >
+        <app-icon name="reset" />
+        <span>Resetear ciclo</span>
+      </button>
+    </div>
+
+    <!-- Barra de progreso visual del ciclo completo (0 a 13 aciertos) -->
+    <div class="flex flex-col gap-1">
+      <div
+        class="w-full h-2 rounded-full bg-slate-200 overflow-hidden"
+        role="progressbar"
+        aria-label="Índices resueltos en el ciclo de 13 posiciones internas"
+        [attr.aria-valuenow]="hits()"
+        aria-valuemin="0"
+        [attr.aria-valuemax]="cycleSize"
+      >
+        <div
+          class="h-full bg-[#f97316] transition-[width] duration-200"
+          [style.width.%]="progressPercent()"
+        ></div>
+      </div>
+      <div class="flex items-center justify-between text-[11.5px] text-slate-500">
+        <span>13 índices (As al Rey) mezclados sin repetición</span>
+        <span class="font-semibold tabular-nums">{{ hits() }} de {{ cycleSize }} completados</span>
+      </div>
+    </div>
+  </div>
+
+  @if (isCycleCompleted()) {
+    <!-- Resumen al completar los 13 índices del ciclo -->
+    <div
+      class="p-5 sm:p-6 rounded-[11px] bg-white border border-slate-200 flex flex-col gap-4"
+      data-testid="internal-trainer-summary"
+      role="status"
+      aria-live="polite"
+    >
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <span class="stat-icon sage"><app-icon name="check" /></span>
+          <div class="flex flex-col gap-0.5">
+            <span class="text-xs font-bold uppercase tracking-wide text-[#397153]">
+              Ciclo de 13 índices finalizado
+            </span>
+            <h3 class="text-[18px] text-slate-900">
+              ¡Has resuelto la posición interna de los 13 índices!
+            </h3>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="button button-accent self-start sm:self-center shrink-0"
+          data-testid="internal-trainer-new-cycle"
+          (click)="resetCycle()"
+        >
+          <app-icon name="reset" />
+          <span>Nuevo ciclo de 13 índices</span>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+        <div class="p-3 rounded-lg bg-slate-50 border border-slate-200 flex flex-col gap-0.5">
+          <span class="text-xs font-semibold text-slate-500">Tiempo total</span>
+          <strong class="text-lg font-extrabold text-slate-900 tabular-nums">
+            {{ formattedTime() }}
+          </strong>
+        </div>
+        <div class="p-3 rounded-lg bg-[#f0fdf4] border border-[#bbf7d0] flex flex-col gap-0.5">
+          <span class="text-xs font-semibold text-[#166534]">Aciertos</span>
+          <strong class="text-lg font-extrabold text-[#15803d] tabular-nums">
+            {{ hits() }} / {{ cycleSize }}
+          </strong>
+        </div>
+        <div class="p-3 rounded-lg bg-[#fff1f2] border border-[#fecdd3] flex flex-col gap-0.5">
+          <span class="text-xs font-semibold text-[#9f1239]">Fallos</span>
+          <strong class="text-lg font-extrabold text-[#be123c] tabular-nums">
+            {{ misses() }}
+          </strong>
+        </div>
+        <div class="p-3 rounded-lg bg-slate-50 border border-slate-200 flex flex-col gap-0.5">
+          <span class="text-xs font-semibold text-slate-500">Ritmo medio</span>
+          <strong class="text-lg font-extrabold text-slate-900 tabular-nums">
+            {{ averageSecondsPerIndex() }} s / índice
+          </strong>
+        </div>
+      </div>
+
+      @if (feedback(); as fb) {
+        <div class="feedback-box feedback-box-hit">
+          <div class="flex flex-col gap-0.5">
+            <strong class="text-[13.5px]">{{ fb.heading }}</strong>
+            <span class="text-[12.5px] opacity-90">{{ fb.detail }}</span>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <!-- Arena central: índice actual mostrado (u oculto con «?») + botonera de posiciones 1.ª a 13.ª -->
+    <div class="grid grid-cols-1 md:grid-cols-[224px_1fr] gap-3.5 items-stretch">
+      <!-- Índice actual preguntado -->
+      <div class="flex flex-col items-center justify-center gap-2.5 p-4 sm:p-5 rounded-[11px] bg-white border border-slate-200">
+        <span class="text-xs font-bold uppercase tracking-wide text-slate-500">
+          Índice {{ stepNumber() }} de {{ cycleSize }}
+        </span>
+
+        @if (isTimerRunning()) {
+          <div
+            class="prompt-index-card"
+            data-testid="internal-trainer-prompt"
+            [attr.aria-label]="'Índice actual: ' + currentRule().displayName"
+          >
+            <span class="absolute top-2.5 left-3 text-xs font-extrabold text-slate-500" aria-hidden="true">
+              {{ currentRankMeta().rank }}
+            </span>
+
+            <div class="flex flex-col items-center gap-1">
+              <span class="text-[44px] font-extrabold leading-none tracking-tight text-slate-900">
+                {{ currentRankMeta().rank }}
+              </span>
+              <span class="px-2 py-0.5 rounded bg-slate-100 text-[11px] font-bold text-slate-600">
+                Valor {{ currentRankMeta().value }}
+              </span>
+            </div>
+
+            <span class="absolute bottom-2.5 right-3 rotate-180 text-xs font-extrabold text-slate-500" aria-hidden="true">
+              {{ currentRankMeta().rank }}
+            </span>
+          </div>
+
+          <div class="flex flex-col items-center gap-0.5 text-center">
+            <strong class="text-[14px] text-slate-900">{{ currentRule().displayName }}</strong>
+          </div>
+        } @else {
+          <button
+            type="button"
+            class="prompt-index-card prompt-hidden-card"
+            data-testid="internal-trainer-hidden-card"
+            [attr.aria-label]="
+              elapsedMs() > 0
+                ? 'Reanudar cronómetro y revelar el índice ' + stepNumber() + ' de ' + cycleSize
+                : 'Iniciar cronómetro y revelar el primer índice'
+            "
+            (click)="startTimer()"
+          >
+            <span class="absolute top-2.5 left-3 text-xs font-extrabold text-slate-400" aria-hidden="true">?</span>
+            <span class="text-[52px] font-extrabold leading-none text-slate-700">?</span>
+            <span class="absolute bottom-2.5 right-3 rotate-180 text-xs font-extrabold text-slate-400" aria-hidden="true">?</span>
+          </button>
+
+          <div class="flex flex-col items-center gap-0.5 text-center">
+            <strong class="text-[13.5px] text-slate-700">
+              {{ elapsedMs() > 0 ? 'Cronómetro en pausa' : 'Índice oculto' }}
+            </strong>
+            <span class="text-[11.5px] text-slate-500">
+              Pulsa <strong>?</strong> o <strong>Play</strong> para revelar
+            </span>
+          </div>
+        }
+      </div>
+
+      <!-- Panel de respuesta: las 13 posiciones internas -->
+      <div class="flex flex-col justify-between gap-4 p-4 sm:p-5 rounded-[11px] bg-white border border-slate-200">
+        <div class="flex flex-col gap-0.5">
+          <h3 class="text-[15.5px] text-slate-900">
+            @if (isTimerRunning()) {
+              ¿Qué posición interna (del 1 al 13) ocupa el índice
+              <strong class="text-slate-950">{{ currentRule().displayName }}</strong>?
+            } @else {
+              ¿Qué posición interna ocupa el índice dentro de su reino?
+            }
+          </h3>
+          <p class="text-[13px] text-slate-600">
+            @if (isTimerRunning()) {
+              Usa la <strong>asociación mnemotécnica</strong> o la <strong>fórmula del × 3</strong> y pulsa su posición exacta:
+            } @else {
+              Inicia el cronómetro pulsando la interrogación (<strong>?</strong>) o el botón <strong>Play</strong> para ver el índice y activar las 13 posiciones:
+            }
+          </p>
+        </div>
+
+        <!-- Botonera del 1 al 13 -->
+        <div class="flex flex-col gap-1.5" [class.opacity-50]="!isTimerRunning()">
+          <span class="text-xs font-bold uppercase tracking-wide text-slate-500">
+            Selecciona la posición interna en el bloque (1.ª a 13.ª)
+          </span>
+          <div
+            class="grid grid-cols-4 sm:grid-cols-7 lg:grid-cols-13 gap-2"
+            role="group"
+            aria-label="Posición interna del 1 al 13"
+          >
+            @for (pos of positions; track pos) {
+              <button
+                type="button"
+                class="position-choice-btn"
+                [class.position-choice-btn-failed]="isTimerRunning() && isFailedPosition(pos)"
+                [disabled]="!isTimerRunning()"
+                [attr.data-position]="pos"
+                [attr.aria-label]="pos + '.ª posición'"
+                (click)="selectPosition(pos)"
+              >
+                <span class="font-extrabold text-[15px] tabular-nums leading-none">{{ pos }}</span>
+                <span class="text-[10.5px] font-semibold text-slate-500 leading-none">.ª pos</span>
+              </button>
+            }
+          </div>
+        </div>
+
+        <!-- Mensaje accesible de resultado o recordatorio -->
+        <div
+          class="feedback-box"
+          [class.feedback-box-hit]="isTimerRunning() && feedback()?.kind === 'hit'"
+          [class.feedback-box-miss]="isTimerRunning() && feedback()?.kind === 'miss'"
+          role="status"
+          aria-live="polite"
+        >
+          @if (!isTimerRunning()) {
+            <p class="text-[13px] text-slate-600">
+              Las posiciones del 1 al 13 están desactivadas mientras el índice permanece oculto. Pulsa <strong>?</strong> o <strong>Play</strong> cuando estés listo.
+            </p>
+          } @else if (feedback(); as fb) {
+            <div class="flex flex-col gap-0.5">
+              <strong class="text-[13.5px]">{{ fb.heading }}</strong>
+              <span class="text-[12.5px] opacity-90">{{ fb.detail }}</span>
+            </div>
+          } @else {
+            <p class="text-[13px] text-slate-600">
+              <strong>Atajos clave:</strong> A–4 multiplican <strong>× 3</strong> · <strong>9</strong> = 1.ª · <strong>K</strong> = 13.ª · <strong>5</strong>→2 · <strong>6</strong>→5 · <strong>7</strong>→8 · <strong>8</strong>→11 · <strong>10</strong>→4 · <strong>J</strong>→7 · <strong>Q</strong>→10.
+            </p>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>
+

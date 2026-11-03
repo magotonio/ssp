@@ -1,0 +1,197 @@
+<div class="flex flex-col gap-4 p-4 sm:p-5 rounded-xl bg-slate-50 border border-slate-200">
+  <!-- Controles superiores: sentido de estudio y mezcla / orden -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 pb-3 border-b border-slate-200">
+    <div class="flex flex-wrap items-center gap-1.5" role="group" aria-label="Sentido de las fichas de estudio">
+      <button
+        type="button"
+        class="flashcard-mode-btn"
+        [class.flashcard-mode-btn-active]="frontFace() === 'rank'"
+        [attr.aria-pressed]="frontFace() === 'rank'"
+        data-testid="flashcards-mode-rank"
+        (click)="setFrontFace('rank')"
+      >
+        Índice → Posición
+      </button>
+      <button
+        type="button"
+        class="flashcard-mode-btn"
+        [class.flashcard-mode-btn-active]="frontFace() === 'position'"
+        [attr.aria-pressed]="frontFace() === 'position'"
+        data-testid="flashcards-mode-position"
+        (click)="setFrontFace('position')"
+      >
+        Posición → Índice
+      </button>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-2">
+      <button
+        type="button"
+        class="flashcard-tool-btn"
+        data-testid="flashcards-shuffle"
+        (click)="shuffleDeck()"
+      >
+        <app-icon name="cycle" />
+        <span>Mezclar 13 fichas</span>
+      </button>
+
+      @if (isShuffled()) {
+        <button
+          type="button"
+          class="flashcard-tool-btn"
+          data-testid="flashcards-order"
+          (click)="restoreCanonicalOrder()"
+        >
+          <span>Orden A → K</span>
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Ficha interactiva central de doble cara -->
+  <div class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-4 items-stretch">
+    <button
+      type="button"
+      class="study-flashcard"
+      [class.study-flashcard-flipped]="isFlipped()"
+      [attr.aria-pressed]="isFlipped()"
+      [attr.aria-label]="
+        isFlipped()
+          ? 'Reverso de la ficha ' + stepLabel() + '. Pulsa para volver al anverso'
+          : 'Anverso de la ficha ' + stepLabel() + '. Pulsa para girar y descubrir el reverso'
+      "
+      data-testid="study-flashcard-surface"
+      (click)="flipCard()"
+    >
+      <div class="w-full flex items-center justify-between gap-2 text-xs font-semibold text-slate-500">
+        <span>Ficha {{ stepLabel() }}</span>
+        <span
+          class="px-2 py-0.5 rounded font-bold text-[11px]"
+          [class.bg-slate-100]="!isFlipped()"
+          [class.text-slate-700]="!isFlipped()"
+          [class.bg-[#edf2eb]]="isFlipped()"
+          [class.text-[#397153]]="isFlipped()"
+        >
+          {{ isFlipped() ? 'Reverso · Respuesta' : 'Anverso · Pregunta' }}
+        </span>
+      </div>
+
+      @if (showsRankSide()) {
+        <div class="flex flex-col items-center gap-2 py-3 text-center">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-400">
+            Índice de la carta
+          </span>
+          <strong class="text-[52px] font-extrabold leading-none tracking-tight text-slate-900">
+            {{ currentRule().rank }}
+          </strong>
+          <span class="text-sm font-semibold text-slate-700">
+            {{ currentRule().displayName }} · Valor numérico {{ currentRule().value }}
+          </span>
+        </div>
+      } @else {
+        <div class="flex flex-col items-center gap-2 py-3 text-center">
+          <span class="text-xs font-bold uppercase tracking-wider text-[#9c4c1f]">
+            Posición interna en el reino
+          </span>
+          <strong class="text-[50px] font-extrabold leading-none tracking-tight text-slate-900 tabular-nums">
+            {{ currentRule().ordinalLabel }}
+          </strong>
+          <span class="px-2.5 py-0.5 rounded-md bg-[#fdf0e5] text-[#9c4c1f] text-xs font-bold">
+            Posición {{ currentRule().internalPosition }} de 13 · {{ currentRule().mnemonicTag }}
+          </span>
+        </div>
+      }
+
+      <span class="text-xs font-semibold text-slate-500">
+        {{ isFlipped() ? 'Pulsa la ficha para ocultarla de nuevo' : 'Pulsa la ficha para girarla y comprobar el otro lado' }}
+      </span>
+    </button>
+
+    <!-- Panel lateral: navegación de fichas y desglose al girar -->
+    <div class="p-4 rounded-[11px] bg-white border border-slate-200 flex flex-col justify-between gap-3.5">
+      <div class="flex flex-col gap-2" role="status" aria-live="polite">
+        <span class="text-xs font-bold uppercase tracking-wide text-slate-500">
+          Apunte de estudio
+        </span>
+
+        @if (isFlipped()) {
+          <div class="flex flex-col gap-1.5" data-testid="study-flashcard-answer-detail">
+            <strong class="text-[14px] text-slate-900">
+              {{ currentRule().displayName }} ↔ {{ currentRule().ordinalLabel }} posición
+            </strong>
+            <p class="text-[12.5px] text-slate-600 leading-snug">
+              <strong>Mnemotecnia:</strong> {{ currentRule().mnemonicRule }}
+            </p>
+            <code class="self-start px-2 py-1 rounded bg-slate-50 border border-slate-200 font-mono text-xs font-bold text-slate-800">
+              {{ currentRule().mathFormulaText }}
+            </code>
+          </div>
+        } @else {
+          <p class="text-[13px] text-slate-600 leading-relaxed">
+            @if (frontFace() === 'rank') {
+              Di mentalmente qué posición del <strong>1 al 13</strong> ocupa el índice <strong>{{ currentRule().rank }}</strong> y pulsa la ficha para comprobarlo.
+            } @else {
+              Di mentalmente qué índice ocupa la <strong>{{ currentRule().ordinalLabel }} posición</strong> de cada reino y gira la ficha.
+            }
+          </p>
+        }
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <button
+          type="button"
+          class="button button-accent w-full"
+          data-testid="flashcards-flip-btn"
+          (click)="flipCard()"
+        >
+          <app-icon name="cycle" />
+          <span>{{ isFlipped() ? 'Ocultar reverso' : 'Girar ficha' }}</span>
+        </button>
+
+        <div class="grid grid-cols-2 gap-2">
+          <button
+            type="button"
+            class="flashcard-nav-btn"
+            data-testid="flashcards-prev"
+            aria-label="Ficha anterior"
+            (click)="previousCard()"
+          >
+            <app-icon name="chevronLeft" />
+            <span>Anterior</span>
+          </button>
+          <button
+            type="button"
+            class="flashcard-nav-btn"
+            data-testid="flashcards-next"
+            aria-label="Ficha siguiente"
+            (click)="nextCard()"
+          >
+            <span>Siguiente</span>
+            <app-icon name="chevronRight" />
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tira rápida de las 13 tarjetas -->
+  <div class="flex flex-wrap items-center gap-1.5" role="group" aria-label="Seleccionar ficha de estudio">
+    @for (rule of orderedRules(); track rule.value; let i = $index) {
+      <button
+        type="button"
+        class="flashcard-pill"
+        [class.flashcard-pill-active]="currentIndex() === i"
+        [attr.aria-pressed]="currentIndex() === i"
+        [attr.aria-label]="
+          frontFace() === 'rank'
+            ? 'Ir a la ficha del índice ' + rule.rank
+            : 'Ir a la ficha de la ' + rule.ordinalLabel + ' posición'
+        "
+        (click)="selectCardAt(i)"
+      >
+        {{ frontFace() === 'rank' ? rule.rank : rule.ordinalLabel }}
+      </button>
+    }
+  </div>
+</div>
+

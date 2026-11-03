@@ -1,0 +1,383 @@
+<a href="#contenido-leccion-4" class="skip-link">Saltar al contenido</a>
+
+<header class="sticky top-0 z-30 bg-white border-b border-slate-200">
+  <div class="max-w-[1080px] mx-auto h-14 sm:h-16 px-4 sm:px-6 flex items-center justify-between gap-3">
+    <div class="flex items-center gap-2.5 min-w-0">
+      <a
+        routerLink="/"
+        class="inline-flex items-center gap-2.5 text-lg font-bold tracking-tight text-slate-900 shrink-0"
+        aria-label="Volver a la portada de StackSSP"
+      >
+        <span class="brand-mark brand-mark-sm" aria-hidden="true"><app-icon name="cards" /></span>
+        <span>Stack<span class="brand-light">SSP</span></span>
+      </a>
+      <span class="text-slate-300 font-medium" aria-hidden="true">/</span>
+      <span class="text-[13px] font-semibold text-slate-600 truncate">Lección 4</span>
+    </div>
+
+    <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+      @if (isLessonCompleted()) {
+        <span class="status-pill status-completed">
+          <app-icon name="check" />
+          <span class="hidden sm:inline">Lección 4 completada</span>
+        </span>
+      } @else {
+        <span class="status-pill status-active hidden sm:inline-flex">
+          En progreso
+        </span>
+      }
+      <a routerLink="/curso/leccion-3" class="back-link hidden md:inline-flex">
+        <app-icon name="arrowLeft" />
+        <span>Lección 3</span>
+      </a>
+      <a routerLink="/" class="back-link">
+        <span>Inicio</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main
+  id="contenido-leccion-4"
+  class="max-w-[1080px] mx-auto px-3.5 sm:px-6 pt-5 sm:pt-8 pb-11 sm:pb-16 flex flex-col gap-4.5 sm:gap-6"
+  tabindex="-1"
+>
+  @if (!progress.cookiesAvailable()) {
+    <div
+      class="flex items-start gap-2.5 px-4 py-3 rounded-[10px] bg-orange-50 border border-orange-200 text-orange-800"
+      role="status"
+    >
+      <app-icon name="info" />
+      <p class="text-[13px] text-orange-800">
+        Las cookies están desactivadas en tu navegador. Podrás estudiar y usar el entrenador con normalidad, aunque el progreso no se recordará al cerrar la pestaña.
+      </p>
+    </div>
+  }
+
+  <!-- 1. Introducción de la Lección 4 -->
+  <section class="card p-5 sm:p-8 flex flex-col gap-4" aria-labelledby="lesson4-title">
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+      <div class="flex flex-col gap-3 max-w-[780px]">
+        <div class="flex flex-wrap items-center gap-2">
+          <p class="eyebrow">LECCIÓN 4 · INTEGRACIÓN DE ÍNDICE Y PALO</p>
+          <span class="px-2 py-0.5 rounded bg-[#fdf0e5] text-[#9c4c1f] text-[11px] font-bold">
+            Cálculo completo
+          </span>
+        </div>
+        <h1 id="lesson4-title" class="lesson-h1">
+          Averigua la siguiente carta exacta a partir de cualquier corte
+        </h1>
+        <p class="text-[15px] leading-relaxed">
+          Ha llegado el momento de unir las dos piezas que ya dominas —el cálculo del <strong>siguiente índice</strong> (Lección 2) y la rueda de los <strong>cuatro palos</strong> (Lección 3)— para saber al instante qué carta exacta sigue a cualquier otra en las 52 posiciones de la baraja.
+        </p>
+      </div>
+
+      <button
+        type="button"
+        class="chip-action chip-action-accent self-start shrink-0"
+        (click)="scrollToSection('entrenador-ciclo')"
+      >
+        Ir al entrenador ↓
+      </button>
+    </div>
+  </section>
+
+  <!-- 2. Las dos reglas combinadas: Caso general vs Salto de palo en valores bajos -->
+  <section class="grid grid-cols-1 lg:grid-cols-2 gap-4.5 sm:gap-6" aria-label="Regla general y salto de palo">
+    <!-- Regla general (5 al K) -->
+    <article class="card p-5 sm:p-7 flex flex-col justify-between gap-4">
+      <div class="flex flex-col gap-3.5">
+        <div class="flex items-center justify-between gap-2">
+          <span class="stat-icon sage"><app-icon name="cycle" /></span>
+          <span class="px-2.5 py-1 rounded-md bg-[#edf2eb] text-[#397153] text-xs font-bold">
+            Valores del 5 al Rey (K)
+          </span>
+        </div>
+
+        <h2 class="text-[19px]">1. Progresión general: resta 4 y avanza 1 palo</h2>
+        <p class="text-sm leading-relaxed">
+          Cuando el valor de la carta vista está entre el <strong>5 y el Rey (K)</strong>, aplicas simultáneamente la resta estándar y el paso normal de palo:
+        </p>
+
+        <div class="flex flex-col gap-2">
+          <div class="p-3 rounded-[9px] bg-slate-50 border border-slate-200 flex items-baseline justify-between gap-3">
+            <strong class="text-[13.5px] text-slate-900">Índice</strong>
+            <span class="text-[13px] font-semibold text-[#397153]">Se resta 4 al valor actual</span>
+          </div>
+          <div class="p-3 rounded-[9px] bg-slate-50 border border-slate-200 flex items-baseline justify-between gap-3">
+            <strong class="text-[13.5px] text-slate-900">Palo</strong>
+            <span class="text-[13px] font-semibold text-[#397153]">Avanza +1 palo (P → C → T → D)</span>
+          </div>
+        </div>
+
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Al avanzar <strong>+1 posición</strong> en la serie canónica, la carta siguiente <strong>cambia siempre de color</strong> (de negra pasa a roja y de roja pasa a negra).
+        </p>
+      </div>
+
+      <div class="flex flex-wrap gap-1.5 pt-1">
+        <span class="code-pill">9♠ → 5<span class="suit-red">♥</span></span>
+        <span class="code-pill">5<span class="suit-red">♥</span> → A♣</span>
+        <span class="code-pill">10♠ → 6<span class="suit-red">♥</span></span>
+        <span class="code-pill">K<span class="suit-red">♦</span> → 9♠</span>
+      </div>
+    </article>
+
+    <!-- Excepción: Salto de palo en valores bajos (A, 2, 3 y 4) -->
+    <article class="card p-5 sm:p-7 flex flex-col justify-between gap-4">
+      <div class="flex flex-col gap-3.5">
+        <div class="flex items-center justify-between gap-2">
+          <span class="stat-icon peach"><app-icon name="star" /></span>
+          <span class="px-2.5 py-1 rounded-md bg-[#fdf0e5] text-[#9c4c1f] text-xs font-bold">
+            Valores bajos: A, 2, 3 y 4
+          </span>
+        </div>
+
+        <h2 class="text-[19px]">2. El «salto de palo» al sumar 9 (A, 2, 3 y 4)</h2>
+        <p class="text-sm leading-relaxed">
+          Cuando la carta es un <strong>As, 2, 3 o 4</strong>, restar 4 no daría un número positivo, por lo que sumas <strong>9</strong> al índice. En ese mismo momento se activa el <strong>salto de palo</strong>:
+        </p>
+
+        <div class="flex flex-col gap-2">
+          <div class="p-3 rounded-[9px] bg-slate-50 border border-slate-200 flex items-baseline justify-between gap-3">
+            <strong class="text-[13.5px] text-slate-900">Índice</strong>
+            <span class="text-[13px] font-semibold text-[#9c4c1f]">Se suma 9 (A→10, 2→J, 3→Q, 4→K)</span>
+          </div>
+          <div class="p-3 rounded-[9px] bg-slate-50 border border-slate-200 flex items-baseline justify-between gap-3">
+            <strong class="text-[13.5px] text-slate-900">Palo</strong>
+            <span class="text-[13px] font-semibold text-[#9c4c1f]">Avanza +2 palos (mismo color)</span>
+          </div>
+        </div>
+
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Atajo visual infalible: al avanzar <strong>2 posiciones</strong> saltas directamente al <strong>otro palo del mismo color</strong> (<code class="code-pill">Picas ↔ Tréboles</code> negros y <code class="code-pill">Corazones ↔ Diamantes</code> rojos).
+        </p>
+      </div>
+
+      <div class="flex flex-wrap gap-1.5 pt-1">
+        <span class="code-pill">A♣ → 10♠</span>
+        <span class="code-pill">2<span class="suit-red">♦</span> → J<span class="suit-red">♥</span></span>
+        <span class="code-pill">3♠ → Q♣</span>
+        <span class="code-pill">4<span class="suit-red">♥</span> → K<span class="suit-red">♦</span></span>
+      </div>
+    </article>
+  </section>
+
+  <!-- 3. Ejemplo desde el 9 de Picas y explorador interactivo de cartas -->
+  <section class="card p-5 sm:px-8 sm:py-7 flex flex-col gap-5" aria-labelledby="sequence-example-title">
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2.5">
+      <div class="flex flex-col gap-1.5 max-w-[760px]">
+        <p class="eyebrow">PUNTO DE PARTIDA · DEL 9 DE PICAS EN ADELANTE</p>
+        <h2 id="sequence-example-title" class="text-[20px]">
+          Cómo fluye la secuencia paso a paso (y comprobador de cualquier carta)
+        </h2>
+        <p class="text-sm leading-relaxed">
+          La carta que encabeza la ordenación de referencia es el <strong>9 de Picas</strong>. Observa los cuatro primeros saltos —incluyendo cómo actúa el salto de palo al llegar al <strong>As de Tréboles</strong>— o pulsa cualquier índice y palo debajo para desglosar su cálculo:
+        </p>
+      </div>
+      <span class="self-start shrink-0 px-2.5 py-1.5 rounded-md bg-[#f0eef9] text-[#5b4b8a] text-xs font-semibold">
+        Arranque desde 9♠
+      </span>
+    </div>
+
+    <!-- Los 4 primeros pasos desde el 9 de Picas -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5" role="list" aria-label="Primeros pasos desde el 9 de Picas">
+      @for (step of openingSteps; track step.from.code) {
+        <button
+          type="button"
+          class="example-step-card text-left"
+          [class.example-step-card-jump]="step.isSuitJump"
+          [class.example-step-card-active]="inspectedFromCard().code === step.from.code"
+          role="listitem"
+          (click)="inspectCard(step.from)"
+        >
+          <div class="flex items-center justify-between gap-2">
+            <div class="inline-flex items-center gap-1.5 font-extrabold text-[15px]">
+              <span class="inline-flex items-center gap-0.5" [style.color]="cardInkHex(step.from.suit)">
+                <span>{{ step.from.rank }}</span>
+                <app-suit-icon [suit]="step.from.suit" />
+              </span>
+              <span class="text-slate-400 font-bold" aria-hidden="true">→</span>
+              <span class="inline-flex items-center gap-0.5" [style.color]="cardInkHex(step.to.suit)">
+                <span>{{ step.to.rank }}</span>
+                <app-suit-icon [suit]="step.to.suit" />
+              </span>
+            </div>
+
+            <span
+              class="px-1.5 py-0.5 rounded text-[10.5px] font-bold"
+              [class.bg-[#edf2eb]]="!step.isSuitJump"
+              [class.text-[#397153]]="!step.isSuitJump"
+              [class.bg-[#fdf0e5]]="step.isSuitJump"
+              [class.text-[#9c4c1f]]="step.isSuitJump"
+            >
+              {{ step.isSuitJump ? '+9 · +2 palos' : '−4 · +1 palo' }}
+            </span>
+          </div>
+          <p class="text-xs text-slate-600 leading-snug">{{ step.summary }}</p>
+        </button>
+      }
+    </div>
+
+    <!-- Comprobador interactivo de cualquier carta -->
+    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col gap-3.5">
+      <div class="flex flex-col gap-2">
+        <span class="text-xs font-bold uppercase tracking-wide text-slate-500">
+          Inspecciona cualquier carta de la baraja
+        </span>
+        <div class="flex flex-wrap items-center gap-1.5" role="group" aria-label="Índice a consultar">
+          @for (r of ranks; track r.value) {
+            <button
+              type="button"
+              class="mini-rank-btn"
+              [class.mini-rank-btn-active]="inspectedValue() === r.value"
+              [attr.aria-pressed]="inspectedValue() === r.value"
+              (click)="selectInspectorValue(r.value)"
+            >
+              {{ r.rank }}
+            </button>
+          }
+        </div>
+        <div class="flex flex-wrap items-center gap-1.5" role="group" aria-label="Palo a consultar">
+          @for (s of suitOptions; track s.code) {
+            <button
+              type="button"
+              class="mini-suit-btn"
+              [class.mini-suit-btn-active]="inspectedSuit() === s.code"
+              [attr.aria-pressed]="inspectedSuit() === s.code"
+              (click)="selectInspectorSuit(s.code)"
+            >
+              <span class="inline-flex" [style.color]="s.inkHex"><app-suit-icon [suit]="s.code" /></span>
+              <span>{{ s.meta.pluralName }}</span>
+            </button>
+          }
+        </div>
+      </div>
+
+      <div
+        class="p-3.5 rounded-[10px] bg-white border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-3"
+        data-testid="lesson4-card-inspector"
+        role="status"
+        aria-live="polite"
+      >
+        <div class="flex flex-col gap-1">
+          <div class="flex flex-wrap items-center gap-2 text-sm text-slate-800">
+            <span>Si cortas y ves el</span>
+            <strong
+              class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-50 border border-slate-300 font-bold"
+              [style.color]="cardInkHex(inspectedFromCard().suit)"
+            >
+              <span>{{ inspectedFromCard().rank }}</span>
+              <app-suit-icon [suit]="inspectedFromCard().suit" />
+              <span class="text-slate-900">({{ inspectedFromCard().fullName }})</span>
+            </strong>
+            <span>la carta siguiente es el</span>
+            <strong
+              class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-slate-900 text-white font-bold"
+            >
+              <span>{{ inspectedToCard().fullName }}</span>
+            </strong>
+          </div>
+          <p class="text-[12.5px] text-slate-600">
+            <strong>Índice:</strong> {{ inspectedIndexDetail().formulaText }} ·
+            <strong>Palo:</strong> {{ inspectedSuitDetail() }}.
+          </p>
+        </div>
+
+        <span
+          class="self-start md:self-center shrink-0 px-2.5 py-1 rounded-md text-xs font-bold"
+          [class.bg-[#edf2eb]]="!inspectedIsLowValue()"
+          [class.text-[#397153]]="!inspectedIsLowValue()"
+          [class.bg-[#fdf0e5]]="inspectedIsLowValue()"
+          [class.text-[#9c4c1f]]="inspectedIsLowValue()"
+        >
+          {{ inspectedIsLowValue() ? 'Salto de palo (+9 y mismo color)' : 'Caso general (−4 y +1 palo)' }}
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Entrenador interactivo de ciclo completo (52 cartas barajadas) -->
+  <section
+    id="entrenador-ciclo"
+    class="card p-5 sm:px-8 sm:py-7 flex flex-col gap-5"
+    aria-labelledby="cycle-trainer-title"
+    tabindex="-1"
+  >
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2.5">
+      <div class="flex flex-col gap-1.5 max-w-[760px]">
+        <p class="eyebrow">PRÁCTICA CRONOMETRADA · BARAJA COMPLETA SIN REPETICIONES</p>
+        <h2 id="cycle-trainer-title" class="text-[20px]">
+          Entrenador de la carta siguiente (ciclo de 52 cartas)
+        </h2>
+        <p class="text-sm leading-relaxed">
+          Las <strong>52 cartas se desordenan internamente</strong> y se muestran una a una para que indiques qué <strong>índice</strong> y qué <strong>palo</strong> tiene la carta siguiente. Así entrenas siempre un <strong>ciclo completo real</strong> sin dejarte ninguna carta ni repetir siempre las mismas, con cronómetro, marcador de aciertos/fallos y reseteo en cualquier momento.
+        </p>
+      </div>
+      <span class="self-start shrink-0 px-2.5 py-1.5 rounded-md bg-[#fdf0e5] text-[#9c4c1f] text-xs font-semibold">
+        52 cartas · Ciclo completo
+      </span>
+    </div>
+
+    <app-next-card-trainer />
+
+    <div class="px-4 py-3 rounded-[10px] bg-slate-50 border border-slate-200 flex items-start gap-2.5">
+      <span class="text-slate-600 mt-0.5"><app-icon name="cards" /></span>
+      <p class="text-[13px] text-slate-600">
+        <strong>Meta recomendada:</strong> primero busca completar las 52 cartas con <strong>0 fallos</strong> sin mirar el reloj; cuando el salto de palo en <strong>A, 2, 3 y 4</strong> te salga automático, usa el cronómetro para bajar tu marca en cada ciclo.
+      </p>
+    </div>
+  </section>
+
+  <!-- 5. Cierre de la Lección 4 y adelanto de la Lección 5 -->
+  <section class="card p-5 sm:p-8 flex flex-col gap-5" aria-labelledby="closing-lesson4-title">
+    <div class="flex flex-col gap-2.5 max-w-[780px]">
+      <p class="eyebrow">CIERRE · VENTAJAS MÁGICAS Y PASO A LA LECCIÓN 5</p>
+      <h2 id="closing-lesson4-title" class="text-xl">
+        Cortes ilimitados y preparación para el siguiente nivel
+      </h2>
+      <p>
+        Al tratarse de una <strong>ordenación cíclica</strong>, un espectador puede cortar la baraja tantas veces como quiera y sus propiedades permanecerán intactas: basta un vistazo a la carta inferior para conocer la superior (o nombrar toda la secuencia desde ahí). En la <strong>Lección 5</strong> pasaremos al siguiente nivel, descubriendo las propiedades avanzadas de la SSP que permiten la <strong>localización exacta de cualquier carta</strong> en la baraja.
+      </p>
+    </div>
+
+    <div class="flex flex-col sm:flex-row flex-wrap gap-3">
+      <button
+        type="button"
+        class="button w-full sm:w-auto"
+        [class.button-accent]="!isLessonCompleted()"
+        [class.button-completed]="isLessonCompleted()"
+        (click)="completeLesson()"
+      >
+        <app-icon name="check" />
+        <span>{{ isLessonCompleted() ? 'Lección 4 completada' : 'Completar Lección 4' }}</span>
+      </button>
+
+      <a
+        routerLink="/curso/leccion-5"
+        class="button w-full sm:w-auto"
+        [class.button-accent]="isLessonCompleted()"
+        [class.button-secondary]="!isLessonCompleted()"
+      >
+        <span>Ir a la Lección 5</span>
+        <app-icon name="arrow" />
+      </a>
+
+      <a routerLink="/curso/leccion-3" class="button button-secondary w-full sm:w-auto">
+        <app-icon name="arrowLeft" />
+        <span>Repasar Lección 3</span>
+      </a>
+
+      <a routerLink="/" class="button button-secondary w-full sm:w-auto">
+        <span>Volver a la portada</span>
+      </a>
+    </div>
+
+    @if (isLessonCompleted()) {
+      <p class="text-[13px] font-medium text-[#397153]" role="status">
+        ¡Enhorabuena! Tu progreso en la Lección 4 ha quedado guardado en este navegador.
+      </p>
+    }
+  </section>
+</main>
+

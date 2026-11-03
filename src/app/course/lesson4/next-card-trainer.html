@@ -1,0 +1,360 @@
+<div class="flex flex-col gap-4.5 p-4 sm:p-5 rounded-xl bg-slate-50 border border-slate-200">
+  <!-- Barra superior: progreso del ciclo, cronómetro, aciertos, fallos y botón de reseteo -->
+  <div class="flex flex-col gap-3 pb-3.5 border-b border-slate-200">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+      <div
+        class="flex flex-wrap items-center gap-2 sm:gap-2.5"
+        aria-label="Marcador y cronómetro del entrenador de ciclo completo"
+      >
+        <!-- Progreso en el ciclo de 52 cartas -->
+        <div class="score-pill score-pill-progress" data-testid="card-trainer-progress">
+          <span class="score-label">Ciclo</span>
+          <strong class="score-value tabular-nums">
+            {{ isCycleCompleted() ? deckSize : cardStepNumber() }} / {{ deckSize }}
+          </strong>
+        </div>
+
+        <!-- Cronómetro de tiempo -->
+        <div class="score-pill score-pill-timer" data-testid="card-trainer-timer">
+          <app-icon name="clock" />
+          <span class="score-label">Tiempo</span>
+          <strong class="score-value tabular-nums">{{ formattedTime() }}</strong>
+          @if (!isCycleCompleted()) {
+            <button
+              type="button"
+              class="timer-toggle-btn"
+              [attr.aria-label]="
+                isTimerRunning()
+                  ? 'Pausar cronómetro y ocultar carta'
+                  : 'Iniciar cronómetro y revelar carta'
+              "
+              [attr.aria-pressed]="isTimerRunning()"
+              data-testid="card-trainer-timer-toggle"
+              (click)="toggleTimer()"
+            >
+              <app-icon [name]="isTimerRunning() ? 'pause' : 'play'" />
+            </button>
+          }
+        </div>
+
+        <!-- Aciertos -->
+        <div class="score-pill score-pill-hits" data-testid="card-trainer-hits">
+          <span class="score-label">Aciertos</span>
+          <strong class="score-value tabular-nums">{{ hits() }}</strong>
+        </div>
+
+        <!-- Fallos -->
+        <div class="score-pill score-pill-misses" data-testid="card-trainer-misses">
+          <span class="score-label">Fallos</span>
+          <strong class="score-value tabular-nums">{{ misses() }}</strong>
+        </div>
+
+        @if (accuracyPercent() !== null) {
+          <div class="score-pill score-pill-neutral">
+            <span class="score-label">Precisión</span>
+            <strong class="score-value tabular-nums">{{ accuracyPercent() }}%</strong>
+          </div>
+        }
+      </div>
+
+      <button
+        type="button"
+        class="reset-counter-btn self-start lg:self-auto shrink-0"
+        data-testid="card-trainer-reset"
+        (click)="resetCycle()"
+      >
+        <app-icon name="reset" />
+        <span>Resetear ciclo</span>
+      </button>
+    </div>
+
+    <!-- Barra de progreso visual del ciclo completo (0 a 52 aciertos) -->
+    <div class="flex flex-col gap-1">
+      <div
+        class="w-full h-2 rounded-full bg-slate-200 overflow-hidden"
+        role="progressbar"
+        aria-label="Cartas superadas en el ciclo de 52 cartas"
+        [attr.aria-valuenow]="hits()"
+        aria-valuemin="0"
+        [attr.aria-valuemax]="deckSize"
+      >
+        <div
+          class="h-full bg-[#f97316] transition-[width] duration-200"
+          [style.width.%]="progressPercent()"
+        ></div>
+      </div>
+      <div class="flex items-center justify-between text-[11.5px] text-slate-500">
+        <span>Baraja de 52 cartas mezclada internamente (sin repeticiones)</span>
+        <span class="font-semibold tabular-nums">{{ hits() }} de {{ deckSize }} completadas</span>
+      </div>
+    </div>
+  </div>
+
+  @if (isCycleCompleted()) {
+    <!-- Resumen al completar las 52 cartas del ciclo -->
+    <div
+      class="p-5 sm:p-6 rounded-[11px] bg-white border border-slate-200 flex flex-col gap-4"
+      data-testid="card-trainer-summary"
+      role="status"
+      aria-live="polite"
+    >
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <span class="stat-icon sage"><app-icon name="check" /></span>
+          <div class="flex flex-col gap-0.5">
+            <span class="text-xs font-bold uppercase tracking-wide text-[#397153]">
+              Ciclo de 52 cartas finalizado
+            </span>
+            <h3 class="text-[18px] text-slate-900">
+              ¡Has recorrido las 52 cartas de la baraja sin repetir ninguna!
+            </h3>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="button button-accent self-start sm:self-center shrink-0"
+          data-testid="card-trainer-new-cycle"
+          (click)="resetCycle()"
+        >
+          <app-icon name="reset" />
+          <span>Nuevo ciclo de 52 cartas</span>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+        <div class="p-3 rounded-lg bg-slate-50 border border-slate-200 flex flex-col gap-0.5">
+          <span class="text-xs font-semibold text-slate-500">Tiempo total</span>
+          <strong class="text-lg font-extrabold text-slate-900 tabular-nums">
+            {{ formattedTime() }}
+          </strong>
+        </div>
+        <div class="p-3 rounded-lg bg-[#f0fdf4] border border-[#bbf7d0] flex flex-col gap-0.5">
+          <span class="text-xs font-semibold text-[#166534]">Aciertos</span>
+          <strong class="text-lg font-extrabold text-[#15803d] tabular-nums">
+            {{ hits() }} / {{ deckSize }}
+          </strong>
+        </div>
+        <div class="p-3 rounded-lg bg-[#fff1f2] border border-[#fecdd3] flex flex-col gap-0.5">
+          <span class="text-xs font-semibold text-[#9f1239]">Fallos</span>
+          <strong class="text-lg font-extrabold text-[#be123c] tabular-nums">
+            {{ misses() }}
+          </strong>
+        </div>
+        <div class="p-3 rounded-lg bg-slate-50 border border-slate-200 flex flex-col gap-0.5">
+          <span class="text-xs font-semibold text-slate-500">Ritmo medio</span>
+          <strong class="text-lg font-extrabold text-slate-900 tabular-nums">
+            {{ averageSecondsPerCard() }} s / carta
+          </strong>
+        </div>
+      </div>
+
+      @if (feedback(); as fb) {
+        <div class="feedback-box feedback-box-hit">
+          <div class="flex flex-col gap-0.5">
+            <strong class="text-[13.5px]">{{ fb.heading }}</strong>
+            <span class="text-[12.5px] opacity-90">{{ fb.detail }}</span>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <!-- Arena central: carta actual mostrada (u oculta con «?») + selección de siguiente índice y siguiente palo -->
+    <div class="grid grid-cols-1 md:grid-cols-[224px_1fr] gap-3.5 items-stretch">
+      <!-- Carta actual preguntada -->
+      <div class="flex flex-col items-center justify-center gap-2.5 p-4 sm:p-5 rounded-[11px] bg-white border border-slate-200">
+        <span class="text-xs font-bold uppercase tracking-wide text-slate-500">
+          Carta {{ cardStepNumber() }} de {{ deckSize }}
+        </span>
+
+        @if (isTimerRunning()) {
+          <div
+            class="prompt-playing-card"
+            data-testid="card-trainer-prompt"
+            [style.color]="currentCardInkHex()"
+            [attr.aria-label]="'Carta actual: ' + currentCard().fullName"
+          >
+            <span class="playing-card-corner absolute top-2 left-2.5 flex flex-col items-center gap-px leading-none" aria-hidden="true">
+              <span class="text-[13px] font-extrabold">{{ currentCard().rank }}</span>
+              <app-suit-icon [suit]="currentCard().suit" />
+            </span>
+
+            <div class="flex flex-col items-center gap-1">
+              <span class="text-[38px] font-extrabold leading-none tracking-tight">{{ currentCard().rank }}</span>
+              <span class="playing-card-main-suit inline-flex">
+                <app-suit-icon [suit]="currentCard().suit" />
+              </span>
+            </div>
+
+            <span class="playing-card-corner absolute bottom-2 right-2.5 rotate-180 flex flex-col items-center gap-px leading-none" aria-hidden="true">
+              <span class="text-[13px] font-extrabold">{{ currentCard().rank }}</span>
+              <app-suit-icon [suit]="currentCard().suit" />
+            </span>
+          </div>
+
+          <div class="flex flex-col items-center gap-0.5 text-center">
+            <strong class="text-[14px] text-slate-900">{{ currentCard().fullName }}</strong>
+          </div>
+        } @else {
+          <button
+            type="button"
+            class="prompt-playing-card prompt-hidden-card"
+            data-testid="card-trainer-hidden-card"
+            [attr.aria-label]="
+              elapsedMs() > 0
+                ? 'Reanudar cronómetro y revelar la carta ' + cardStepNumber() + ' de ' + deckSize
+                : 'Iniciar cronómetro y revelar la primera carta'
+            "
+            (click)="startTimer()"
+          >
+            <span class="absolute top-2.5 left-3 text-xs font-extrabold text-slate-400" aria-hidden="true">?</span>
+            <span class="text-[52px] font-extrabold leading-none text-slate-700">?</span>
+            <span class="absolute bottom-2.5 right-3 rotate-180 text-xs font-extrabold text-slate-400" aria-hidden="true">?</span>
+          </button>
+
+          <div class="flex flex-col items-center gap-0.5 text-center">
+            <strong class="text-[13.5px] text-slate-700">
+              {{ elapsedMs() > 0 ? 'Cronómetro en pausa' : 'Carta oculta' }}
+            </strong>
+            <span class="text-[11.5px] text-slate-500">
+              Pulsa <strong>?</strong> o <strong>Play</strong> para revelar
+            </span>
+          </div>
+        }
+      </div>
+
+      <!-- Panel de respuesta: índice + palo -->
+      <div class="flex flex-col justify-between gap-4 p-4 sm:p-5 rounded-[11px] bg-white border border-slate-200">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <div class="flex flex-col gap-0.5">
+            <h3 class="text-[15.5px] text-slate-900">
+              @if (isTimerRunning()) {
+                ¿Qué índice y qué palo tiene la carta siguiente al
+                <strong class="text-slate-950">{{ currentCard().fullName }}</strong>?
+              } @else {
+                ¿Qué índice y qué palo tiene la siguiente carta?
+              }
+            </h3>
+            <p class="text-[13px] text-slate-600">
+              @if (isTimerRunning()) {
+                Marca el <strong>índice</strong> y el <strong>palo</strong> en el orden que prefieras; al completar ambos se comprueba al instante:
+              } @else {
+                Inicia el cronómetro pulsando la interrogación (<strong>?</strong>) o el botón <strong>Play</strong> para ver la carta y activar la selección:
+              }
+            </p>
+          </div>
+
+          <!-- Visor de selección parcial -->
+          <div
+            class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-[12.5px] shrink-0 self-start sm:self-center"
+            [class.opacity-50]="!isTimerRunning()"
+            data-testid="card-trainer-selection"
+            aria-live="polite"
+          >
+            <span class="text-[11.5px] font-semibold text-slate-500">Tu elección:</span>
+            <strong class="selection-slot" [class.selection-slot-filled]="selectedRankMeta() !== null">
+              {{ selectedRankMeta()?.rank ?? 'Índice' }}
+            </strong>
+            <span class="text-slate-300" aria-hidden="true">·</span>
+            <strong
+              class="selection-slot inline-flex items-center gap-1"
+              [class.selection-slot-filled]="selectedSuitOption() !== null"
+            >
+              @if (selectedSuitOption(); as suitOpt) {
+                <span class="inline-flex" [style.color]="suitOpt.inkHex">
+                  <app-suit-icon [suit]="suitOpt.code" />
+                </span>
+                <span>{{ suitOpt.meta.pluralName }}</span>
+              } @else {
+                <span>Palo</span>
+              }
+            </strong>
+          </div>
+        </div>
+
+        <!-- 1. Botonera de los 13 índices -->
+        <div class="flex flex-col gap-1.5" [class.opacity-50]="!isTimerRunning()">
+          <span class="text-xs font-bold uppercase tracking-wide text-slate-500">
+            1. Índice de la siguiente carta
+          </span>
+          <div
+            class="grid grid-cols-5 sm:grid-cols-7 lg:grid-cols-13 gap-1.5"
+            role="group"
+            aria-label="Índice de la siguiente carta"
+          >
+            @for (item of ranks; track item.value) {
+              <button
+                type="button"
+                class="index-choice-btn"
+                [disabled]="!isTimerRunning()"
+                [class.index-choice-btn-selected]="selectedValue() === item.value"
+                [attr.aria-pressed]="selectedValue() === item.value"
+                [attr.data-rank]="item.rank"
+                [attr.aria-label]="
+                  'Índice ' + item.valueName + (item.valueName !== item.rank ? ' (' + item.rank + ')' : '')
+                "
+                (click)="selectRank(item.value)"
+              >
+                {{ item.rank }}
+              </button>
+            }
+          </div>
+        </div>
+
+        <!-- 2. Botonera de los 4 palos -->
+        <div class="flex flex-col gap-1.5" [class.opacity-50]="!isTimerRunning()">
+          <span class="text-xs font-bold uppercase tracking-wide text-slate-500">
+            2. Palo de la siguiente carta
+          </span>
+          <div
+            class="grid grid-cols-2 sm:grid-cols-4 gap-2"
+            role="group"
+            aria-label="Palo de la siguiente carta"
+          >
+            @for (opt of suitOptions; track opt.code) {
+              <button
+                type="button"
+                class="suit-choice-btn"
+                [disabled]="!isTimerRunning()"
+                [class.suit-choice-btn-selected]="selectedSuit() === opt.code"
+                [attr.aria-pressed]="selectedSuit() === opt.code"
+                [attr.data-suit]="opt.code"
+                [attr.aria-label]="'Palo ' + opt.displayLabel"
+                (click)="selectSuit(opt.code)"
+              >
+                <span class="suit-choice-icon inline-flex" [style.color]="opt.inkHex">
+                  <app-suit-icon [suit]="opt.code" />
+                </span>
+                <span class="font-bold text-[13px]">{{ opt.meta.pluralName }}</span>
+              </button>
+            }
+          </div>
+        </div>
+
+        <!-- Mensaje accesible de resultado o recordatorio -->
+        <div
+          class="feedback-box"
+          [class.feedback-box-hit]="isTimerRunning() && feedback()?.kind === 'hit'"
+          [class.feedback-box-miss]="isTimerRunning() && feedback()?.kind === 'miss'"
+          role="status"
+          aria-live="polite"
+        >
+          @if (!isTimerRunning()) {
+            <p class="text-[13px] text-slate-600">
+              Las botoneras de índice y palo están desactivadas mientras la carta permanece oculta. Pulsa <strong>?</strong> o <strong>Play</strong> cuando estés listo.
+            </p>
+          } @else if (feedback(); as fb) {
+            <div class="flex flex-col gap-0.5">
+              <strong class="text-[13.5px]">{{ fb.heading }}</strong>
+              <span class="text-[12.5px] opacity-90">{{ fb.detail }}</span>
+            </div>
+          } @else {
+            <p class="text-[13px] text-slate-600">
+              Del <strong>5 al K</strong>: resta <strong>4</strong> y avanza <strong>+1 palo</strong> (cambia de color). En <strong>A, 2, 3 y 4</strong>: suma <strong>9</strong> y salta <strong>+2 palos</strong> (mismo color).
+            </p>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>

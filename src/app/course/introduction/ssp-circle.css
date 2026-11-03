@@ -1,0 +1,62 @@
+.suit-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 10px;
+  min-height: 44px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: #1e293b;
+  font: 600 12px inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+  text-align: left;
+}
+.suit-pill:hover { background: var(--suit-bg); border-color: var(--suit-border); }
+.suit-pill-active { background: var(--suit-bg); border-color: var(--suit-dot); color: var(--suit-text); }
+.suit-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--suit-dot); flex-shrink: 0; }
+.suit-pill app-suit-icon { width: 14px; height: 14px; }
+
+.circle-stage { position: relative; width: 100%; max-width: 450px; margin: 0 auto; aspect-ratio: 440 / 460; user-select: none; }
+.slot-group { cursor: pointer; outline: none; }
+.landmark-text { font-size: 10.5px; font-weight: 650; fill: #334155; }
+.landmark-accent { fill: #9a3412; }
+.landmark-blue { fill: #1e40af; }
+.slot-group:focus-visible .slot-dot { stroke: #087f94; stroke-width: 2.6; }
+.slot-dot { transition: r 140ms ease, fill 140ms ease; }
+
+.center-inspector {
+  position: absolute;
+  top: 48.7%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 58%;
+  max-width: 232px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+  padding: 10px 8px;
+  border-radius: 14px;
+  background: #ffffffeb;
+  border: 1px solid #e2e8f0;
+}
+.neighbor-btn { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 8px; border: 1px solid #e2e8f0; background: #f8fafc; color: #334155; cursor: pointer; flex-shrink: 0; touch-action: manipulation; }
+.neighbor-btn:hover { background: #e2e8f0; }
+.neighbor-btn app-icon { width: 16px; height: 16px; }
+.mini-playing-card { display: inline-flex; align-items: center; justify-content: center; gap: 5px; padding: 4px 10px; border-radius: 8px; border: 1.5px solid transparent; font-size: 16px; font-weight: 750; letter-spacing: -0.4px; line-height: 1.1; }
+.mini-playing-card app-suit-icon { width: 16px; height: 16px; }
+.inspector-ssp-pos { font-size: 10.5px; font-weight: 600; color: #334155; background: #f1f5f9; padding: 2px 8px; border-radius: 5px; }
+.inspector-ssp-highlight { background: #fff7ed; color: #9a3412; border: 1px solid #fed7aa; }
+
+.progress-bar > span { display: block; height: 100%; background: var(--color-accent); border-radius: inherit; transition: width 150ms ease; }
+.primary-controls { grid-template-columns: 1fr 1.2fr 1fr; }
+.chip-btn { border: 1px solid #cbd5e1; background: #fff; color: #334155; border-radius: 7px; padding: 8px 12px; min-height: 38px; font: 600 12px inherit; cursor: pointer; touch-action: manipulation; }
+.chip-btn:hover:not(:disabled) { background: #f1f5f9; }
+.chip-btn:disabled { opacity: 0.48; cursor: not-allowed; }
+.speed-btn { border: 0; background: transparent; color: #475569; border-radius: 6px; padding: 6px 9px; min-height: 30px; font: 600 11.5px inherit; cursor: pointer; touch-action: manipulation; }
+.speed-btn-active { background: #fff; color: #0f172a; box-shadow: 0 0 0 1px #cbd5e1; }
+
+@media (prefers-reduced-motion: reduce) { .slot-dot, .progress-bar > span { transition: none; } }

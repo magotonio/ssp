@@ -1,0 +1,321 @@
+<a href="#contenido-leccion-3" class="skip-link">Saltar al contenido</a>
+
+<header class="sticky top-0 z-30 bg-white border-b border-slate-200">
+  <div class="max-w-[1080px] mx-auto h-14 sm:h-16 px-4 sm:px-6 flex items-center justify-between gap-3">
+    <div class="flex items-center gap-2.5 min-w-0">
+      <a
+        routerLink="/"
+        class="inline-flex items-center gap-2.5 text-lg font-bold tracking-tight text-slate-900 shrink-0"
+        aria-label="Volver a la portada de StackSSP"
+      >
+        <span class="brand-mark brand-mark-sm" aria-hidden="true"><app-icon name="cards" /></span>
+        <span>Stack<span class="brand-light">SSP</span></span>
+      </a>
+      <span class="text-slate-300 font-medium" aria-hidden="true">/</span>
+      <span class="text-[13px] font-semibold text-slate-600 truncate">Lección 3</span>
+    </div>
+
+    <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+      @if (isLessonCompleted()) {
+        <span class="status-pill status-completed">
+          <app-icon name="check" />
+          <span class="hidden sm:inline">Lección 3 completada</span>
+        </span>
+      } @else {
+        <span class="status-pill status-active hidden sm:inline-flex">
+          En progreso
+        </span>
+      }
+      <a routerLink="/curso/leccion-2" class="back-link hidden md:inline-flex">
+        <app-icon name="arrowLeft" />
+        <span>Lección 2</span>
+      </a>
+      <a routerLink="/" class="back-link">
+        <span>Inicio</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main
+  id="contenido-leccion-3"
+  class="max-w-[1080px] mx-auto px-3.5 sm:px-6 pt-5 sm:pt-8 pb-11 sm:pb-16 flex flex-col gap-4.5 sm:gap-6"
+  tabindex="-1"
+>
+  @if (!progress.cookiesAvailable()) {
+    <div
+      class="flex items-start gap-2.5 px-4 py-3 rounded-[10px] bg-orange-50 border border-orange-200 text-orange-800"
+      role="status"
+    >
+      <app-icon name="info" />
+      <p class="text-[13px] text-orange-800">
+        Las cookies están desactivadas en tu navegador. Podrás estudiar y usar el entrenador con normalidad, aunque el progreso no se recordará al cerrar la pestaña.
+      </p>
+    </div>
+  }
+
+  <!-- 1. Introducción y secuencia estándar de los 4 palos -->
+  <section class="card p-5 sm:p-8 flex flex-col gap-5" aria-labelledby="lesson3-title">
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+      <div class="flex flex-col gap-3 max-w-[780px]">
+        <div class="flex flex-wrap items-center gap-2">
+          <p class="eyebrow">LECCIÓN 3 · EL ORDEN DE LOS PALOS</p>
+          <span class="px-2 py-0.5 rounded bg-[#fdf0e5] text-[#9c4c1f] text-[11px] font-bold">
+            Memoria visual y ciclo
+          </span>
+        </div>
+        <h1 id="lesson3-title" class="lesson-h1">La secuencia canónica de los palos</h1>
+        <p class="text-[15px] leading-relaxed">
+          Ya sabes calcular qué índice sigue a cualquier otro; ahora completamos la otra mitad del sistema: memorizar sin esfuerzo el <strong>orden cíclico de los cuatro palos</strong> empleado en la ordenación SSP: <strong>Picas, Corazones, Tréboles y Diamantes (Rombos)</strong>.
+        </p>
+      </div>
+
+      <button
+        type="button"
+        class="chip-action chip-action-accent self-start shrink-0"
+        (click)="scrollToSection('entrenador-palos')"
+      >
+        Ir al entrenador ↓
+      </button>
+    </div>
+
+    <!-- Tira cíclica P -> C -> T -> D -> P -->
+    <div class="flex flex-col gap-2.5">
+      <h2 class="text-[14.5px] text-slate-900">Ciclo continuo del 1 al 4 (Negro · Rojo · Negro · Rojo)</h2>
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5"
+        role="list"
+        aria-label="Secuencia estándar de los cuatro palos"
+      >
+        @for (step of canonicalSteps; track step.code) {
+          <div
+            class="p-3.5 rounded-[10px] bg-slate-50 border border-slate-200 flex items-center justify-between gap-3"
+            role="listitem"
+          >
+            <div class="flex items-center gap-3 min-w-0">
+              <span
+                class="w-10 h-10 rounded-lg bg-white border border-slate-200 grid place-items-center shrink-0"
+                [style.color]="step.inkHex"
+              >
+                <app-suit-icon [suit]="step.code" />
+              </span>
+              <div class="flex flex-col min-w-0">
+                <div class="flex items-baseline gap-1.5">
+                  <strong class="text-[15px] text-slate-900 truncate">{{ step.name }}</strong>
+                  @if (step.altName) {
+                    <span class="text-xs font-medium text-slate-500">({{ step.altName }})</span>
+                  }
+                </div>
+                <span class="text-xs text-slate-600">
+                  Color {{ step.deckColor }} · {{ step.pointsSummary }}
+                </span>
+              </div>
+            </div>
+            <span class="px-2 py-1 rounded-md bg-slate-900 text-white text-xs font-extrabold shrink-0">
+              {{ step.order }}
+            </span>
+          </div>
+        }
+      </div>
+      <p class="text-xs text-slate-600">
+        El ciclo es cerrado y continuo: después de <strong>Diamantes / Rombos (4)</strong> vuelve siempre a empezar en <strong>Picas (1)</strong>.
+      </p>
+    </div>
+  </section>
+
+  <!-- 2. Representación gráfica de las puntas / sobresalientes de cada palo -->
+  <section class="card p-5 sm:px-8 sm:py-7 flex flex-col gap-5" aria-labelledby="anatomy-title">
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2.5">
+      <div class="flex flex-col gap-1.5 max-w-[760px]">
+        <p class="eyebrow">LÓGICA VISUAL · DE 1 A 4 PUNTAS O SOBRESALIENTES</p>
+        <h2 id="anatomy-title" class="text-[20px]">
+          El propio dibujo de cada palo te dice su número (1, 2, 3 y 4)
+        </h2>
+        <p class="text-sm leading-relaxed">
+          No necesitas memorizar el orden a ciegas: basta con observar cuántas <strong>puntas o partes sobresalientes</strong> tiene el símbolo de cada palo. Así entiendes de un vistazo por qué <strong>Picas es 1</strong>, <strong>Corazones es 2</strong>, <strong>Tréboles es 3</strong> y <strong>Rombos es 4</strong>:
+        </p>
+      </div>
+      <span class="self-start shrink-0 px-2.5 py-1.5 rounded-md bg-[#edf2eb] text-[#397153] text-xs font-semibold">
+        Regla visual 1–2–3–4
+      </span>
+    </div>
+
+    <app-suit-points-diagram />
+  </section>
+
+  <!-- 3. Reglas mnemotécnicas (picotridia, picotudo, SHCD) y estandarización -->
+  <section class="grid grid-cols-1 lg:grid-cols-2 gap-4.5 sm:gap-6" aria-label="Recursos mnemotécnicos y estandarización">
+    <!-- Mnemotecnia verbal y siglas -->
+    <article class="card p-5 sm:p-7 flex flex-col justify-between gap-4">
+      <div class="flex flex-col gap-3.5">
+        <div class="flex items-center justify-between gap-2">
+          <span class="stat-icon peach"><app-icon name="book" /></span>
+          <span class="px-2.5 py-1 rounded-md bg-[#fdf0e5] text-[#9c4c1f] text-xs font-bold">
+            Palabras clave y siglas
+          </span>
+        </div>
+
+        <h2 class="text-[19px]">Palabras mnemotécnicas para recitar el ciclo</h2>
+        <p class="text-sm leading-relaxed">
+          Además de la forma visual de las puntas, puedes fijar la secuencia fonéticamente con una sola palabra clave:
+        </p>
+
+        <!-- Desglose PI-CO-TRI-DIA -->
+        <div class="p-3.5 rounded-[10px] bg-slate-50 border border-slate-200 flex flex-col gap-2.5">
+          <div class="flex items-center justify-between gap-2">
+            <strong class="text-[13.5px] text-slate-900">«PICOTRIDIA» (o «PICOTUDO»)</strong>
+            <span class="text-[11.5px] font-semibold text-slate-500">4 sílabas = 4 palos</span>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            @for (part of picotridiaParts; track part.fragment) {
+              <div class="p-2 rounded-lg bg-white border border-slate-200 flex flex-col items-center gap-0.5 text-center">
+                <strong class="text-base font-extrabold tracking-tight" [style.color]="part.inkHex">
+                  {{ part.fragment }}
+                </strong>
+                <span class="inline-flex items-center gap-1 text-[11.5px] font-semibold text-slate-700">
+                  <span class="inline-flex" [style.color]="part.inkHex"><app-suit-icon [suit]="part.suit" /></span>
+                  <span>{{ part.suitLabel }}</span>
+                </span>
+              </div>
+            }
+          </div>
+          <p class="text-xs text-slate-600">
+            Variante muy fácil de recordar: <strong>PI-CO-TU-DO</strong> (<strong>PI</strong>cas · <strong>CO</strong>razones · <strong>T</strong>réboles · <strong>D</strong>iamantes).
+          </p>
+        </div>
+
+        <!-- Siglas en inglés SHCD -->
+        <div class="p-3.5 rounded-[10px] bg-slate-50 border border-slate-200 flex flex-col gap-2">
+          <strong class="text-[13.5px] text-slate-900">Siglas en inglés: S · H · C · D</strong>
+          <div class="flex flex-wrap gap-1.5">
+            @for (part of englishParts; track part.fragment) {
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white border border-slate-200 text-xs font-semibold text-slate-800">
+                <strong [style.color]="part.inkHex">{{ part.fragment }}</strong>
+                <span>= {{ part.suitLabel }}</span>
+              </span>
+            }
+          </div>
+          <p class="text-xs text-slate-600">
+            Coincide con el clásico orden anglosajón <em>CHaSeD</em> comenzando desde <em>Spades</em> (Picas).
+          </p>
+        </div>
+      </div>
+    </article>
+
+    <!-- Estandarización del sistema y palos gemelos -->
+    <article class="card p-5 sm:p-7 flex flex-col justify-between gap-4">
+      <div class="flex flex-col gap-3.5">
+        <div class="flex items-center justify-between gap-2">
+          <span class="stat-icon lavender"><app-icon name="cycle" /></span>
+          <span class="px-2.5 py-1 rounded-md bg-[#f0eef9] text-[#5b4b8a] text-xs font-bold">
+            Estándar oficial SSP
+          </span>
+        </div>
+
+        <h2 class="text-[19px]">Por qué estandarizamos Picas → Corazones → Tréboles → Diamantes</h2>
+        <p class="text-sm leading-relaxed">
+          Desde un punto de vista puramente matemático, cualquier mago podría adaptar otro orden personal de palos si mantuviera la misma estructura. Sin embargo, adoptar <strong>Picas → Corazones → Tréboles → Diamantes</strong> como <strong>estándar único en los vídeos y aplicaciones de la SSP</strong> te aporta ventajas clave:
+        </p>
+
+        <div class="flex flex-col gap-2.5">
+          <div class="p-3 rounded-[9px] bg-slate-50 border border-slate-200 flex flex-col gap-1">
+            <strong class="text-[13.5px] text-slate-900">1. Lenguaje común y entrenamiento directo</strong>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Todas las referencias rápidas (como empezar en el <strong>9 de Picas</strong> en posición 1 y cerrar en el <strong>Rey de Diamantes</strong> en posición 52) coinciden exactamente con los entrenadores de esta plataforma.
+            </p>
+          </div>
+
+          <div class="p-3 rounded-[9px] bg-slate-50 border border-slate-200 flex flex-col gap-1">
+            <strong class="text-[13.5px] text-slate-900">2. Alternancia natural Negro / Rojo y palos gemelos</strong>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Los palos impares (<strong>1 Picas</strong> y <strong>3 Tréboles</strong>) son <strong>negros</strong>, y los pares (<strong>2 Corazones</strong> y <strong>4 Diamantes</strong>) son <strong>rojos</strong>. Así, avanzar <strong>+1 palo</strong> cambia siempre de color, y avanzar <strong>+2 palos</strong> salta directamente al palo gemelo del mismo color (<code class="code-pill">P ↔ T</code> y <code class="code-pill">C ↔ D</code>).
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <p class="text-xs text-slate-600 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5">
+        Dominar tanto el paso al <strong>siguiente palo (+1)</strong> como el salto al <strong>palo gemelo (+2)</strong> te hará volar en la Lección 4.
+      </p>
+    </article>
+  </section>
+
+  <!-- 4. Entrenador interactivo de palos -->
+  <section
+    id="entrenador-palos"
+    class="card p-5 sm:px-8 sm:py-7 flex flex-col gap-5"
+    aria-labelledby="suit-trainer-title"
+    tabindex="-1"
+  >
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2.5">
+      <div class="flex flex-col gap-1.5 max-w-[760px]">
+        <p class="eyebrow">PRÁCTICA INTERACTIVA · AUTOMATIZA LA RUEDA</p>
+        <h2 id="suit-trainer-title" class="text-[20px]">Entrenador del orden de los palos</h2>
+        <p class="text-sm leading-relaxed">
+          Practica el ciclo hasta que la respuesta sea instantánea. Puedes alternar entre adivinar el <strong>siguiente palo (+1)</strong>, identificar cada palo por su <strong>número de puntas (1–4)</strong> o combinar <strong>saltos de +1 y +2 palos</strong>.
+        </p>
+      </div>
+      <span class="self-start shrink-0 px-2.5 py-1.5 rounded-md bg-[#fdf0e5] text-[#9c4c1f] text-xs font-semibold">
+        3 modos de práctica
+      </span>
+    </div>
+
+    <app-suit-order-trainer />
+
+    <div class="px-4 py-3 rounded-[10px] bg-slate-50 border border-slate-200 flex items-start gap-2.5">
+      <span class="text-slate-600 mt-0.5"><app-icon name="cards" /></span>
+      <p class="text-[13px] text-slate-600">
+        <strong>Ejercicio rápido con cartas físicas:</strong> saca los 4 Ases de tu baraja, mézclalos dorso arriba y voltea uno tras otro diciendo al instante cuántas puntas tiene (1–4) y qué palo le sigue en la rueda.
+      </p>
+    </div>
+  </section>
+
+  <!-- 5. Cierre y preparación para la integración final (Lección 4) -->
+  <section class="card p-5 sm:p-8 flex flex-col gap-5" aria-labelledby="closing-lesson3-title">
+    <div class="flex flex-col gap-2.5 max-w-[780px]">
+      <p class="eyebrow">CIERRE · PREPARACIÓN PARA LA INTEGRACIÓN FINAL</p>
+      <h2 id="closing-lesson3-title" class="text-xl">Todo listo para unir índices y palos</h2>
+      <p>
+        Ya tienes las dos piezas fundamentales por separado: la regla numérica de los <strong>índices</strong> (Lección 2) y la secuencia cíclica de los <strong>palos</strong> (Lección 3). En la <strong>próxima lección</strong> unificaremos ambas reglas para calcular la carta siguiente completa en toda la baraja de 52 cartas.
+      </p>
+    </div>
+
+    <div class="flex flex-col sm:flex-row flex-wrap gap-3">
+      <button
+        type="button"
+        class="button w-full sm:w-auto"
+        [class.button-accent]="!isLessonCompleted()"
+        [class.button-completed]="isLessonCompleted()"
+        (click)="completeLesson()"
+      >
+        <app-icon name="check" />
+        <span>{{ isLessonCompleted() ? 'Lección 3 completada' : 'Completar Lección 3' }}</span>
+      </button>
+
+      <a
+        routerLink="/curso/leccion-4"
+        class="button w-full sm:w-auto"
+        [class.button-accent]="isLessonCompleted()"
+        [class.button-secondary]="!isLessonCompleted()"
+      >
+        <span>Ir a la Lección 4</span>
+        <app-icon name="arrow" />
+      </a>
+
+      <a routerLink="/curso/leccion-2" class="button button-secondary w-full sm:w-auto">
+        <app-icon name="arrowLeft" />
+        <span>Repasar Lección 2</span>
+      </a>
+
+      <a routerLink="/" class="button button-secondary w-full sm:w-auto">
+        <span>Volver a la portada</span>
+      </a>
+    </div>
+
+    @if (isLessonCompleted()) {
+      <p class="text-[13px] font-medium text-[#397153]" role="status">
+        ¡Magnífico! Tu progreso en la Lección 3 ha quedado guardado en este navegador.
+      </p>
+    }
+  </section>
+</main>

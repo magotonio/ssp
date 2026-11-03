@@ -1,0 +1,38 @@
+.brand-mark-xs {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+}
+
+.brand-mark-xs app-icon {
+  width: 15px;
+  height: 15px;
+}
+
+.version-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  border-radius: 5px;
+  border: 1px solid #e2e8f0;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.footer-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 4px 2px;
+  color: #475569;
+  transition: color 140ms;
+}
+
+.footer-link:hover {
+  color: #0f172a;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}

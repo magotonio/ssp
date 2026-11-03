@@ -1,0 +1,243 @@
+<div class="flex flex-col gap-4.5 p-3 sm:p-4.5 rounded-xl bg-slate-50 border border-slate-200">
+  <!-- Banner rítmico en vivo -->
+  <div
+    class="rhythm-banner p-3.5 sm:px-4 rounded-[10px] bg-white border border-slate-300 flex flex-col gap-1"
+    [class.rhythm-banner-done]="promptMessage().isDone"
+    role="status"
+    aria-live="polite"
+  >
+    <div class="flex flex-wrap items-center justify-between gap-2">
+      <span class="rhythm-badge" [class.rhythm-badge-done]="promptMessage().isDone">
+        {{ promptMessage().badge }}
+      </span>
+      <span class="text-xs font-semibold text-slate-600">
+        Progreso: {{ currentStep() }} / {{ deckSize }} cartas
+      </span>
+    </div>
+    <p class="text-[15px] font-bold text-slate-900 leading-snug mt-0.5">
+      {{ promptMessage().title }}
+    </p>
+    <p class="text-[13px] text-slate-600 leading-relaxed">
+      {{ promptMessage().detail }}
+    </p>
+  </div>
+
+  <!-- Tapete: 3 montones cara arriba + mano receptora -->
+  <div class="mat-grid">
+    <!-- 3 montones en la mesa -->
+    <div class="flex flex-col gap-2.5">
+      <div class="flex items-center justify-between gap-2">
+        <span class="text-xs font-semibold uppercase tracking-wide text-slate-500">
+          En tu mesa (montones cara arriba)
+        </span>
+        <span class="text-xs text-slate-500 hidden sm:inline">Cuenta de izquierda a derecha: 1 · 2 · 3</span>
+      </div>
+
+      <div class="grid grid-cols-3 gap-1.5 sm:gap-2.5" role="list" aria-label="Estado actual de los tres montones en la mesa">
+        @for (item of livePiles(); track item.pile.pickupBeat) {
+          <div
+            class="pile-slot flex flex-col items-center gap-2 p-2 sm:p-2.5 rounded-[10px] bg-white"
+            [class.pile-slot-next]="item.isNextToPick"
+            [class.pile-slot-empty]="item.remainingCount === 0"
+            role="listitem"
+          >
+            <div class="flex items-center justify-between gap-1 w-full">
+              <span class="beat-tag" [class.beat-tag-next]="item.isNextToPick">
+                «{{ item.pile.beatWord }}»
+              </span>
+              <span class="text-[11px] font-semibold text-slate-500">
+                {{ item.remainingCount }} {{ item.remainingCount === 1 ? 'carta' : 'cartas' }}
+              </span>
+            </div>
+
+            @if (item.visibleTopCard; as card) {
+              <div
+                class="mini-card-face w-full p-2 rounded-[9px] flex flex-col justify-between"
+                [style.background]="item.topSuitMeta?.surfaceBg"
+                [style.border-color]="item.topSuitMeta?.surfaceBorder"
+                [style.color]="item.topSuitMeta?.dotColor"
+              >
+                <div class="flex items-center gap-1">
+                  <span class="text-base font-extrabold leading-none">{{ card.rank }}</span>
+                  <app-suit-icon [suit]="card.suit" />
+                </div>
+                <div class="mini-card-center grid place-items-center py-1">
+                  <app-suit-icon [suit]="card.suit" />
+                </div>
+                <span class="text-[10.5px] sm:text-[11.5px] font-semibold leading-tight text-center text-slate-800">
+                  {{ card.fullName }}
+                </span>
+              </div>
+            } @else {
+              <div class="mini-card-empty w-full p-2 rounded-[9px] border border-dashed border-slate-300 text-slate-600 text-[11.5px] font-semibold flex flex-col items-center justify-center gap-1.5 text-center">
+                <app-icon name="check" />
+                <span>Montón agotado</span>
+              </div>
+            }
+
+            <div class="min-h-[18px] flex items-center justify-center">
+              @if (item.isNextToPick) {
+                <span class="text-[11px] font-bold text-[#9c4c1f]">Siguiente en tomar</span>
+              } @else if (item.isJustPickedFrom) {
+                <span class="text-[11px] font-semibold text-[#397153]">Recién tomada</span>
+              } @else {
+                <span class="text-[11px] text-slate-400">{{ item.pile.tablePositionLabel.split(' · ')[0] }}</span>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Mano receptora -->
+    <div class="flex flex-col justify-between gap-3 p-3.5 rounded-[10px] bg-white border border-slate-200">
+      <div class="flex items-center justify-between gap-2">
+        <span class="text-xs font-semibold uppercase tracking-wide text-slate-500">
+          En tu mano (cara arriba encima)
+        </span>
+        <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 text-xs font-bold">
+          {{ currentStep() }} / 52
+        </span>
+      </div>
+
+      @if (latestPickedStep(); as latest) {
+        <div
+          class="hand-card-display p-3 rounded-[9px]"
+          [style.background]="handTopSuitMeta()?.surfaceBg"
+          [style.border-color]="handTopSuitMeta()?.surfaceBorder"
+        >
+          <div class="flex items-center gap-3">
+            <span
+              class="w-12 h-14 rounded-lg bg-white border border-slate-200 flex flex-col items-center justify-center gap-0.5 shrink-0"
+              [style.color]="handTopSuitMeta()?.dotColor"
+            >
+              <span class="text-xl font-extrabold leading-none">{{ latest.card.rank }}</span>
+              <app-suit-icon [suit]="latest.card.suit" />
+            </span>
+            <div class="flex flex-col">
+              <span class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Carta visible arriba en tu mano
+              </span>
+              <strong class="text-[15.5px] text-slate-900">{{ latest.card.fullName }}</strong>
+              <span class="text-xs text-slate-600">
+                Tiempo «{{ latest.beatWord }}» · Cubre la carta anterior sin voltear
+              </span>
+            </div>
+          </div>
+        </div>
+      } @else {
+        <div class="min-h-[82px] p-3 rounded-[9px] border border-dashed border-slate-300 bg-slate-50 grid place-items-center">
+          <p class="text-[13px] text-slate-600 text-center">
+            Tu mano receptora está vacía. Toma primero el <strong>9 de Corazones</strong> («UNO») manteniéndolo <strong>cara arriba</strong>.
+          </p>
+        </div>
+      }
+
+      <!-- Tira de valores entrelazados -->
+      <div class="flex flex-col gap-1.5">
+        <span class="text-[11.5px] font-semibold text-slate-600">
+          Secuencia automática en tu mano (últimas cartas colocadas):
+        </span>
+        @if (recentPickedChips().length > 0) {
+          <div class="flex flex-wrap gap-1.5" aria-label="Últimas cartas recogidas">
+            @for (chip of recentPickedChips(); track chip.stepNumber) {
+              <span
+                class="seq-chip"
+                [class.seq-chip-latest]="chip.isLatest"
+                [style.color]="chip.suitMeta.dotColor"
+                [style.border-color]="chip.isLatest ? chip.suitMeta.dotColor : chip.suitMeta.surfaceBorder"
+                [style.background]="chip.isLatest ? chip.suitMeta.surfaceBg : '#ffffff'"
+                [attr.title]="'Carta ' + chip.stepNumber + ' («' + chip.beatWord + '»): ' + chip.card.fullName"
+              >
+                <span>{{ chip.card.rank }}</span>
+                <app-suit-icon [suit]="chip.card.suit" />
+              </span>
+            }
+          </div>
+        } @else {
+          <p class="text-xs text-slate-500">
+            Verás aparecer aquí <code class="font-mono text-[11.5px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-900">9 → 5 → A → 10 → 6 → 2 → J → 7 → 3 → Q → 8 → 4 → K…</code>
+          </p>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Controles de acompañamiento físico -->
+  <div class="flex flex-col gap-3 p-3 sm:px-3.5 rounded-[10px] bg-white border border-slate-200">
+    <div class="flex flex-wrap items-center gap-2">
+      <button
+        type="button"
+        class="ctrl-btn ctrl-btn-primary"
+        (click)="togglePlayback()"
+      >
+        <app-icon [name]="isPlaying() ? 'pause' : 'play'" />
+        <span>{{ isPlaying() ? 'Pausar ritmo' : (currentStep() >= deckSize ? 'Repetir recogida' : 'Guiarme con ritmo') }}</span>
+      </button>
+
+      <button
+        type="button"
+        class="ctrl-btn"
+        [disabled]="currentStep() === 0"
+        (click)="stepBackward()"
+        aria-label="Retroceder una carta"
+      >
+        <app-icon name="stepBack" />
+        <span>-1</span>
+      </button>
+
+      <button
+        type="button"
+        class="ctrl-btn"
+        [disabled]="currentStep() >= deckSize"
+        (click)="stepForward()"
+      >
+        <span>+1 carta</span>
+        <app-icon name="stepForward" />
+      </button>
+
+      <button
+        type="button"
+        class="ctrl-btn"
+        [disabled]="currentStep() >= deckSize"
+        (click)="stepForwardTrio()"
+      >
+        <span>+1 trío («1-2-3»)</span>
+      </button>
+
+      <button
+        type="button"
+        class="ctrl-btn"
+        [disabled]="currentStep() === 0 && !isPlaying()"
+        (click)="resetTrainer()"
+      >
+        <app-icon name="reset" />
+        <span>Reiniciar</span>
+      </button>
+    </div>
+
+    <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-200">
+      <div class="flex flex-wrap items-center gap-1.5" role="group" aria-label="Velocidad del ritmo de recogida">
+        <span class="text-xs font-semibold text-slate-600 mr-1">Cadencia:</span>
+        @for (opt of cadenceOptions; track opt.id) {
+          <button
+            type="button"
+            class="speed-pill"
+            [class.speed-pill-active]="cadence() === opt.id"
+            [attr.aria-pressed]="cadence() === opt.id"
+            (click)="setCadence(opt.id)"
+          >
+            {{ opt.label }}
+          </button>
+        }
+      </div>
+
+      <div class="flex flex-wrap items-center gap-1.5">
+        <span class="text-xs font-semibold text-slate-600 mr-1">Comprobar punto:</span>
+        <button type="button" class="jump-pill" (click)="jumpToStep(13)">Carta 13 (K<span class="suit-red">♥</span>)</button>
+        <button type="button" class="jump-pill" (click)="jumpToStep(39)">Carta 39 (K<span class="suit-red">♦</span>)</button>
+        <button type="button" class="jump-pill" (click)="jumpToStep(52)">Final (52/52)</button>
+      </div>
+    </div>
+  </div>
+</div>
