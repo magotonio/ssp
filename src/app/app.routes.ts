@@ -39,6 +39,12 @@ export const routes: Routes = [
       import('./course/lesson3/lesson3').then((module) => module.Lesson3),
   },
   {
+    path: 'curso/leccion-4',
+    title: 'Lección 4 · Integración de índice y palo | StackSSP',
+    loadComponent: () =>
+      import('./course/lesson4/lesson4').then((module) => module.Lesson4),
+  },
+  {
     path: '**',
     redirectTo: '',
   },

@@ -111,7 +111,22 @@ Validaciones: `npm run build` y `npm test -- --watch=false`. La compilación se 
 - **Entrenador del orden de los palos:**
   - Tres modos de práctica intercambiables: siguiente palo en el ciclo, identificación por número de puntas/sobresalientes (`1–4`) y saltos combinados en el ciclo (`+1` y `+2`).
   - Contadores de **aciertos**, **fallos** y porcentaje de precisión, pistas contextuales al fallar manteniendo la pregunta activa, avance automático a una pregunta distinta al acertar y botón **Resetear contador**.
-- Cierre preparando la unión de índices y palos en la siguiente lección, botón para marcar la **Lección 3** como completada y navegación a **Lección 2** e **Inicio**.
+- Cierre preparando la unión de índices y palos en la siguiente lección, botón para marcar la **Lección 3** como completada y navegación a **Lección 4**, **Lección 2** e **Inicio**.
+
+### Lección 4 (`/curso/leccion-4`)
+
+- Cabecera de curso con enlace a la portada (`/`), acceso rápido a **Lección 3** (`/curso/leccion-3`), referencia a **Lección 4** e indicador de estado («En progreso» / «Lección 4 completada»).
+- Explicación pedagógica de la integración de índice y palo para deducir la **carta siguiente exacta** conforme a [leccion4.md](../leccion4.md) y [ordenacion-ssp.md](../ordenacion-ssp.md), sin duplicar ni contradecir la definición normativa:
+  - Comparativa visual entre la progresión general y la excepción del **«salto de palo»** en los valores bajos (destacando el cambio de color frente al salto al palo gemelo del mismo color).
+  - Recorrido de ejemplo desde la carta inicial de referencia y comprobador interactivo donde al seleccionar cualquier carta se desglosan simultáneamente el cálculo del índice y la transición del palo.
+- **Entrenador de ciclo completo (52 cartas):**
+  - Desordena internamente las 52 cartas de la baraja para presentarlas una a una sin repeticiones ni omisiones a lo largo de un ciclo completo (`1 / 52` a `52 / 52`).
+  - Mientras el cronómetro no está en marcha (al entrar, al resetear o al pausar), la carta permanece oculta tras una **interrogación (`?`)** y la selección de índice y palo queda deshabilitada; al pulsar sobre la interrogación o sobre el botón **Play** del cronómetro se inicia/reanuda el tiempo, se revela la carta y se habilita la respuesta (y al pausar vuelve a ocultarse).
+  - Con la carta visible solicita seleccionar qué **índice** (`A` a `K`) y qué **palo** (`Picas`, `Corazones`, `Tréboles` o `Diamantes`) corresponden a la carta siguiente, admitiendo la selección en cualquier orden.
+  - Incluye **cronómetro de tiempo** (con parada automática al completar la carta 52), **contador de aciertos**, **contador de fallos**, porcentaje de precisión y barra de progreso del ciclo.
+  - Si falla, incrementa el contador de fallos, ofrece una pista contextual indicando qué parte falló y mantiene la misma carta activa para reintentar; si acierta, incrementa los aciertos, muestra el cálculo aplicado y pasa a la siguiente carta de la mezcla hasta mostrar el resumen final del ciclo al llegar a 52 aciertos.
+  - Botón **Resetear ciclo** para poner a cero tiempo, aciertos y fallos, volver a ocultar la carta y mezclar de nuevo internamente las 52 cartas.
+- Cierre destacando la ventaja mágica de los cortes ilimitados y adelantando la **Lección 5** (localización exacta de cualquier carta), botón para marcar la **Lección 4** como completada y navegación a **Lección 3** e **Inicio**.
 
 ### Ejecución desde la raíz
 

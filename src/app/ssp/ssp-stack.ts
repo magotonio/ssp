@@ -238,6 +238,25 @@ const CARD_BY_CODE: ReadonlyMap<string, SspCard> = new Map(
 );
 
 /**
+ * Devuelve la carta SSP correspondiente a un valor e identificador de palo.
+ */
+export function getSspCardByValueAndSuit(value: CardValue, suit: SuitCode): SspCard {
+  const code = `${RANK_BY_VALUE[value]}${suit}`;
+  const card = CARD_BY_CODE.get(code);
+  if (!card) {
+    throw new Error(`Carta no encontrada en la ordenación SSP: ${code}`);
+  }
+  return card;
+}
+
+/**
+ * Devuelve la carta inmediatamente siguiente en el ciclo normativo de 52 cartas.
+ */
+export function getNextSspCard(card: SspCard): SspCard {
+  return SSP_STACK[card.position % DECK_SIZE];
+}
+
+/**
  * Construye los 52 pasos del reloj visual de la Introducción:
  * - El As de Picas (AP) se coloca arriba a las 12 en punto (hueco 0).
  * - Cada palo avanza contando de 3 en 3 huecos en sentido horario.

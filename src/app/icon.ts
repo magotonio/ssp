@@ -17,6 +17,7 @@ const paths = {
   chevronLeft: 'm15 19-7-7 7-7',
   chevronRight: 'm9 5 7 7-7 7',
   info: 'M12 11v6m0-10v1M22 12a10 10 0 1 0-20 0 10 10 0 0 0 20 0',
+  clock: 'M12 6v6l4 2M22 12a10 10 0 1 0-20 0 10 10 0 0 0 20 0',
 } as const;
 
 export type IconName = keyof typeof paths;

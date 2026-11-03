@@ -1,0 +1,39 @@
+.skip-link { position: fixed; top: -100px; left: 16px; padding: 10px 14px; background: var(--color-navy); color: #fff; border-radius: 8px; font-size: 13px; font-weight: 600; z-index: 50; }
+.skip-link:focus { top: 12px; }
+
+.brand-mark-sm { width: 34px; height: 34px; border-radius: 9px; }
+.brand-mark-sm app-icon { width: 17px; height: 17px; }
+.status-pill { display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 6px; font-size: 11.5px; font-weight: 600; }
+.status-pill app-icon { width: 14px; height: 14px; }
+.status-active { background: #fdf0e5; color: #9c4c1f; }
+.status-completed { background: #edf2eb; color: #397153; }
+.back-link { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; min-height: 38px; border-radius: 8px; border: 1px solid #e2e8f0; background: #f8fafc; color: #334155; font-size: 12.5px; font-weight: 600; }
+.back-link:hover { background: #f1f5f9; }
+.back-link app-icon { width: 16px; height: 16px; }
+
+.eyebrow { font-size: 11px; font-weight: 650; letter-spacing: 1px; color: #64748b; text-transform: uppercase; }
+.lesson-h1 { font-size: clamp(24px, 3vw, 32px); line-height: 1.2; font-weight: 750; letter-spacing: -0.8px; color: #0f172a; }
+.code-pill { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 12.5px; font-weight: 600; padding: 2px 7px; border-radius: 5px; background: #f1f5f9; border: 1px solid #e2e8f0; color: #0f172a; }
+
+.chip-action { padding: 8px 14px; min-height: 40px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; color: #1e293b; font: 600 12.5px inherit; cursor: pointer; touch-action: manipulation; }
+.chip-action-accent { background: var(--color-accent); border-color: var(--color-accent); color: #301a09; }
+.chip-action-accent:hover { filter: brightness(0.94); }
+
+.example-step-card { display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-radius: 10px; border: 1.5px solid #e2e8f0; background: #f8fafc; font-family: inherit; cursor: pointer; touch-action: manipulation; }
+.example-step-card:hover { background: #f1f5f9; border-color: #94a3b8; }
+.example-step-card-jump { background: #fffaf5; border-color: #fed7aa; }
+.example-step-card-active { border-color: var(--color-navy); background: #fff; box-shadow: inset 0 0 0 1px var(--color-navy); }
+.example-step-card app-suit-icon { width: 15px; height: 15px; }
+
+.mini-rank-btn { min-width: 34px; min-height: 34px; padding: 4px 8px; border-radius: 7px; border: 1px solid #cbd5e1; background: #fff; color: #1e293b; font: 700 13px inherit; cursor: pointer; touch-action: manipulation; }
+.mini-rank-btn:hover { background: #f1f5f9; }
+.mini-rank-btn-active { background: var(--color-navy); border-color: var(--color-navy); color: #fff; }
+.mini-rank-btn-active:hover { background: #334155; }
+
+.mini-suit-btn { display: inline-flex; align-items: center; gap: 6px; min-height: 34px; padding: 5px 11px; border-radius: 7px; border: 1px solid #cbd5e1; background: #fff; color: #1e293b; font: 600 12.5px inherit; cursor: pointer; touch-action: manipulation; }
+.mini-suit-btn:hover { background: #f1f5f9; }
+.mini-suit-btn app-suit-icon { width: 14px; height: 14px; }
+.mini-suit-btn-active { background: #fff7ed; border-color: var(--color-accent); color: #301a09; font-weight: 700; }
+
+.button-completed { background: #edf2eb; color: #2f5e41; border-color: #b7d1be; }
+
