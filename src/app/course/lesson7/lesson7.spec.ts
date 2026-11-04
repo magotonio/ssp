@@ -16,6 +16,8 @@ import {
   CUT_TRAINING_PHASES,
   evaluateCutAttempt,
   mapRatioToDeckPosition,
+  PHYSICAL_TOLERANCE_CARDS,
+  QUICK_DEVIATION_DISTANCES,
   RiffleCutTrainer,
 } from './riffle-cut-trainer';
 
@@ -43,6 +45,9 @@ describe('Lección 7 · Integración, corte al tacto, barra de rifleado y cálcu
       expect(getRelativeKingdomZone(4).id).toBe('start');
       expect(getRelativeKingdomZone(8).id).toBe('middle');
       expect(getRelativeKingdomZone(13).id).toBe('end');
+
+      expect(PHYSICAL_TOLERANCE_CARDS).toBe(5);
+      expect(QUICK_DEVIATION_DISTANCES).toEqual([1, 2, 3, 4, 5]);
     });
 
     it('evalúa cortes exactos, cortes por arriba (menos cartas) y por abajo (más cartas)', () => {
@@ -60,12 +65,19 @@ describe('Lección 7 · Integración, corte al tacto, barra de rifleado y cálcu
       expect(shortCut.withinPhysicalTolerance).toBe(true);
       expect(shortCut.cutCard.code).toBe('QC');
 
-      const deepCut = evaluateCutAttempt(13, 18); // 6T en #18 -> 5 cartas por abajo
+      const deepCut = evaluateCutAttempt(13, 18); // 6T en #18 -> 5 cartas por abajo (límite de ±5)
       expect(deepCut.isExact).toBe(false);
       expect(deepCut.direction).toBe('below');
       expect(deepCut.distance).toBe(5);
-      expect(deepCut.withinPhysicalTolerance).toBe(false);
+      expect(deepCut.withinPhysicalTolerance).toBe(true);
       expect(deepCut.cutCard.code).toBe('6T');
+
+      const outsideToleranceCut = evaluateCutAttempt(13, 19); // 2D en #19 -> 6 cartas por abajo (fuera de ±5)
+      expect(outsideToleranceCut.isExact).toBe(false);
+      expect(outsideToleranceCut.direction).toBe('below');
+      expect(outsideToleranceCut.distance).toBe(6);
+      expect(outsideToleranceCut.withinPhysicalTolerance).toBe(false);
+      expect(outsideToleranceCut.cutCard.code).toBe('2D');
 
       expect(mapRatioToDeckPosition(0)).toBe(1);
       expect(mapRatioToDeckPosition(0.5)).toBe(26);
@@ -98,7 +110,10 @@ describe('Lección 7 · Integración, corte al tacto, barra de rifleado y cálcu
       expect(page?.textContent).toContain('Rey de Picas');
       expect(page?.textContent).toContain('Rey de Corazones');
       expect(page?.textContent).toContain('Rey de Tréboles');
-      expect(page?.textContent).toContain('Tolerancia física ±3 cartas');
+      expect(page?.textContent).toContain('Tolerancia física ±5 cartas');
+      expect(page?.querySelector('[data-testid="cut-trainer-tolerance"]')?.textContent).toContain(
+        'Margen ±5',
+      );
 
       const inspector = page?.querySelector('[data-testid="lesson7-tactile-inspector"]');
       expect(inspector?.textContent).toContain('7 de Diamantes');
@@ -157,6 +172,23 @@ describe('Lección 7 · Integración, corte al tacto, barra de rifleado y cálcu
       expect(page?.querySelector('[data-testid="cut-trainer-target"]')?.textContent).toContain(
         'Cortar 26 cartas (Rey de Corazones)',
       );
+
+      // Si el corte se pasa más allá de 5 cartas (#34 frente a #26 -> 8 cartas), se considera fallo y vuelve a riflear
+      trainer.performCut(34);
+      harness.detectChanges();
+
+      expect(trainer.stage()).toBe('out-of-tolerance');
+      expect(trainer.cutMisses()).toBe(1);
+      expect(trainer.totalMisses()).toBe(1);
+      expect(page?.querySelector('[data-testid="out-of-tolerance-panel"]')?.textContent).toContain(
+        'Corte fuera de margen',
+      );
+      expect(page?.querySelector('[data-testid="deviation-panel"]')).toBeNull();
+
+      // Pulsamos en volver a riflear
+      page?.querySelector<HTMLButtonElement>('[data-testid="retry-riffle-btn"]')?.click();
+      harness.detectChanges();
+      expect(trainer.stage()).toBe('ready');
 
       // Simulamos arrastrar, riflear y soltar con puntero sobre la mitad exacta de la barra (#26)
       const trackEl = page?.querySelector<HTMLElement>('[data-testid="riffle-bar-track"]');
@@ -218,6 +250,10 @@ describe('Lección 7 · Integración, corte al tacto, barra de rifleado y cálcu
       // Mientras calcula el desvío no debe filtrarse la posición #10
       expect(cutCardBox?.textContent).not.toContain('#10');
       expect(page?.querySelector('[data-testid="deviation-panel"]')).toBeTruthy();
+      // Solo se puede responder de 1 a 5: existen botones 1..5 y no 6 ni superiores
+      expect(page?.querySelector('[data-testid="deviation-quick-1"]')).toBeTruthy();
+      expect(page?.querySelector('[data-testid="deviation-quick-5"]')).toBeTruthy();
+      expect(page?.querySelector('[data-testid="deviation-quick-6"]')).toBeNull();
 
       // Fallamos primero indicando sentido opuesto (por abajo, 3) -> muestra pista específica
       page?.querySelector<HTMLButtonElement>('[data-testid="deviation-dir-below"]')?.click();

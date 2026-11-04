@@ -10,7 +10,7 @@ La **Lección 7** donde se integran todos los conceptos aprendidos para lograr e
 
 #### **2. Ejercicios con Baraja Física (Tacto y estimación de paquetes)**
 El autor propone una serie de ejercicios prácticos para entrenar la memoria muscular y el sentido del tacto al manipular las cartas:
-* **Corte a la mitad (26 cartas):** Intentar cortar al tacto exactamente 26 cartas (cuya carta de referencia en la ordenación estándar es el Rey de corazones). Se establece un margen de tolerancia aceptable de \\(\pm 3\\) cartas.
+* **Corte a la mitad (26 cartas):** Intentar cortar al tacto exactamente 26 cartas (cuya carta de referencia en la ordenación estándar es el Rey de corazones). Se establece un margen de tolerancia aceptable de \\(\pm 5\\) cartas.
 * **Cortes a 13 y 39 cartas:** Practicar cortes al primer bloque (13 cartas, Rey de picas) y al tercer bloque (39 cartas, Rey de tréboles) para familiarizarse con el grosor de cada sección.
 * **Estimación relativa en el Reino:** Para una carta cualquiera (por ejemplo, el 7 de rombos en la 8.ª posición de Tréboles), determinar si se encuentra al principio, en el centro o al final de su bloque de 13, facilitando llegar a ella mediante un ligero rifleado.
 

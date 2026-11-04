@@ -23,7 +23,11 @@ import {
 
 export type CutTrainingPhaseId = 'cut-26' | 'cut-13' | 'cut-39' | 'cycle-52';
 
-export type CutAttemptStage = 'ready' | 'awaiting-deviation' | 'resolved';
+export type CutAttemptStage =
+  | 'ready'
+  | 'awaiting-deviation'
+  | 'out-of-tolerance'
+  | 'resolved';
 
 export type CutDeviationDirection = 'above' | 'below';
 
@@ -58,10 +62,10 @@ export interface RiffleCutTrainerFeedback {
 }
 
 export const CALIBRATION_CUTS_GOAL = 3;
-export const PHYSICAL_TOLERANCE_CARDS = 3;
+export const PHYSICAL_TOLERANCE_CARDS = 5;
 
 export const QUICK_DEVIATION_DISTANCES: readonly number[] = [
-  1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+  1, 2, 3, 4, 5,
 ] as const;
 
 export const DECK_SLOTS: readonly number[] = Array.from(
@@ -227,7 +231,9 @@ export class RiffleCutTrainer {
   readonly toleranceCuts = signal<number>(0);
   readonly cumulativeDistance = signal<number>(0);
   readonly deviationHits = signal<number>(0);
+  readonly cutMisses = signal<number>(0);
   readonly deviationMisses = signal<number>(0);
+  readonly totalMisses = computed<number>(() => this.cutMisses() + this.deviationMisses());
 
   // Cronómetro para la Fase 4 (ciclo de 52 cartas)
   readonly elapsedMs = signal<number>(0);
@@ -249,7 +255,7 @@ export class RiffleCutTrainer {
       dist !== null &&
       Number.isInteger(dist) &&
       dist >= 1 &&
-      dist <= DECK_SIZE - 1
+      dist <= PHYSICAL_TOLERANCE_CARDS
     );
   });
 
@@ -399,6 +405,7 @@ export class RiffleCutTrainer {
     this.toleranceCuts.set(0);
     this.cumulativeDistance.set(0);
     this.deviationHits.set(0);
+    this.cutMisses.set(0);
     this.deviationMisses.set(0);
     this.isCycleCompleted.set(false);
 
@@ -430,6 +437,7 @@ export class RiffleCutTrainer {
     this.toleranceCuts.set(0);
     this.cumulativeDistance.set(0);
     this.deviationHits.set(0);
+    this.cutMisses.set(0);
     this.deviationMisses.set(0);
     this.isCycleCompleted.set(false);
 
@@ -476,8 +484,14 @@ export class RiffleCutTrainer {
   }
 
   onArenaPointerDown(event: PointerEvent): void {
-    if (this.stage() !== 'ready' || this.isCycleCompleted()) {
+    if (
+      (this.stage() !== 'ready' && this.stage() !== 'out-of-tolerance') ||
+      this.isCycleCompleted()
+    ) {
       return;
+    }
+    if (this.stage() === 'out-of-tolerance') {
+      this.resetCurrentAttemptState();
     }
     if (event.button !== 0 && event.pointerType === 'mouse') {
       return;
@@ -547,8 +561,14 @@ export class RiffleCutTrainer {
   }
 
   onHandleKeydown(event: KeyboardEvent): void {
-    if (this.stage() !== 'ready' || this.isCycleCompleted()) {
+    if (
+      (this.stage() !== 'ready' && this.stage() !== 'out-of-tolerance') ||
+      this.isCycleCompleted()
+    ) {
       return;
+    }
+    if (this.stage() === 'out-of-tolerance') {
+      this.resetCurrentAttemptState();
     }
 
     const current = this.riffleSlot();
@@ -604,7 +624,10 @@ export class RiffleCutTrainer {
   }
 
   performCut(cutPosition: number): void {
-    if (this.stage() !== 'ready' || this.isCycleCompleted()) {
+    if (
+      (this.stage() !== 'ready' && this.stage() !== 'out-of-tolerance') ||
+      this.isCycleCompleted()
+    ) {
       return;
     }
 
@@ -631,10 +654,31 @@ export class RiffleCutTrainer {
       return;
     }
 
+    if (!evaluation.withinPhysicalTolerance) {
+      this.cutMisses.update((n) => n + 1);
+      this.selectedDirection.set(null);
+      this.selectedDistance.set(null);
+      this.stage.set('out-of-tolerance');
+      const dirWord = evaluation.direction === 'above' ? 'por arriba' : 'por abajo';
+      this.feedback.set({
+        kind: 'miss',
+        heading: `Corte fuera de margen: te has desviado ${evaluation.distance} cartas ${dirWord}.`,
+        detail: `Has cortado en ${evaluation.cutCard.fullName} (posición #${evaluation.cutPosition}). El margen máximo es de ±${PHYSICAL_TOLERANCE_CARDS} cartas. Vuelve a riflear para acercarte a la carta buscada.`,
+      });
+      return;
+    }
+
     this.selectedDirection.set(null);
     this.selectedDistance.set(null);
     this.stage.set('awaiting-deviation');
     this.feedback.set(null);
+  }
+
+  retryRiffle(): void {
+    if (this.isCycle52Phase() && !this.isCycleCompleted()) {
+      this.startTimer();
+    }
+    this.resetCurrentAttemptState();
   }
 
   selectDirection(direction: CutDeviationDirection): void {
@@ -649,34 +693,6 @@ export class RiffleCutTrainer {
       return;
     }
     this.selectedDistance.set(distance);
-  }
-
-  onDistanceInput(event: Event): void {
-    if (this.stage() !== 'awaiting-deviation') {
-      return;
-    }
-    const input = event.target as HTMLInputElement;
-    const raw = input.value.trim();
-    if (!raw) {
-      this.selectedDistance.set(null);
-      return;
-    }
-    const parsed = Number(raw);
-    if (!Number.isFinite(parsed)) {
-      this.selectedDistance.set(null);
-      return;
-    }
-    this.selectedDistance.set(Math.trunc(parsed));
-  }
-
-  adjustDistance(delta: -1 | 1): void {
-    if (this.stage() !== 'awaiting-deviation') {
-      return;
-    }
-    const rawCurrent = this.selectedDistance();
-    const base = typeof rawCurrent === 'number' && Number.isFinite(rawCurrent) ? rawCurrent : 0;
-    const next = Math.min(DECK_SIZE - 1, Math.max(1, base + delta));
-    this.selectedDistance.set(next);
   }
 
   onDeviationFormSubmit(event: Event): void {
@@ -770,6 +786,7 @@ export class RiffleCutTrainer {
     this.toleranceCuts.set(0);
     this.cumulativeDistance.set(0);
     this.deviationHits.set(0);
+    this.cutMisses.set(0);
     this.deviationMisses.set(0);
     this.isCycleCompleted.set(false);
     this.resetCurrentAttemptState();
@@ -797,7 +814,7 @@ export class RiffleCutTrainer {
       } else {
         const dirWord = evaluation.direction === 'above' ? 'por arriba' : 'por abajo';
         const toleranceNote = evaluation.withinPhysicalTolerance
-          ? ' · ¡Dentro del margen óptimo de ±3 cartas!'
+          ? ` · ¡Dentro del margen óptimo de ±${PHYSICAL_TOLERANCE_CARDS} cartas!`
           : '';
         this.feedback.set({
           kind: 'hit',
@@ -825,7 +842,7 @@ export class RiffleCutTrainer {
     } else {
       const dirWord = evaluation.direction === 'above' ? 'por arriba' : 'por abajo';
       const toleranceNote = evaluation.withinPhysicalTolerance
-        ? ' · Dentro del margen de ±3 cartas.'
+        ? ` · Dentro del margen de ±${PHYSICAL_TOLERANCE_CARDS} cartas.`
         : '.';
       this.feedback.set({
         kind: 'hit',
