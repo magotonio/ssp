@@ -1,0 +1,15 @@
+### **Principios de la Ordenación SSP (Ordenados por Importancia)**
+
+1. **Naturaleza Cíclica:** La baraja constituye un bucle cerrado continuo de 52 cartas que permite realizar cortes libres sin alterar las relaciones de vecindad ni sus propiedades.
+2. **Regla de la Carta Siguiente (Algoritmo de Transición):** Para determinar la carta contigua se restan 4 al índice (o se suman 9 si el valor es \\(\le 4\\)) y se avanza 1 palo en la secuencia canónica (o 2 palos si el valor es \\(\le 4\\)).
+3. **Periodicidad de 13 Cartas (Mismo Índice y Avance Canónico de Palo):** A una distancia exacta de 13 cartas (\\(n\\) y \\(n+13\\)), reaparece **el mismo índice** y los palos avanzan en el orden canónico (\\(P \to C \to T \to D\\)).
+4. **Periodicidad de 26 Cartas (Carta Homónima / Gemela):** A una distancia de 26 cartas (\\(n\\) y \\(n+26\\), exactamente a media baraja), se encuentra la **carta homónima**, compartiendo **el mismo índice y el mismo color** (\\(P \leftrightarrow T\\) en negros, \\(C \leftrightarrow D\\) en rojos).
+5. **Punto de Partida Canónico (\\(9\spadesuit\\)):** La ordenación estándar de referencia fija el \\(9\spadesuit\\) en la posición 1 y cierra con el \\(K\diamondsuit\\) en la posición 52, estableciendo un marco de coordenadas absolutas.
+6. **Distribución por Reinos (Nobles, Políticos y Científicos):** Las 52 cartas se dividen en 4 bloques de 13 cartas (Picas, Corazones, Tréboles y Diamantes), clasificando las cartas según su palo y valor para saber en qué bloque residen.
+7. **Posiciones Internas (Fórmula del \\(\times 3\\)):** La posición del 1 al 13 que ocupa cada carta dentro de su reino se obtiene multiplicando su valor nominal por 3 en módulo 13.
+8. **Separación Regular de Palos (Distancia 3 Ascendente):** A lo largo del mazo, las cartas de un mismo palo aparecen distribuidas a una distancia fija de 3 posiciones entre sí, en estricto orden correlativo ascendente de As a Rey.
+9. **Alternancia de Paridad de la Suma (Índice + Palo):** Al asignar valor numérico a los palos (\\(P=1, C=2, T=3, D=4\\)) y sumar el índice y el palo, la paridad del resultado altera estrictamente entre Par e Impar en cada carta sucesiva.
+10. **No Repetición de Palos en Tríos Consecutivos:** En cualesquiera tres cartas consecutivas tomadas de la baraja intervienen siempre tres palos completamente diferentes.
+11. **Teorema de la Suma de 3 Cartas:** Al sumar los valores nominales de tres cartas consecutivas y restar 14, se obtiene exactamente la posición interna (del 1 al 13) de la primera carta del trío.
+12. **Alternancia de Colores por Eliminación de Tetráadas:** Al retirar 4 valores específicos (como los Políticos As, 2, 3 y 4), las 36 cartas restantes adquieren una alternancia perfecta de color rojo y negro.
+13. **Construcción Rápida en 17 Montones:** Repartir la baraja organizada por palos de Rey a As en 17 montones correlativos y recogerlos en orden genera automáticamente la ordenación SSP completa.

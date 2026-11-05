@@ -342,6 +342,16 @@
         <span>{{ isLessonCompleted() ? 'Lección 7 completada' : 'Completar Lección 7' }}</span>
       </button>
 
+      <a
+        routerLink="/curso/leccion-8"
+        class="button w-full sm:w-auto"
+        [class.button-accent]="isLessonCompleted()"
+        [class.button-secondary]="!isLessonCompleted()"
+      >
+        <span>Ir a la Lección 8</span>
+        <app-icon name="arrow" />
+      </a>
+
       <a routerLink="/curso/leccion-6" class="button button-secondary w-full sm:w-auto">
         <app-icon name="arrowLeft" />
         <span>Repasar Lección 6</span>

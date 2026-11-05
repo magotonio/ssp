@@ -9,7 +9,8 @@ export type LessonId =
   | 'leccion-4'
   | 'leccion-5'
   | 'leccion-6'
-  | 'leccion-7';
+  | 'leccion-7'
+  | 'leccion-8';
 
 export interface CourseLessonMeta {
   readonly id: LessonId;
@@ -66,6 +67,12 @@ export const COURSE_LESSONS: readonly CourseLessonMeta[] = [
     label: 'Lección 7',
     title: 'Integración y localización al tacto',
     route: '/curso/leccion-7',
+  },
+  {
+    id: 'leccion-8',
+    label: 'Lección 8',
+    title: 'Los 13 principios de la SSP',
+    route: '/curso/leccion-8',
   },
 ] as const;
 

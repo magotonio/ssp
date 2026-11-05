@@ -63,6 +63,12 @@ export const routes: Routes = [
       import('./course/lesson7/lesson7').then((module) => module.Lesson7),
   },
   {
+    path: 'curso/leccion-8',
+    title: 'Lección 8 · Los 13 principios de la SSP | StackSSP',
+    loadComponent: () =>
+      import('./course/lesson8/lesson8').then((module) => module.Lesson8),
+  },
+  {
     path: '**',
     redirectTo: '',
   },
