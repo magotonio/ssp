@@ -1,4 +1,5 @@
-.phase-tab-btn-active { border-color: var(--color-navy) !important; box-shadow: inset 0 0 0 1px var(--color-navy); }
+.phase-tab-btn-active, .direction-choice-btn-active { border-color: var(--color-navy) !important; box-shadow: inset 0 0 0 1px var(--color-navy); }
+.direction-choice-btn-active { background: #fff !important; }
 .phase-tab-btn-done { border-color: #b7d1be !important; background: #f6faf7 !important; }
 .phase-step-badge { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 6px; background: #f1f5f9; color: #334155; font-size: 11.5px; font-weight: 800; }
 .phase-step-badge app-icon { width: 13px; height: 13px; }
@@ -23,6 +24,7 @@
 
 .mini-playing-card { position: relative; width: 66px; height: 92px; border-radius: 10px; border: 2px solid #cbd5e1; background: #fff; display: grid; place-items: center; user-select: none; }
 .mini-playing-card-hit { border-color: #22c55e; background: #f0fdf4; }
+.mini-playing-card-miss { border-color: #f87171; background: #fff1f2; }
 .mini-playing-card-placeholder { border-style: dashed; background: #f8fafc; }
 .mini-card-suit app-suit-icon { width: 18px; height: 18px; }
 
@@ -43,6 +45,6 @@
 .cutter-thumb-figure { width: 34px; height: 38px; color: var(--color-accent); display: inline-flex; }
 .cutter-thumb-figure svg { width: 100%; height: 100%; }
 .riffle-cutter-hit .cutter-thumb-figure { color: #4ade80; }
+.riffle-cutter-miss .cutter-thumb-figure { color: #f87171; }
 
-.direction-choice-btn-active { border-color: var(--color-navy) !important; background: #fff !important; box-shadow: inset 0 0 0 1px var(--color-navy); }
 .quick-distance-btn-active { background: var(--color-navy) !important; border-color: var(--color-navy) !important; color: #fff !important; }

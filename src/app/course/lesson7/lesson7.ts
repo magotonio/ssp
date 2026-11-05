@@ -19,7 +19,7 @@ import {
   describeAbsolutePosition,
   InternalPositionNumber,
 } from '../lesson6/internal-position-trainer';
-import { RiffleCutTrainer } from './riffle-cut-trainer';
+import { PHYSICAL_TOLERANCE_CARDS, RiffleCutTrainer } from './riffle-cut-trainer';
 
 export type KingdomZoneId = 'start' | 'middle' | 'end';
 
@@ -102,7 +102,7 @@ const LANDMARK_KINGS: readonly LandmarkKingView[] = [
     position: 26,
     fractionLabel: 'Mitad exacta · 1/2',
     card: SSP_STACK[25], // KC
-    note: 'Referencia central de corte al tacto (tolerancia aceptable ±3 cartas).',
+    note: `Referencia central de corte al tacto (tolerancia aceptable ±${PHYSICAL_TOLERANCE_CARDS} cartas).`,
   },
   {
     position: 39,
@@ -153,6 +153,7 @@ export class Lesson7 {
   protected readonly landmarkKings = LANDMARK_KINGS;
   protected readonly kingdomZones = KINGDOM_ZONES;
   protected readonly tactileExamples = LESSON7_TACTILE_EXAMPLES;
+  protected readonly toleranceLimit = PHYSICAL_TOLERANCE_CARDS;
 
   protected readonly inspectedValue = signal<CardValue>(7);
   protected readonly inspectedSuit = signal<SuitCode>('D');

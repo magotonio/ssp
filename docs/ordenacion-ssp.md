@@ -1,6 +1,6 @@
 # Ordenación SSP
 
-Este documento define las reglas de la ordenación SSP, independientemente de su implementación. Es la referencia normativa del dominio para la aplicación descrita en [ESPECIFICACIONES.md](./spec/ESPECIFICACIONES.md).
+Este documento define las reglas de la ordenación SSP, independientemente de su implementación. Es la referencia normativa del dominio para la aplicación descrita en [ESPECIFICACIONES.md](./spec/ESPECIFICACIONES.md). Para un desglose didáctico y detallado de las 11 reglas y propiedades clave del sistema, consulta [Reglas y Propiedades SSP](./reglas-ssp.md).
 
 ## 1. La ordenación SSP: Definiciones Formales y Convenciones
 
