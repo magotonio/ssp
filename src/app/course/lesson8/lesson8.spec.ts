@@ -78,12 +78,15 @@ describe('Lección 8 · Los 13 principios', () => {
       }
     });
 
-    it('P12: sin As, 2, 3 y 4 los colores alternan en bucle cerrado', () => {
-      const kept = SSP_STACK.filter((c) => c.value > 4);
-      expect(kept).toHaveLength(36);
-      kept.forEach((card, i) => {
-        expect(suitColor(card.suit)).not.toBe(suitColor(kept[(i + 1) % kept.length].suit));
-      });
+    it('P12: al retirar 4 índices consecutivos que empiezan en 10, J, Q, K o As los colores alternan', () => {
+      for (const start of [10, 11, 12, 13, 1]) {
+        const removed = new Set([0, 1, 2, 3].map((i) => ((start - 1 + i) % 13) + 1));
+        const kept = SSP_STACK.filter((c) => !removed.has(c.value));
+        expect(kept).toHaveLength(36);
+        kept.forEach((card, i) => {
+          expect(suitColor(card.suit)).not.toBe(suitColor(kept[(i + 1) % kept.length].suit));
+        });
+      }
     });
 
     it('P13: los 17 montones recogidos reproducen la ordenación SSP (cíclicamente)', () => {
