@@ -405,14 +405,7 @@
         (pointerup)="onArenaPointerUp($event)"
         (pointercancel)="onArenaPointerCancel($event)"
       >
-        <!-- Cuna izquierda de salida del pulgar -->
-        <div
-          class="w-[52px] h-[54px] shrink-0 rounded-l-[9px] border-[1.5px] border-dashed border-slate-300 border-r-0 bg-white flex items-end justify-center pb-1.5"
-          aria-hidden="true"
-        >
-          <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Inicio</span>
-        </div>
-
+        <div class="riffle-deck-row">
         <!-- Mazo horizontal de 52 cartas sin numerar -->
         <div #barTrack class="riffle-bar-track" data-testid="riffle-bar-track">
           @for (slot of deckSlots; track slot) {
@@ -450,6 +443,11 @@
             }
           }
 
+        </div>
+        </div>
+
+        <!-- Carril inferior independiente: el marcador queda debajo del mazo para que el dedo no lo tape -->
+        <div class="riffle-handle-rail" data-testid="riffle-handle-rail">
           <!-- Objeto / dibujo arrastrable de pulgar / uña de corte -->
           <div
             class="riffle-cutter-handle"

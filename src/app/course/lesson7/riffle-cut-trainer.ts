@@ -334,7 +334,7 @@ export class RiffleCutTrainer {
   protected readonly handleLeftCss = computed<string>(() => {
     const slot = this.activeDisplaySlot();
     if (slot <= 0) {
-      return '-26px';
+      return '17px';
     }
     const percent = ((slot - 0.5) / DECK_SIZE) * 100;
     return `${percent}%`;
