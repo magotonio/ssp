@@ -103,9 +103,9 @@ export const PRINCIPLES: readonly PrincipleMeta[] = [
   },
   {
     number: 12,
-    title: 'Alternancia de colores sin los Políticos',
+    title: 'Alternancia de colores al retirar 4 índices',
     statement:
-      'Al retirar As, 2, 3 y 4, las 36 cartas restantes alternan perfectamente rojo y negro.',
+      'Al retirar 4 índices con sus respectivos palos (16 cartas), las 36 restantes adquieren una alternancia perfecta de color rojo y negro.',
     component: Principle12Colors,
   },
   {

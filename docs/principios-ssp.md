@@ -11,5 +11,5 @@
 9. **Alternancia de Paridad de la Suma (Índice + Palo):** Al asignar valor numérico a los palos (\\(P=1, C=2, T=3, D=4\\)) y sumar el índice y el palo, la paridad del resultado altera estrictamente entre Par e Impar en cada carta sucesiva.
 10. **No Repetición de Palos en Tríos Consecutivos:** En cualesquiera tres cartas consecutivas tomadas de la baraja intervienen siempre tres palos completamente diferentes.
 11. **Teorema de la Suma de 3 Cartas:** Al sumar los valores nominales de tres cartas consecutivas y restar 14, se obtiene exactamente la posición interna (del 1 al 13) de la primera carta del trío.
-12. **Alternancia de Colores por Eliminación de Tetráadas:** Al retirar 4 valores específicos (como los Políticos As, 2, 3 y 4), las 36 cartas restantes adquieren una alternancia perfecta de color rojo y negro.
+12. **Alternancia de Colores por Eliminación de Tetráadas:** Al retirar 4 índices con sus respectivos palos (16 cartas), las 36 cartas restantes adquieren una alternancia perfecta de color rojo y negro. Esto se cumple para 5 combinaciones de 4 índices consecutivos que comienzan entre el 10 y el As (10–K, J–A, Q–2, K–3 y As–4).
 13. **Construcción Rápida en 17 Montones:** Repartir la baraja organizada por palos de Rey a As en 17 montones correlativos y recogerlos en orden genera automáticamente la ordenación SSP completa.
