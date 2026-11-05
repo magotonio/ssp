@@ -1,0 +1,165 @@
+<a href="#contenido-leccion-8" class="skip-link">Saltar al contenido</a>
+
+<header class="sticky top-0 z-30 bg-white border-b border-slate-200">
+  <div class="max-w-[1080px] mx-auto h-14 sm:h-16 px-4 sm:px-6 flex items-center justify-between gap-3">
+    <div class="flex items-center gap-2.5 min-w-0">
+      <a
+        routerLink="/"
+        class="inline-flex items-center gap-2.5 text-lg font-bold tracking-tight text-slate-900 shrink-0"
+        aria-label="Volver a la portada de StackSSP"
+      >
+        <span class="brand-mark brand-mark-sm" aria-hidden="true"><app-icon name="cards" /></span>
+        <span>Stack<span class="brand-light">SSP</span></span>
+      </a>
+      <span class="text-slate-300 font-medium" aria-hidden="true">/</span>
+      <span class="text-[13px] font-semibold text-slate-600 truncate">Lección 8</span>
+    </div>
+
+    <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+      @if (isLessonCompleted()) {
+        <span class="status-pill status-completed">
+          <app-icon name="check" />
+          <span class="hidden sm:inline">Lección 8 completada</span>
+        </span>
+      } @else {
+        <span class="status-pill status-active hidden sm:inline-flex">En progreso</span>
+      }
+      <a routerLink="/curso/leccion-7" class="back-link hidden md:inline-flex">
+        <app-icon name="arrowLeft" />
+        <span>Lección 7</span>
+      </a>
+      <a routerLink="/" class="back-link">
+        <span>Inicio</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main
+  id="contenido-leccion-8"
+  class="max-w-[1080px] mx-auto px-3.5 sm:px-6 pt-5 sm:pt-8 pb-11 sm:pb-16 flex flex-col gap-4.5 sm:gap-6"
+  tabindex="-1"
+>
+  @if (!progress.cookiesAvailable()) {
+    <div
+      class="flex items-start gap-2.5 px-4 py-3 rounded-[10px] bg-orange-50 border border-orange-200 text-orange-800"
+      role="status"
+    >
+      <app-icon name="info" />
+      <p class="text-[13px] text-orange-800">
+        Las cookies están desactivadas en tu navegador. Podrás recorrer todos los principios con normalidad, aunque el progreso no se recordará al cerrar la pestaña.
+      </p>
+    </div>
+  }
+
+  <section class="card p-5 sm:p-8 flex flex-col gap-4" aria-labelledby="lesson8-title">
+    <div class="flex flex-col gap-3 max-w-[780px]">
+      <div class="flex flex-wrap items-center gap-2">
+        <p class="eyebrow">LECCIÓN 8 · LOS 13 PRINCIPIOS</p>
+        <span class="px-2 py-0.5 rounded bg-[#fdf0e5] text-[#9c4c1f] text-[11px] font-bold">
+          Entender por qué funciona
+        </span>
+      </div>
+      <h1 id="lesson8-title" class="lesson-h1">Los 13 principios de la ordenación SSP</h1>
+      <p class="text-[15px] leading-relaxed">
+        La ordenación no es una lista arbitraria: está regida por propiedades que se pueden comprobar
+        y aprovechar. Recorre los principios de uno en uno, de mayor a menor importancia, y prueba cada demostración.
+      </p>
+    </div>
+
+    <nav aria-label="Principios de la ordenación SSP">
+      <ol class="flex flex-wrap gap-1.5">
+        @for (principle of principles; track principle.number; let i = $index) {
+          <li>
+            <button
+              type="button"
+              class="step-dot"
+              [class.step-dot-active]="i === currentIndex()"
+              [attr.aria-current]="i === currentIndex() ? 'step' : null"
+              [attr.aria-label]="'Principio ' + principle.number + ': ' + principle.title"
+              (click)="goTo(i)"
+            >
+              {{ principle.number }}
+            </button>
+          </li>
+        }
+      </ol>
+    </nav>
+  </section>
+
+  <section class="card p-5 sm:px-8 sm:py-7 flex flex-col gap-5" aria-labelledby="principio-actual">
+    <div class="flex flex-col gap-2 max-w-[780px]">
+      <p class="eyebrow">PRINCIPIO {{ current().number }} DE {{ principles.length }}</p>
+      <h2 id="principio-actual" class="text-[22px]" tabindex="-1">{{ current().title }}</h2>
+      <p class="text-[15px] leading-relaxed text-slate-800">{{ current().statement }}</p>
+    </div>
+
+    <ng-container [ngComponentOutlet]="current().component" />
+
+    <div class="flex items-center justify-between gap-3 pt-2 border-t border-slate-200">
+      <button
+        type="button"
+        class="button button-secondary"
+        [disabled]="isFirst()"
+        (click)="previous()"
+      >
+        <app-icon name="arrowLeft" />
+        <span>Anterior</span>
+      </button>
+      <span class="text-[13px] font-semibold text-slate-500 tabular-nums" aria-live="polite">
+        {{ current().number }} / {{ principles.length }}
+      </span>
+      <button
+        type="button"
+        class="button"
+        [class.button-accent]="!isLast()"
+        [class.button-secondary]="isLast()"
+        [disabled]="isLast()"
+        (click)="next()"
+      >
+        <span>Siguiente</span>
+        <app-icon name="arrow" />
+      </button>
+    </div>
+  </section>
+
+  <section class="card p-5 sm:p-8 flex flex-col gap-5" aria-labelledby="closing-lesson8-title">
+    <div class="flex flex-col gap-2.5 max-w-[780px]">
+      <p class="eyebrow">CIERRE · COMPRENDER LA SSP</p>
+      <h2 id="closing-lesson8-title" class="text-xl">De saber usarla a saber por qué funciona</h2>
+      <p>
+        Ya conoces los trece principios que sostienen la ordenación SSP. Vuelve a ellos siempre que
+        quieras: cada uno es un atajo para comprobar, deducir o reconstruir cualquier carta de la baraja.
+      </p>
+    </div>
+
+    <div class="flex flex-col sm:flex-row flex-wrap gap-3">
+      <button
+        type="button"
+        class="button w-full sm:w-auto"
+        [class.button-accent]="!isLessonCompleted()"
+        [class.button-completed]="isLessonCompleted()"
+        (click)="completeLesson()"
+      >
+        <app-icon name="check" />
+        <span>{{ isLessonCompleted() ? 'Lección 8 completada' : 'Completar Lección 8' }}</span>
+      </button>
+
+      <a routerLink="/curso/leccion-7" class="button button-secondary w-full sm:w-auto">
+        <app-icon name="arrowLeft" />
+        <span>Repasar Lección 7</span>
+      </a>
+
+      <a routerLink="/" class="button button-secondary w-full sm:w-auto">
+        <span>Volver a la portada</span>
+      </a>
+    </div>
+
+    @if (isLessonCompleted()) {
+      <p class="text-[13px] font-medium text-[#397153]" role="status">
+        ¡Enhorabuena! Has completado la Lección 8 y tu progreso ha quedado guardado en este navegador.
+      </p>
+    }
+  </section>
+</main>
+

@@ -176,7 +176,16 @@ Validaciones: `npm run build` y `npm test -- --watch=false`. La compilación se 
     2. **Fase 2 · Cortar 13** (primer bloque).
     3. **Fase 3 · Cortar 39** (tercer bloque).
     4. **Fase 4 · Ciclo completo de 52 cartas aleatorias** sin repetición (`1 / 52` a `52 / 52`), con cronómetro, contadores de cortes exactos, cortes dentro de `±5`, fallos (cortes fuera de margen y desvíos erróneos), desvío medio, resumen final y reinicio de fase/ciclo.
-- Cierre del dominio práctico de la ordenación SSP, botón para marcar la **Lección 7** como completada y navegación a **Lección 6** e **Inicio**.
+- Cierre del dominio práctico de la ordenación SSP, botón para marcar la **Lección 7** como completada y navegación a **Lección 8**, **Lección 6** e **Inicio**.
+
+### Lección 8 (`/curso/leccion-8`)
+
+- Cabecera de curso con enlace a la portada (`/`), acceso rápido a **Lección 7** (`/curso/leccion-7`), referencia a **Lección 8** e indicador de estado («En progreso» / «Lección 8 completada»).
+- Enseña los **13 principios** de la ordenación SSP recogidos en [principios-ssp.md](../principios-ssp.md), ordenados por importancia, sin duplicar ni contradecir [ordenacion-ssp.md](../ordenacion-ssp.md).
+- **Solo se muestra un principio cada vez:** navegación por botones numerados `1`–`13` (con `aria-current`) y botones **Anterior** / **Siguiente**; al cambiar de principio el foco pasa a su título.
+- Cada principio es un **componente standalone propio** en `src/app/course/lesson8/principles/` (`principle-NN-*.ts`) con su explicación y una demostración interactiva (deslizador de posición, cuadrícula de reinos, selector de índice, montones, etc.). La lección los carga dinámicamente (`NgComponentOutlet`) desde el registro `PRINCIPLES` de `principles.ts`, donde se declaran número, título, enunciado y componente. Para modificar un principio basta con editar su componente; para añadir uno, crear el componente y registrarlo.
+- Piezas compartidas: `app-card-chip` (ficha de carta), `app-position-slider` (selector de posición 1–52) y utilidades puras en `principle-helpers.ts`, verificadas por pruebas contra la ordenación normativa.
+- Cierre con botón para marcar la **Lección 8** como completada y navegación a **Lección 7** e **Inicio**.
 
 ### Ejecución desde la raíz
 
